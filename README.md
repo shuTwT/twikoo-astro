@@ -1,9 +1,10 @@
 # twikoo
 
-一个**简洁**、**安全**、**免费**的静态网站评论系统。<br>
+一个**简洁**、**安全**、**免费**的静态网站评论系统。
+
 A **simple**, **safe**, **free** comment system.  
 
-
+**简体中文** | [English](./README.en.md)
 
 ## 简介
 
