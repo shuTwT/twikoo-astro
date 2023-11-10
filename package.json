@@ -1,6 +1,6 @@
 {
   "name": "astro-twikoo",
-  "version": "1.0.0",
+  "private":"true",
   "repository": "git@github.com:shuTwT/astro-twikoo.git",
   "author": "shu <1324073644@qq.com>",
   "license": "MIT",
@@ -26,6 +26,6 @@
     "unplugin-auto-import": "^0.16.7",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.5.0",
-    "vue": "^3.2.25"
+    "vue": "^3.3.1"
   }
 }

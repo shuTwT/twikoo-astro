@@ -1,6 +1,6 @@
 {
   "name": "@astro-twikoo/core",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "lib/twikoo.cjs",
   "module": "es/twikoo.mjs",
@@ -12,8 +12,7 @@
     "./package.json":"./package.json",
     "./dist/*":"./dist/*",
     "./es/*":"./es/*",
-    "./lib/*":"./lib/*",
-    "./src/*":"./src/*"
+    "./lib/*":"./lib/*"
   },
   "files": [
     "dist/*.js",
@@ -34,9 +33,11 @@
     "url": "https://github.com/shuTwT/astro-twikoo"
   },
   "peerDependencies": {
+    "@nanostores/vue": "^0.10.0",
     "jsdom":"^22.1.0",
+    "nanostores": "^0.9.4",
     "owo":"^1.0.2",
     "prismjs":"^1.29.0",
-    "vue":"^3.2.25"
+    "vue":">=3.3.1"
   }
 }

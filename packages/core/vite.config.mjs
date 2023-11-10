@@ -15,7 +15,7 @@ export default defineConfig({
         // })
     ],
     build: {
-        minify: false,
+        minify: true,
         rollupOptions: {
             external: [
                 'vue',

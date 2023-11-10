@@ -11,6 +11,8 @@ A **simple**, **safe**, **free** comment system.
 
 ~~终极目标：打包体积<100kb~~
 
+目前约为 300kb
+
 **注意**：该仓库仅包含魔改版的前端，后端依旧为原版
 
 更多详情请查看[原仓库](https://github.com/twikoojs/twikoo)
