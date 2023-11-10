@@ -1,0 +1,42 @@
+{
+  "name": "@astro-twikoo/core",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/twikoo.cjs",
+  "module": "es/twikoo.mjs",
+  "exports":{
+    ".":{
+        "require":"./lib/twikoo.cjs",
+        "import":"./es/twikoo.mjs"
+    },
+    "./package.json":"./package.json",
+    "./dist/*":"./dist/*",
+    "./es/*":"./es/*",
+    "./lib/*":"./lib/*",
+    "./src/*":"./src/*"
+  },
+  "files": [
+    "dist/*.js",
+    "dist/*.css",
+    "es/*.mjs",
+    "es/*.css",
+    "lib/*.cjs",
+    "lib/*.css"
+  ],
+  "scripts": {
+    "build": "vite build"
+  },
+  "keywords": ["twikoo","comment","astro","vue"],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shuTwT/astro-twikoo"
+  },
+  "peerDependencies": {
+    "jsdom":"^22.1.0",
+    "owo":"^1.0.2",
+    "prismjs":"^1.29.0",
+    "vue":"^3.2.25"
+  }
+}

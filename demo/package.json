@@ -1,0 +1,17 @@
+{
+    "name": "@astro-twikoo/demo",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "dev": "astro dev"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "astro": "^3.4.3",
+        "@astrojs/vue":"^3.0.4"
+    }
+  }
+  
