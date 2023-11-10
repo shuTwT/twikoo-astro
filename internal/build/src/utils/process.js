@@ -1,5 +1,5 @@
 import {spawn} from 'node:child_process'
-import { rootDir } from '../gulpfile.js'
+import { rootDir } from '../../gulpfile.js'
 export const run = async (command, cwd = rootDir) => {
     new Promise((resolve, reject) => {
         const [cmd, ...args] = command.split(' ')

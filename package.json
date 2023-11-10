@@ -9,8 +9,9 @@
     "dev": "pnpm run --filter demo dev",
     "buil": "pnpm run --filter core build",
     "build": "pnpm run -C internal/build start",
-    "clean":"pnpm run clean:dist && pnpm run -r --parallel clean",
-    "clean:dist":"rimraf dist"
+    "clean":"pnpm run clean:dist",
+    "clean:dist":"rimraf dist",
+    "stub":"pnpm run -r --parallel stub"
   },
   "devDependencies": {
     "@astro-twikoo/core": "workspace:*",

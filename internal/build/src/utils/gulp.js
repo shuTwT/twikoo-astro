@@ -1,4 +1,4 @@
-import {rootDir} from '../gulpfile.js'
+import {buildRoot} from '../../gulpfile.js'
 import {run} from './process.js'
 /**
  * 
@@ -12,8 +12,7 @@ export const withTaskName=(name,fn)=>Object.assign(fn,{displayName:name})
  * 
  * @param {string} name 
  */
-export const runTask=(name)=>{
+export const runTask=(name)=>
     withTaskName(`shellTask:${name}`,()=>
-    run(`pnpm run start ${name}`, rootDir)
+        run(`pnpm run start ${name}`, buildRoot)
     )
-}
