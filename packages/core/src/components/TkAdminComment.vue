@@ -50,7 +50,7 @@
   </template>
   
   <script>
-    import {ElButton,ElInput,ClickOutside as VClickOutside,ElLoading} from 'element-plus'
+    import {ElButton,ElInput,ElLoading} from 'element-plus'
   import { twikooStore } from '../store'
 import { timeago, call, convertLink, renderLinks, renderMath, renderCode, t } from '../utils'
   import { version } from '../version'

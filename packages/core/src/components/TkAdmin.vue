@@ -72,7 +72,7 @@
 </template>
   
 <script>
-import { ElButton, ElInput, ClickOutside, ElLoading } from 'element-plus'
+import { ElButton, ElInput, ElLoading } from 'element-plus'
 import md5 from 'blueimp-md5'
 import TkAdminComment from './TkAdminComment.vue'
 import TkAdminConfig from './TkAdminConfig.vue'
@@ -93,7 +93,6 @@ export default {
     },
     directives: {
         "Loading": ElLoading.directive,
-        ClickOutside
     },
     props: {
         show: Boolean

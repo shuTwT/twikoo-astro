@@ -1,0 +1,9 @@
+{
+    "name": "@astro-twikoo/locale",
+    "version": "0.0.1",
+    "description": "astro-twikoo locale",
+    "license":"MIT",
+    "main": "index.js",
+    "module": "index.js",
+    "types": "index.d.ts"
+}

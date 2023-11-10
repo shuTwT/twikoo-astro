@@ -18,7 +18,8 @@
       </div>
       <div class="tk-row actions">
         <div class="tk-row-actions-start">
-          <div class="tk-submit-action-icon OwO" v-show="config.SHOW_EMOTION === 'true'" v-html="iconEmotion" v-click-outside="closeOwo" ref="owo" >  </div>
+          <div class="tk-submit-action-icon OwO" v-show="config.SHOW_EMOTION === 'true'" v-html="iconEmotion" v-click-outside="closeOwo" ref="owo" >
+        </div>
           <div class="tk-submit-action-icon" v-show="config.SHOW_IMAGE === 'true'" v-html="iconImage" @click="openSelectImage"></div>
           <input class="tk-input-image" type="file" accept="image/*" value="" ref="inputFile" @change="onSelectImage" />
           <div class="tk-error-message">{{ errorMessage }}</div>
@@ -47,7 +48,7 @@
   </template>
   
   <script>
-  import {ElButton,ElInput,ClickOutside,ElLoading} from 'element-plus'
+  import {ElButton,ElInput,ClickOutside} from 'element-plus'
   import iconMarkdown from '@fortawesome/fontawesome-free/svgs/brands/markdown.svg?raw'
   import iconEmotion from '@fortawesome/fontawesome-free/svgs/regular/laugh.svg?raw'
   import iconImage from '@fortawesome/fontawesome-free/svgs/regular/image.svg?raw'
@@ -76,7 +77,7 @@
         ElButton,
         ElInput,
       TkAvatar,
-      TkMetaInput
+      TkMetaInput,
     },
     directives:{ClickOutside},
     props: {

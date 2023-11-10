@@ -21,7 +21,7 @@
   </template>
   
   <script>
-    import {ElButton,ElInput,ClickOutside as VClickOutside,ElLoading} from 'element-plus'
+    import {ElButton,ElInput,ElLoading} from 'element-plus'
   import { call, readAsText, t } from '../utils'
   import { tcbStore } from '../store'
   export default {

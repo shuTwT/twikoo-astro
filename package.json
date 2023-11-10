@@ -1,15 +1,20 @@
 {
   "name": "astro-twikoo",
-  "private":"true",
+  "private": "true",
   "repository": "git@github.com:shuTwT/astro-twikoo.git",
   "author": "shu <1324073644@qq.com>",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "dev": "pnpm run --filter demo dev",
-    "build": "pnpm run --filter core build"
+    "buil": "pnpm run --filter core build",
+    "build": "pnpm run -C internal/build start",
+    "clean":"pnpm run clean:dist && pnpm run -r --parallel clean",
+    "clean:dist":"rimraf dist"
   },
   "devDependencies": {
     "@astro-twikoo/core": "workspace:*",
+    "@astro-twikoo/locale": "workspace:*",
     "@cloudbase/cli": "^1.9.5",
     "@cloudbase/js-sdk": "^1.7.1",
     "@fortawesome/fontawesome-free": "^5.15.4",
@@ -17,6 +22,7 @@
     "@vitejs/plugin-vue": "^4.4.0",
     "blueimp-md5": "^2.19.0",
     "element-plus": "^2.4.2",
+    "gulp": "^4.0.2",
     "jsdom": "^22.1.0",
     "mitt": "^3.0.1",
     "nanostores": "^0.9.4",
@@ -26,6 +32,7 @@
     "unplugin-auto-import": "^0.16.7",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.5.0",
-    "vue": "^3.3.1"
+    "vue": "^3.3.1",
+    "vue-i18n": "^9.6.5"
   }
 }

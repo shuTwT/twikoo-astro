@@ -14,7 +14,7 @@
   </template>
   
   <script>
-    import {ElButton,ElInput,ClickOutside as VClickOutside,ElLoading} from 'element-plus'
+    import {ElButton,ElInput} from 'element-plus'
     import t from '../utils/i18n'
   import { isQQ } from '../utils'
   

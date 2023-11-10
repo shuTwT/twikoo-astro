@@ -42,7 +42,7 @@
   </template>
   
   <script>
-    import {ElButton,ElInput,ClickOutside as VClickOutside,ElLoading} from 'element-plus'
+    import {ElButton,ElInput,ElLoading} from 'element-plus'
   import { call, logger, t } from '../utils'
   import { version } from '../version'
   import { twikooStore } from '../store'

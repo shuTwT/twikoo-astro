@@ -6,13 +6,13 @@ import {visualizer} from "rollup-plugin-visualizer"
 export default defineConfig({
     plugins: [
         vue(),
-        // visualizer({
-        //     gzipSize: true,
-        //     brotliSize: true,
-        //     emitFile: false,
-        //     filename: "test.html",
-        //     // open: true
-        // })
+        visualizer({
+            gzipSize: true,
+            brotliSize: true,
+            emitFile: false,
+            filename: "test.html",
+            open: true
+        })
     ],
     build: {
         minify: true,
@@ -30,7 +30,7 @@ export default defineConfig({
                     exports: "named",
                     dir: "es",
                     globals:{
-                        vue:'Vue'
+                        vue:'Vue',
                     }
                 },
                 {
@@ -55,7 +55,8 @@ export default defineConfig({
             ]
         },
         lib: {
-            entry: path.resolve(__dirname, "./src/main.js"),
+            entry: 
+                path.resolve(__dirname, "./src/main.js"),
         },
     }
 })

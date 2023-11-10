@@ -37,7 +37,7 @@
   </template>
   
   <script>
-    import {ElButton,ElInput,ClickOutside as VClickOutside,ElLoading} from 'element-plus'
+    import {ElButton,ElInput,ElLoading} from 'element-plus'
   import { t } from '../utils'
   
   export default {

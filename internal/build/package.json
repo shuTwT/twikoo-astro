@@ -1,0 +1,8 @@
+{
+    "name": "@astro-twikoo/build",
+    "private":true,
+    "type": "module",
+    "scripts": {
+        "start":"gulp -f gulpfile.js"
+    }
+}
