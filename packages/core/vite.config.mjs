@@ -1,11 +1,16 @@
 import { defineConfig } from "vite"
 import path from "node:path"
-import vue from "@vitejs/plugin-vue"
+import VueMacros from "unplugin-vue-macros/vite"
+import Vue from "@vitejs/plugin-vue"
 import {visualizer} from "rollup-plugin-visualizer"
 
 export default defineConfig({
     plugins: [
-        vue(),
+        VueMacros({
+            plugins:{
+                vue:Vue()
+            }
+        }),
         visualizer({
             gzipSize: true,
             brotliSize: true,

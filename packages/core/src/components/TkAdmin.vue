@@ -11,7 +11,7 @@
                     <div class="tk-login-title">{{ t('ADMIN_LOGIN_TITLE') }}</div>
                     <input type="hidden" />
                     <ElInput class="tk-password" :placeholder="t('ADMIN_PASSWORD_PLACEHOLDER')" v-model="password"
-                        show-password @keyup.enter.native="onLogin" ref="focusme">
+                        show-password @keyup.enter.native="onLogin" ref="focusmeRef">
                         <template v-slot:prepend>{{ t('ADMIN_PASSWORD') }}</template>
                         <template v-slot:append>
                             <ElButton @click="onLogin">{{ t('ADMIN_LOGIN') }}</ElButton>
@@ -27,7 +27,7 @@
                 <div class="tk-regist" v-if="!isLogin && !isSetPassword">
                     <div class="tk-login-title">{{ t('ADMIN_LOGIN_TITLE') }}</div>
                     <ElInput class="tk-password" :placeholder="t('ADMIN_CREDENTIALS_PLACEHOLDER')" v-if="!isSetCredentials"
-                        v-model="credentials" ref="focusme">
+                        v-model="credentials" ref="focusmeRef">
                         <template v-slot:prepend>{{ t('ADMIN_CREDENTIALS') }}</template>
                     </ElInput>
                     <ElInput class="tk-password" :placeholder="t('ADMIN_SET_PASSWORD_PLACEHOLDER')" v-model="password"
@@ -71,7 +71,158 @@
     </div>
 </template>
   
-<script>
+<script setup>
+import { ElButton, ElInput, ElLoading } from 'element-plus'
+import md5 from 'blueimp-md5'
+import TkAdminComment from './TkAdminComment.vue'
+import TkAdminConfig from './TkAdminConfig.vue'
+import TkAdminImport from './TkAdminImport.vue'
+import TkAdminExport from './TkAdminExport.vue'
+import t from '../utils/i18n'
+import { logger, call } from '../utils'
+import iconClose from '@fortawesome/fontawesome-free/svgs/solid/times.svg?raw'
+import { tcbStore } from '../store'
+import { computed, ref } from 'vue'
+
+const props = defineProps({
+    show: Boolean
+})
+
+const focusmeRef = ref()
+const loading = ref(true)
+const version = ref('')
+const needUpdate = ref(false)
+const isLogin = ref(false)
+const isSetPassword = ref(true)
+const isSetCredentials = ref(false)
+const credentials = ref('')
+const password = ref('')
+const passwordConfirm = ref('')
+const loginErrorMessage = ref('')
+const activeTabName = ref('comment')
+
+const canRegist = computed(() => {
+    return !this.isSetPassword &&
+        !!this.password &&
+        this.password === this.passwordConfirm &&
+        (this.isSetCredentials || this.credentials)
+})
+
+const emit = defineEmits(['close'])
+
+async function onLogin() {
+    if (!password.value) {
+        loginErrorMessage.value = t('ADMIN_PASSWORD_REQUIRED')
+        return
+    }
+    loading.value = true
+    loginErrorMessage.value = ''
+    const passwordMd5 = md5(this.password)
+    const res = await call(tcbStore.get(), 'LOGIN', {
+        password: passwordMd5
+    })
+    if (res.result.message) {
+        loginErrorMessage.value = res.result.message
+    } else if (res.result.ticket) {
+        try {
+            await tcbStore.get().auth
+                .customAuthProvider()
+                .signIn(res.result.ticket)
+            logger.log('登录成功')
+            password.value = ''
+            checkAuth()
+        } catch (err) {
+            logger.error('登录失败', err)
+        }
+    } else if (res.result.code === 0) {
+        logger.log('登录成功')
+        localStorage.setItem('twikoo-access-token', passwordMd5)
+        password.value = ''
+        checkAuth()
+    }
+    loading.value = false
+}
+async function onLogout() {
+    loading.value = true
+    if (tcbStore.get()) {
+        await tcbStore.get().auth.signOut()
+        await tcbStore.get().auth
+            .anonymousAuthProvider()
+            .signIn()
+    } else {
+        localStorage.removeItem('twikoo-access-token')
+    }
+    isLogin.value = false
+    loading.value = false
+}
+async function onRegist() {
+    loading.value = true
+    const passwordMd5 = md5(password.value)
+    const res = await call(tcbStore.get(), 'SET_PASSWORD', {
+        password: passwordMd5,
+        credentials: this.credentials
+    })
+    if (!res.result.code) {
+        password.value = ''
+        isSetPassword.value = true
+        onLogin()
+    } else {
+        loginErrorMessage.value = t('ADMIN_REGIST_FAILED')
+        if (res.result.message) {
+            loginErrorMessage.value += '，' + res.result.message
+        }
+        logger.warn('Twikoo 注册失败', res)
+    }
+    loading.value = false
+}
+async function onShow() {
+    loading.value = true
+    await this.checkAuth()
+    if (!this.isLogin) {
+        await checkIfPasswordSet()
+        focusPassword()
+    }
+    loading.value = false
+}
+function focusPassword() {
+    // 聚焦密码输入框
+    setTimeout(() => {
+        focusmeRef.value && focusmeRef.value.focus()
+    }, 500)
+}
+async function checkAuth() {
+    // 检查用户身份
+
+    if (tcbStore.get()) {
+        const currentUser = await tcbStore.get().auth.getCurrenUser()
+        isLogin.value = currentUser.loginType === 'CUSTOM'
+    } else {
+        const result = await call(tcbStore.get(), 'GET_CONFIG')
+        if (result && result.result && result.result.config) {
+            isLogin.value = result.result.config.IS_ADMIN
+        }
+    }
+}
+async function checkIfPasswordSet() {
+    // 检查是否设置过密码
+    try {
+        const res = await call(tcbStore.get(), 'GET_PASSWORD_STATUS')
+        version.value = res.result.version
+        isSetPassword.value = res.result.status
+        isSetCredentials.value = !tcbStore.get()
+    } catch (e) {
+        needUpdate.value = true
+        loading.value = false
+        throw e
+    }
+}
+function onClose() {
+    emit('close')
+}
+
+</script>
+
+<!-- <script>
 import { ElButton, ElInput, ElLoading } from 'element-plus'
 import md5 from 'blueimp-md5'
 import TkAdminComment from './TkAdminComment.vue'
@@ -240,7 +391,7 @@ export default {
         }
     }
 }
-</script>
+</script> -->
   
 <style>
 .tk-admin-container {
@@ -372,4 +523,5 @@ export default {
 .tk-panel .tk-tab.__active {
     color: #ffffff;
     border-bottom: 2px solid #ffffff;
-}</style>
+}
+</style>

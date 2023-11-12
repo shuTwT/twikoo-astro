@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "types": ["unplugin-vue-macros/macros-global"]
+    },
+    "vueCompilerOptions": {
+        "plugins": [
+            "@vue-macros/volar/define-options",
+        ]
+    }
+}

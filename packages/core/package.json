@@ -46,6 +46,10 @@
     "prismjs":"^1.29.0",
     "vue":">=3.3.1"
   },
+  "devDependencies": {
+    "unplugin-vue-macros":"^2.6.2",
+    "vite": "^4.5.0"
+  },
   "peerDependenciesMeta": {
     "prismjs":{
         "optional": true
