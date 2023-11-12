@@ -7,7 +7,7 @@ import {
   defaultGravatar,
 } from "../utils";
 export default {
-  name: "zh-cn",
+  name: "zh-CN",
   el: {
     ADMIN_CLIENT_VERSION: "前端版本：",
     ADMIN_SERVER_VERSION: "云函数版本：",

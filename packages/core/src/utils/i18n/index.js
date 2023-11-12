@@ -1,5 +1,5 @@
-import i18n from './i18n'
-
+//import i18n from './i18n'
+import {zhCn} from '@astro-twikoo/locale/'
 // ISO Language Code Table http://www.lingoes.net/en/translator/langcode.htm
 // RSS Language Code Table https://www.rssboard.org/rss-language-codes
 
@@ -20,6 +20,7 @@ const langs = {
   ja: 5,
   'ja-JP': 5
 }
+const langList=['zh-CN','zh-HK','zh-TW','en','uz','ja']
 
 let userLanguage = ''
 
@@ -37,9 +38,14 @@ const translate = (key, language) => {
   const lang = language || userLanguage || typeof window!=='undefined'&&navigator.language
   let value
   if (lang && langs[lang]) {
-    value = i18n[key][langs[lang]]
+    const lang=langList[langs[lang]]
+    if(langList[langs[lang]]=='zh-CN'){
+      value=zhCn.el[key]
+    }
+    //value = i18n[key][langs[lang]]
   } else {
-    value = i18n[key][langs['zh-CN']]
+    value=zhCn.el[key]
+    //value = i18n[key][langs['zh-CN']]
   }
   return value || ''
 }
