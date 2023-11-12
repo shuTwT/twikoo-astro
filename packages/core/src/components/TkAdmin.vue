@@ -220,6 +220,13 @@ function onClose() {
     emit('close')
 }
 
+watch(
+    ()=>props.show,
+    (val)=>{
+        if(val) onShow()
+    }
+)
+
 </script>
 
 <!-- <script>

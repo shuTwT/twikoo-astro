@@ -21,29 +21,29 @@ const props = defineProps({
 const emit=defineEmits(['click'])
 
 const gravatarCdn = computed(() => {
-  if (this.config && this.config.GRAVATAR_CDN) {
-    return this.config.GRAVATAR_CDN
+  if (props.config && props.config.GRAVATAR_CDN) {
+    return props.config.GRAVATAR_CDN
   } else {
     return 'cravatar.cn'
   }
 })
 const defaultGravatar = computed(() => {
-  if (this.config && this.config.DEFAULT_GRAVATAR) {
-    return this.config.DEFAULT_GRAVATAR
+  if (props.config && props.config.DEFAULT_GRAVATAR) {
+    return props.config.DEFAULT_GRAVATAR
   } else {
     return 'identicon'
   }
 })
 
 const avatarInner = computed(() => {
-  if (this.avatar) {
-    return this.avatar
-  } else if (this.mailMd5) {
-    return `https://${this.gravatarCdn}/avatar/${this.mailMd5}?d=${this.defaultGravatar}`
-  } else if (this.mail && isQQ(this.mail)) {
-    return getQQAvatar(this.mail)
-  } else if (this.mail) {
-    return `https://${this.gravatarCdn}/avatar/${md5(normalizeMail(this.mail))}?d=${this.defaultGravatar}`
+  if (props.avatar) {
+    return props.avatar
+  } else if (props.mailMd5) {
+    return `https://${gravatarCdn}/avatar/${props.mailMd5}?d=${defaultGravatar}`
+  } else if (props.mail && isQQ(props.mail)) {
+    return getQQAvatar(props.mail)
+  } else if (props.mail) {
+    return `https://${gravatarCdn}/avatar/${md5(normalizeMail(props.mail))}?d=${defaultGravatar}`
   } else {
     return ''
   }
@@ -51,8 +51,8 @@ const avatarInner = computed(() => {
 
 function onClick() {
   emit('click')
-  if (this.link) {
-    window.open(convertLink(this.link), '_blank').opener = null
+  if (props.link) {
+    window.open(convertLink(props.link), '_blank').opener = null
   }
 }
 

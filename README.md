@@ -10,9 +10,9 @@ A **simple**, **safe**, **free** comment system.
 
 这是一个[twikoo](https://github.com/twikoojs/twikoo)的魔改版，目标适配astro，理论上vue项目也能使用
 
-~~终极目标：打包体积<100kb~~
+~~终极目标：打包体积<200kb~~
 
-目前约为 300kb
+目前约为 280kb
 
 **注意**：该仓库仅包含魔改版的前端，后端依旧为原版
 

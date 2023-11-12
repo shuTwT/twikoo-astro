@@ -78,7 +78,7 @@ async function importFile(fileID) {
   log(`${t('ADMIN_IMPORT_IMPORTING')}${source.value}`)
   const result = await call(tcbStore.get(), 'COMMENT_IMPORT_FOR_ADMIN', {
     fileId: fileID,
-    source: this.source
+    source: source.value
   })
   logText.value += result.result.log
   log(`${t('ADMIN_IMPORT_IMPORTED')}${source.value}`)
