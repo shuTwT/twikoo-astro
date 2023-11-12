@@ -39,6 +39,8 @@
   },
   "peerDependencies": {
     "@nanostores/vue": "^0.10.0",
+    "lodash-es": "^4.17.21",
+    "lodash-unified": "^1.0.2",
     "nanostores": "^0.9.4",
     "owo":"^1.0.2",
     "prismjs":"^1.29.0",
