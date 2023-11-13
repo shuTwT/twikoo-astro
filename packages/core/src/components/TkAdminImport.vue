@@ -98,105 +98,12 @@ function log(message) {
 }
 function scrollLogToBottom() {
   if (logTextAreaRef.value) {
-    const textareaEl = logTextAreaRef.$refs.textarea
+    const textareaEl = logTextAreaRef.value.$refs.textarea
     textareaEl.scrollTop = textareaEl.scrollHeight
   }
 }
 
 </script>
-  
-<!-- <script>
-import { ElButton, ElInput, ElLoading } from 'element-plus'
-import { call, readAsText, t } from '../utils'
-import { tcbStore } from '../store'
-export default {
-  components: {
-    ElButton,
-    ElInput
-  },
-  directives: {
-    "Loading": ElLoading.directive
-  },
-  data() {
-    return {
-      loading: false,
-      source: '',
-      logText: '',
-      warnText: {
-        valine: t('ADMIN_IMPORT_TIP_VALINE'),
-        disqus: t('ADMIN_IMPORT_TIP_DISQUS'),
-        artalk: t('ADMIN_IMPORT_TIP_ARTALK'),
-        artalk2: '',
-        twikoo: ''
-      }
-    }
-  },
-  methods: {
-    t,
-    async uploadFile() {
-      if (!this.source) {
-        this.log(t('ADMIN_IMPORT_SOURCE_REQUIRED'))
-        return
-      }
-      const filePath = this.$refs.inputFile.files[0]
-      if (!filePath) {
-        this.log(t('ADMIN_IMPORT_FILE_REQUIRED'))
-        return
-      }
-      this.log(t('ADMIN_IMPORT_START'))
-      this.loading = true
-      try {
-        if (tcbStore.get()) {
-          const result = await tcbStore.get().app.uploadFile({
-            cloudPath: `import/${Date.now()}`,
-            filePath,
-            onUploadProgress: (progressEvent) => {
-              const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-              this.log(`${t('ADMIN_IMPORT_UPLOADING')}${percentCompleted}%`)
-            }
-          })
-          this.log(`${t('ADMIN_IMPORT_UPLOADED')}${result.fileID}`)
-          await this.importFile(result.fileID)
-        } else {
-          await this.importFileToVercel(filePath)
-        }
-      } catch (e) {
-        console.error(e)
-        this.log(e.message)
-      }
-      this.loading = false
-    },
-    async importFile(fileID) {
-      this.log(`${t('ADMIN_IMPORT_IMPORTING')}${this.source}`)
-      const result = await call(tcbStore.get(), 'COMMENT_IMPORT_FOR_ADMIN', {
-        fileId: fileID,
-        source: this.source
-      })
-      this.logText += result.result.log
-      this.log(`${t('ADMIN_IMPORT_IMPORTED')}${this.source}`)
-    },
-    async importFileToVercel(filePath) {
-      this.log(`${t('ADMIN_IMPORT_IMPORTING')}${this.source}`)
-      const result = await call(tcbStore.get(), 'COMMENT_IMPORT_FOR_ADMIN', {
-        file: await readAsText(filePath),
-        source: this.source
-      })
-      this.logText += result.result.log
-      this.log(`${t('ADMIN_IMPORT_IMPORTED')}${this.source}`)
-    },
-    log(message) {
-      this.logText += `${new Date().toLocaleString()} ${message}\n`
-      this.$nextTick(this.scrollLogToBottom)
-    },
-    scrollLogToBottom() {
-      if (this.$refs.logTextArea) {
-        const textareaEl = this.$refs.logTextArea.$refs.textarea
-        textareaEl.scrollTop = textareaEl.scrollHeight
-      }
-    }
-  }
-}
-</script> -->
   
 <style>
 .tk-admin-import {

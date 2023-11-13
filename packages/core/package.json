@@ -12,7 +12,8 @@
     "./package.json":"./package.json",
     "./dist/*":"./dist/*",
     "./es/*":"./es/*",
-    "./lib/*":"./lib/*"
+    "./lib/*":"./lib/*",
+    "./*":"./*"
   },
   "files": [
     "dist/*.js",

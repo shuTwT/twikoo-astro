@@ -4,5 +4,8 @@
     "description": "astro-twikoo locale",
     "license":"MIT",
     "main": "index.ts",
-    "module": "index.ts"
+    "module": "index.ts",
+    "scripts": {
+        "build":"tsup"
+    }
 }

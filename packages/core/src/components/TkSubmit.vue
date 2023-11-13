@@ -32,7 +32,7 @@
 </template>
   
 <script setup>
-import { ElButton, ElInput, ClickOutside } from 'element-plus'
+import { ElButton, ElInput, ClickOutside as vClickOutside } from 'element-plus'
 import iconMarkdown from '@fortawesome/fontawesome-free/svgs/brands/markdown.svg?raw'
 import iconEmotion from '@fortawesome/fontawesome-free/svgs/regular/laugh.svg?raw'
 import iconImage from '@fortawesome/fontawesome-free/svgs/regular/image.svg?raw'
@@ -42,7 +42,7 @@ import t from '../utils/i18n'
 import { marked, call, logger, renderLinks, renderMath, renderCode, initOwoEmotions, initMarkedOwo, getUrl, getHref, blobToDataURL } from '../utils'
 import OwO from '../lib/owo'
 import { twikooStore, tcbStore } from '../store'
-import { computed, inject, ref, nextTick, watch } from 'vue'
+import { computed, inject, ref, nextTick, watch,onMounted } from 'vue'
 
 const imageTypes = [
   'apng',
@@ -81,15 +81,13 @@ const owoRef = ref(null)
 const inputFileRef = ref(null)
 const commentPreviewRef = ref(null)
 
-const $mitt = inject("mitt")
-
 const canSend = computed(() => {
-  return !this.isSending &&
-    !!this.isMetaValid &&
-    !!this.comment.trim()
+  return !isSending.value &&
+    !!isMetaValid.value &&
+    !!comment.value.trim()
 })
 const textarea = computed(() => {
-  return textareaRef.value ? textareaRef.$refs.textarea : null
+  return textareaRef.value ? textareaRef.value.$refs.textarea : null
 })
 const commentPlaceholder = computed(() => {
   let ph = twikooStore.get().placeholder || props.config.COMMENT_PLACEHOLDER || ''
@@ -109,15 +107,15 @@ function initDraft() {
   }
 }
 function saveDraft() {
-  localStorage.setItem('twikoo-draft', this.comment)
+  localStorage.setItem('twikoo-draft', comment.value)
 }
 async function initOwo() {
   if (props.config.SHOW_EMOTION === 'true') {
     const odata = await initOwoEmotions(props.config.EMOTION_CDN || 'https://owo.imaegoo.com/owo.json')
     owo.value = new OwO({
       logo: iconEmotion, // OwO button text, default: `OωO表情`
-      container: owoRef, // OwO container, default: `document.getElementsByClassName('OwO')[0]`
-      target: textareaRef, // OwO target input or textarea, default: `document.getElementsByTagName('textarea')[0]`
+      container: owoRef.value, // OwO container, default: `document.getElementsByClassName('OwO')[0]`
+      target: textareaRef.value, // OwO target input or textarea, default: `document.getElementsByTagName('textarea')[0]`
       odata,
       position: 'down', // OwO body position, default: `down`
       maxHeight: '250px' // OwO body max-height, default: `250px`
@@ -149,7 +147,7 @@ function updatePreview() {
       renderLinks(commentPreviewRef)
       renderMath(commentPreviewRef, twikooStore.get().katex)
       if (props.config.HIGHLIGHT === 'true') {
-        renderCode(commentPreviewRef, props.config.HIGHLIGHT_THEME)
+        renderCode(commentPreviewRef.value, props.config.HIGHLIGHT_THEME)
       }
     })
   }
@@ -337,316 +335,6 @@ watch(
 
 
 </script>
-
-<!-- <script>
-import { ElButton, ElInput, ClickOutside } from 'element-plus'
-import iconMarkdown from '@fortawesome/fontawesome-free/svgs/brands/markdown.svg?raw'
-import iconEmotion from '@fortawesome/fontawesome-free/svgs/regular/laugh.svg?raw'
-import iconImage from '@fortawesome/fontawesome-free/svgs/regular/image.svg?raw'
-import TkAvatar from './TkAvatar.vue'
-import TkMetaInput from './TkMetaInput.vue'
-import t from '../utils/i18n'
-import { marked, call, logger, renderLinks, renderMath, renderCode, initOwoEmotions, initMarkedOwo, getUrl, getHref, blobToDataURL } from '../utils'
-import OwO from '../lib/owo'
-import { twikooStore, tcbStore } from '../store'
-
-const imageTypes = [
-  'apng',
-  'bmp',
-  'gif',
-  'jpeg',
-  'jpg',
-  'png',
-  'svg',
-  'tif',
-  'tiff',
-  'webp'
-]
-
-export default {
-  components: {
-    ElButton,
-    ElInput,
-    TkAvatar,
-    TkMetaInput,
-  },
-  directives: { ClickOutside },
-  props: {
-    replyId: String,
-    pid: String,
-    config: Object
-  },
-  data() {
-    return {
-      isSending: false,
-      isPreviewing: false,
-      isMetaValid: false,
-      errorMessage: '',
-      owo: null,
-      comment: '',
-      commentHtml: '',
-      nick: '',
-      mail: '',
-      link: '',
-      iconMarkdown,
-      iconEmotion,
-      iconImage
-    }
-  },
-  inject: ["$mitt"],
-  computed: {
-    canSend() {
-      return !this.isSending &&
-        !!this.isMetaValid &&
-        !!this.comment.trim()
-    },
-    textarea() {
-      return this.$refs.textarea ? this.$refs.textarea.$refs.textarea : null
-    },
-    commentPlaceholder() {
-      let ph = twikooStore.get().placeholder || this.config.COMMENT_PLACEHOLDER || ''
-      ph = ph.replace(/<br>/g, '\n')
-      return ph
-    },
-    maxLength() {
-      let limitLength = parseInt(this.config.LIMIT_LENGTH)
-      if (Number.isNaN(limitLength)) limitLength = 500
-      return limitLength > 0 ? limitLength : null
-    }
-  },
-  methods: {
-    t,
-    initDraft() {
-      const draft = localStorage.getItem('twikoo-draft')
-      if (!this.comment && draft) {
-        this.comment = draft
-      }
-    },
-    saveDraft() {
-      localStorage.setItem('twikoo-draft', this.comment)
-    },
-    async initOwo() {
-      if (this.config.SHOW_EMOTION === 'true') {
-        const odata = await initOwoEmotions(this.config.EMOTION_CDN || 'https://owo.imaegoo.com/owo.json')
-        this.owo = new OwO({
-          logo: iconEmotion, // OwO button text, default: `OωO表情`
-          container: this.$refs.owo, // OwO container, default: `document.getElementsByClassName('OwO')[0]`
-          target: this.textarea, // OwO target input or textarea, default: `document.getElementsByTagName('textarea')[0]`
-          odata,
-          position: 'down', // OwO body position, default: `down`
-          maxHeight: '250px' // OwO body max-height, default: `250px`
-        })
-        marked.setOptions({ odata: initMarkedOwo(odata) })
-      }
-    },
-    onMetaUpdate(updates) {
-      this.nick = updates.meta.nick
-      this.mail = updates.meta.mail
-      this.link = updates.meta.link
-      this.isMetaValid = updates.valid
-    },
-    cancel() {
-      this.$emit('cancel')
-    },
-    onCommentInput() {
-      this.saveDraft()
-      this.updatePreview()
-    },
-    preview() {
-      this.isPreviewing = !this.isPreviewing
-      this.updatePreview()
-    },
-    updatePreview() {
-      if (this.isPreviewing) {
-        this.commentHtml = marked(this.comment)
-        this.$nextTick(() => {
-          renderLinks(this.$refs['comment-preview'])
-          renderMath(this.$refs['comment-preview'], twikooStore.get().katex)
-          if (this.config.HIGHLIGHT === 'true') {
-            renderCode(this.$refs['comment-preview'], this.config.HIGHLIGHT_THEME)
-          }
-        })
-      }
-    },
-    async send() {
-      this.isSending = true
-      try {
-        if (this.comment.match(new RegExp(`!\\[${t('IMAGE_UPLOAD_PLACEHOLDER')}.+\\]\\(\\)`))) {
-          throw new Error(t('IMAGE_UPLOAD_PLEASE_WAIT'))
-        }
-        const url = getUrl(twikooStore.get().path)
-        const href = getHref(twikooStore.get().href)
-        const comment = {
-          nick: this.nick,
-          mail: this.mail,
-          link: this.link,
-          ua: navigator.userAgent,
-          url,
-          href,
-          comment: marked(this.comment),
-          pid: this.pid ? this.pid : this.replyId,
-          rid: this.replyId
-        }
-        const sendResult = await call(tcbStore.get(), 'COMMENT_SUBMIT', comment)
-        if (sendResult && sendResult.result && sendResult.result.id) {
-          this.comment = ''
-          this.errorMessage = ''
-          this.$emit('load')
-          this.saveDraft()
-        } else {
-          throw new Error(sendResult.result.message)
-        }
-      } catch (e) {
-        logger.error('评论失败', e)
-        this.errorMessage = `${t('COMMENT_FAILED')}: ${e && e.message}`
-      } finally {
-        this.isSending = false
-      }
-    },
-    addEventListener() {
-      if (this.textarea) {
-        this.textarea.addEventListener('paste', this.onPaste)
-      }
-    },
-    onBgImgChange() {
-      if (this.config.COMMENT_BG_IMG && this.textarea) {
-        this.textarea.style['background-image'] = `url("${this.config.COMMENT_BG_IMG}")`
-      }
-    },
-    onEnterKeyUp(event) {
-      // 按 Ctrl + Enter / Command + Enter 发送
-      if ((event.ctrlKey || event.metaKey) && this.canSend) {
-        this.send()
-        event.preventDefault()
-      }
-    },
-    closeOwo() {
-      if (this.owo && this.owo.container.classList.contains('OwO-open')) {
-        this.owo.toggle()
-      }
-    },
-    openSelectImage() {
-      this.$refs.inputFile.click()
-    },
-    onSelectImage() {
-      const photo = this.$refs.inputFile.files[0]
-      this.parseAndUploadPhoto(photo)
-    },
-    onPaste(e) {
-      if (!e.clipboardData) return
-      let photo
-      if (e.clipboardData.files[0]) {
-        photo = e.clipboardData.files[0]
-      } else if (e.clipboardData.items[0] && e.clipboardData.items[0].getAsFile()) {
-        photo = e.clipboardData.items[0].getAsFile()
-      }
-      this.parseAndUploadPhoto(photo)
-    },
-    parseAndUploadPhoto(photo) {
-      if (!photo || this.config.SHOW_IMAGE !== 'true') return
-      const nameSplit = photo.name.split('.')
-      const fileType = nameSplit.length > 1 ? nameSplit.pop() : ''
-      if (imageTypes.indexOf(fileType.toLowerCase()) === -1) return
-      const userId = this.getUserId()
-      const fileIndex = `${Date.now()}-${userId}`
-      const fileName = nameSplit.join('.')
-      this.paste(this.getImagePlaceholder(fileIndex, fileType))
-      const imageCdn = this.config.IMAGE_CDN
-      if (tcbStore.get() && (!imageCdn || imageCdn === 'qcloud')) {
-        this.uploadPhotoToQcloud(fileIndex, fileName, fileType, photo)
-      } else if (imageCdn) {
-        this.uploadPhotoToThirdParty(fileIndex, fileName, fileType, photo)
-      } else {
-        this.uploadFailed(fileIndex, fileType, t('IMAGE_UPLOAD_FAILED_NO_CONF'))
-      }
-    },
-    getUserId() {
-      if (tcbStore.get()) {
-        return tcbStore.get().auth.currentUser.uid
-      } else {
-        return localStorage.getItem('twikoo-access-token')
-      }
-    },
-    async uploadPhotoToQcloud(fileIndex, fileName, fileType, photo) {
-      try {
-        const uploadResult = await tcbStore.get().app.uploadFile({
-          cloudPath: `tk-img/${fileIndex}.${fileType}`,
-          filePath: photo
-        })
-        if (uploadResult.fileID) {
-          const tempUrlResult = await tcbStore.get().app.getTempFileURL({ fileList: [uploadResult.fileID] })
-          const tempFileUrl = tempUrlResult.fileList[0].tempFileURL
-          this.uploadCompleted(fileIndex, fileName, fileType, tempFileUrl)
-        }
-      } catch (e) {
-        console.error(e)
-        this.uploadFailed(fileIndex, fileType, e.message)
-      }
-    },
-    async uploadPhotoToThirdParty(fileIndex, fileName, fileType, photo) {
-      try {
-        let smmsImageDuplicateCheck
-        const { result: uploadResult } = await call(tcbStore.get(), 'UPLOAD_IMAGE', {
-          fileName: `${fileIndex}.${fileType}`,
-          photo: await blobToDataURL(photo)
-        })
-        if (uploadResult.data) {
-          this.uploadCompleted(fileIndex, fileName, fileType, uploadResult.data.url)
-        } else if (uploadResult.code === 1040 && uploadResult.err &&
-          (smmsImageDuplicateCheck = uploadResult.err.match(/this image exists at: (http[^ ]+)/))) {
-          console.warn(uploadResult)
-          this.uploadCompleted(fileIndex, fileName, fileType, smmsImageDuplicateCheck[1])
-        } else {
-          console.error(uploadResult)
-          this.uploadFailed(fileIndex, fileType, uploadResult.err)
-        }
-      } catch (e) {
-        console.error(e)
-        this.uploadFailed(fileIndex, fileType, e.message)
-      }
-    },
-    uploadCompleted(fileIndex, fileName, fileType, fileUrl) {
-      fileName = fileName.replace(/[[\]]/g, '_')
-      this.comment = this.comment.replace(this.getImagePlaceholder(fileIndex, fileType), `![${fileName}](${fileUrl})`)
-      this.$refs.inputFile.value = ''
-    },
-    uploadFailed(fileIndex, fileType, reason) {
-      this.comment = this.comment.replace(this.getImagePlaceholder(fileIndex, fileType), `_${t('IMAGE_UPLOAD_FAILED')}: ${reason}_`)
-      this.$refs.inputFile.value = ''
-    },
-    paste(text) {
-      if (document.selection) {
-        document.selection.createRange().text = text
-      } else if (this.textarea.selectionStart || this.textarea.selectionStart === 0) {
-        const n = this.textarea.selectionStart
-        const r = this.textarea.selectionEnd
-        this.comment = this.comment.substring(0, n) + text + this.comment.substring(r, this.comment.length)
-        this.textarea.selectionStart = n + text.length
-        this.textarea.selectionEnd = n + text.length
-      } else {
-        this.comment += text
-      }
-    },
-    getImagePlaceholder(fileIndex, fileType) {
-      return `![${t('IMAGE_UPLOAD_PLACEHOLDER')} ${fileIndex}.${fileType}]()`
-    }
-  },
-  mounted() {
-    this.initDraft()
-    this.initOwo()
-    this.addEventListener()
-    this.onBgImgChange()
-  },
-  watch: {
-    'config.SHOW_EMOTION': function () {
-      this.initOwo()
-    },
-    'config.COMMENT_BG_IMG': function () {
-      this.onBgImgChange()
-    }
-  }
-}
-</script> -->
   
 <style>
 .tk-submit {

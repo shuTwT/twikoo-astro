@@ -13,6 +13,7 @@
 import { ElButton, ElInput, ElLoading } from 'element-plus'
 import { call, t } from '../utils'
 import { tcbStore } from '../store'
+import {ref} from "vue"
 
 const loading = ref(false)
 
@@ -39,45 +40,3 @@ function downloadJson(fileName, json) {
   saveLink.click()
 }
 </script>
-<!-- <script>
-import { ElButton, ElInput, ElLoading } from 'element-plus'
-import { call, t } from '../utils'
-import { tcbStore } from '../store'
-
-export default {
-  components: { ElButton, ElInput },
-  directives: {
-    "Loading": ElLoading.directive
-  },
-  data() {
-    return {
-      loading: false
-    }
-  },
-  methods: {
-    t,
-    async doExport(collection) {
-      this.loading = true
-      try {
-        const result = await call(tcbStore.get(), 'COMMENT_EXPORT_FOR_ADMIN', {
-          collection
-        })
-        if (result.result.data) {
-          this.downloadJson(`twikoo-${collection}.json`, result.result.data)
-        }
-      } finally {
-        this.loading = false
-      }
-    },
-    downloadJson(fileName, json) {
-      const jsonStr = (json instanceof Object) ? JSON.stringify(json, null, 2) : json
-      const url = window.URL || window.webkitURL || window
-      const blob = new Blob([jsonStr])
-      const saveLink = document.createElementNS('http://www.w3.org/1999/xhtml', 'a')
-      saveLink.href = url.createObjectURL(blob)
-      saveLink.download = fileName
-      saveLink.click()
-    }
-  }
-}
-</script> -->

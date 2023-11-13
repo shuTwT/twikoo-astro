@@ -1,5 +1,5 @@
 <template>
-  <div class="tk-comment" :id="comment.id" :class="{ 'tk-master': comment.master }" ref="tk-comment">
+  <div class="tk-comment" :id="comment.id" :class="{ 'tk-master': comment.master }" ref="tkCommentRef">
     <TkAvatar :config="config" :nick="comment.nick" :avatar="comment.avatar" :mail-md5="comment.mailMd5"
       :link="convertedLink" />
     <div class="tk-main">
@@ -30,7 +30,7 @@
       <div class="tk-content">
         <span v-if="comment.pid">{{ t('COMMENT_REPLIED') }} <a class="tk-ruser" :href="`#${comment.pid}`">@{{
           comment.ruser }}</a> :</span>
-        <span v-html="comment.comment" ref="comment"></span>
+        <span v-html="comment.comment" ref="commentRef"></span>
       </div>
       <div class="tk-extras" v-if="comment.ipRegion || comment.os || comment.browser">
         <div class="tk-extra" v-if="comment.ipRegion">
@@ -233,8 +233,8 @@ onMounted(() => {
   nextTick(showExpandIfNeed)
   nextTick(scrollToComment)
   nextTick(() => {
-    renderLinks(this.$refs.comment)
-    renderMath(this.$refs.comment, twikooStore.get().katex)
+    renderLinks(commentRef.value)
+    renderMath(commentRef.value, twikooStore.get().katex)
   })
   checkAuth()
 })
@@ -262,208 +262,7 @@ watch(
   }
 )
 </script>
-<!-- <script>
-import { timeago, convertLink, call, renderLinks, renderMath, renderCode, t } from '../utils'
-import TkAction from './TkAction.vue'
-import TkAvatar from './TkAvatar.vue'
-import TkSubmit from './TkSubmit.vue'
-import iconWindows from '@fortawesome/fontawesome-free/svgs/brands/windows.svg?raw'
-import iconApple from '@fortawesome/fontawesome-free/svgs/brands/apple.svg?raw'
-import iconAndroid from '@fortawesome/fontawesome-free/svgs/brands/android.svg?raw'
-import iconLinux from '@fortawesome/fontawesome-free/svgs/brands/linux.svg?raw'
-import iconUbuntu from '@fortawesome/fontawesome-free/svgs/brands/ubuntu.svg?raw'
-import iconChrome from '@fortawesome/fontawesome-free/svgs/brands/chrome.svg?raw'
-import iconFirefox from '@fortawesome/fontawesome-free/svgs/brands/firefox-browser.svg?raw'
-import iconSafari from '@fortawesome/fontawesome-free/svgs/brands/safari.svg?raw'
-import iconIe from '@fortawesome/fontawesome-free/svgs/brands/internet-explorer.svg?raw'
-import iconEdge from '@fortawesome/fontawesome-free/svgs/brands/edge.svg?raw'
-import iconOther from '@fortawesome/fontawesome-free/svgs/regular/window-maximize.svg?raw'
-import iconLocation from '@fortawesome/fontawesome-free/svgs/solid/location-arrow.svg?raw'
-import { twikooStore, tcbStore } from '../store'
 
-const osList = {
-  win: iconWindows,
-  mac: iconApple,
-  ipad: iconApple,
-  iphone: iconApple,
-  ios: iconApple,
-  android: iconAndroid,
-  ubuntu: iconUbuntu,
-  linux: iconLinux
-}
-
-const browserList = {
-  edge: iconEdge,
-  chrome: iconChrome,
-  firefox: iconFirefox,
-  safari: iconSafari,
-  explorer: iconIe,
-  ie: iconIe
-}
-
-export default {
-  name: 'TkComment', // 允许组件模板递归地调用自身
-  components: {
-    TkAction,
-    TkAvatar,
-    TkSubmit
-  },
-  data() {
-    return {
-      pid: '',
-      like: 0,
-      liked: false,
-      likeLoading: false,
-      isExpanded: false,
-      hasExpand: false,
-      isLogin: false
-    }
-  },
-  props: {
-    comment: Object,
-    replying: Boolean,
-    config: Object
-  },
-  computed: {
-    displayCreated() {
-      return timeago(this.comment.created)
-    },
-    jsonTimestamp() {
-      return new Date(this.comment.created).toJSON()
-    },
-    localeTime() {
-      return new Date(this.comment.created).toLocaleString()
-    },
-    iconOs() {
-      return this.getIconBy(this.comment.os, osList)
-    },
-    iconBrowser() {
-      return this.getIconBy(this.comment.browser, browserList)
-    },
-    iconLocation: () => iconLocation,
-    showExpand() {
-      return this.hasExpand && !this.isExpanded
-    },
-    showCollapse() {
-      return this.hasExpand && this.isExpanded
-    },
-    convertedLink() {
-      return convertLink(this.comment.link)
-    }
-  },
-  methods: {
-    t,
-    getIconBy(name, list) {
-      const lowerCaseName = name.toLowerCase()
-      for (const key in list) {
-        if (lowerCaseName.indexOf(key) !== -1) return list[key]
-      }
-      return iconOther
-    },
-    showExpandIfNeed() {
-      if (this.comment.replies && this.comment.replies.length > 0 && this.$refs['tk-replies']) {
-        // 200 是回复区域最大高度
-        // 36 是展开按钮高度
-        this.hasExpand = this.$refs['tk-replies'].scrollHeight > 200 + 36
-      }
-    },
-    scrollToComment() {
-      if (window.location.hash.indexOf(this.comment.id) !== -1) {
-        this.$refs['tk-comment'].scrollIntoView()
-        this.$emit('expand')
-      }
-    },
-    async onLike() {
-      if (this.likeLoading) return // 防止连续点击
-      this.likeLoading = true
-      await call(tcbStore.get(), 'COMMENT_LIKE', { id: this.comment.id })
-      if (this.liked) {
-        this.like--
-      } else {
-        this.like++
-      }
-      this.liked = !this.liked
-      this.likeLoading = false
-    },
-    onReply() {
-      this.$emit('reply', this.comment.id)
-    },
-    onReplyReply(id) {
-      // 楼中楼回复
-      this.pid = id
-      this.$emit('reply', this.comment.id)
-    },
-    onCancel() {
-      this.pid = ''
-      this.$emit('reply', '')
-    },
-    onLoad() {
-      this.pid = ''
-      this.$emit('reply', '')
-      this.$emit('load')
-      this.onExpand()
-    },
-    onExpand() {
-      this.isExpanded = true
-    },
-    onCollapse() {
-      this.isExpanded = false
-    },
-    async checkAuth() {
-      // 检查用户身份
-      if (tcbStore.get()) {
-        const currentUser = await tcbStore.get().auth.getCurrenUser()
-        this.isLogin = currentUser.loginType === 'CUSTOM'
-      } else {
-        this.isLogin = twikooStore.get().serverConfig && twikooStore.get().serverConfig.IS_ADMIN
-      }
-    },
-    handleSpam(isSpam) {
-      this.setComment({ isSpam })
-    },
-    handleTop(top) {
-      this.setComment({ top })
-    },
-    async setComment(set) {
-      this.loading = true
-      await call(tcbStore.get(), 'COMMENT_SET_FOR_ADMIN', {
-        id: this.comment.id,
-        set
-      })
-      this.loading = false
-      this.$emit('load')
-    }
-  },
-  mounted() {
-    this.$nextTick(this.showExpandIfNeed)
-    this.$nextTick(this.scrollToComment)
-    this.$nextTick(() => {
-      renderLinks(this.$refs.comment)
-      renderMath(this.$refs.comment, twikooStore.get().katex)
-    })
-    this.checkAuth()
-  },
-  watch: {
-    'comment.like': {
-      handler: function (like) {
-        this.like = this.comment.like
-        this.liked = this.comment.liked
-      },
-      immediate: true
-    },
-    'config.HIGHLIGHT': {
-      handler: function (highlight) {
-        if (highlight === 'true') {
-          this.$nextTick(() => {
-            renderCode(this.$refs.comment, this.config.HIGHLIGHT_THEME)
-          })
-        }
-      },
-      immediate: true
-    }
-  }
-}
-</script> -->
   
 <style>
 .tk-main {

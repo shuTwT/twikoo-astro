@@ -57,64 +57,7 @@ function onClick() {
 }
 
 </script>
-<!-- <script>
-import md5 from 'blueimp-md5'
-import { convertLink, normalizeMail, isQQ, getQQAvatar } from '../utils'
-import iconUser from '@fortawesome/fontawesome-free/svgs/solid/user-circle.svg?raw'
 
-export default {
-  props: {
-    config: Object,
-    avatar: String,
-    mail: String,
-    mailMd5: String,
-    link: String
-  },
-  data() {
-    return {
-      iconUser
-    }
-  },
-  computed: {
-    gravatarCdn() {
-      if (this.config && this.config.GRAVATAR_CDN) {
-        return this.config.GRAVATAR_CDN
-      } else {
-        return 'cravatar.cn'
-      }
-    },
-    defaultGravatar() {
-      if (this.config && this.config.DEFAULT_GRAVATAR) {
-        return this.config.DEFAULT_GRAVATAR
-      } else {
-        return 'identicon'
-      }
-    },
-    avatarInner() {
-      if (this.avatar) {
-        return this.avatar
-      } else if (this.mailMd5) {
-        return `https://${this.gravatarCdn}/avatar/${this.mailMd5}?d=${this.defaultGravatar}`
-      } else if (this.mail && isQQ(this.mail)) {
-        return getQQAvatar(this.mail)
-      } else if (this.mail) {
-        return `https://${this.gravatarCdn}/avatar/${md5(normalizeMail(this.mail))}?d=${this.defaultGravatar}`
-      } else {
-        return ''
-      }
-    }
-  },
-  methods: {
-    onClick() {
-      this.$emit('click')
-      if (this.link) {
-        window.open(convertLink(this.link), '_blank').opener = null
-      }
-    }
-  }
-}
-</script> -->
-  
 <style>
 .tk-avatar {
   flex-shrink: 0;

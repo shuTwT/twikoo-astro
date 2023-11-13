@@ -11,7 +11,8 @@
     "license": "MIT",
     "dependencies": {
         "astro": "^3.4.3",
-        "@astrojs/vue":"^3.0.4"
+        "@astrojs/vue":"^3.0.4",
+        "@vue-macros/astro":"^0.1.14"
     }
   }
   

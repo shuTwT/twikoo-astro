@@ -82,8 +82,9 @@ import t from '../utils/i18n'
 import { logger, call } from '../utils'
 import iconClose from '@fortawesome/fontawesome-free/svgs/solid/times.svg?raw'
 import { tcbStore } from '../store'
-import { computed, ref } from 'vue'
+import { computed, ref,watch } from 'vue'
 
+const vLoading=ElLoading.directive
 const props = defineProps({
     show: Boolean
 })
@@ -117,7 +118,7 @@ async function onLogin() {
     }
     loading.value = true
     loginErrorMessage.value = ''
-    const passwordMd5 = md5(this.password)
+    const passwordMd5 = md5(password.value)
     const res = await call(tcbStore.get(), 'LOGIN', {
         password: passwordMd5
     })
@@ -177,8 +178,8 @@ async function onRegist() {
 }
 async function onShow() {
     loading.value = true
-    await this.checkAuth()
-    if (!this.isLogin) {
+    await checkAuth()
+    if (!isLogin.value) {
         await checkIfPasswordSet()
         focusPassword()
     }
@@ -228,177 +229,6 @@ watch(
 )
 
 </script>
-
-<!-- <script>
-import { ElButton, ElInput, ElLoading } from 'element-plus'
-import md5 from 'blueimp-md5'
-import TkAdminComment from './TkAdminComment.vue'
-import TkAdminConfig from './TkAdminConfig.vue'
-import TkAdminImport from './TkAdminImport.vue'
-import TkAdminExport from './TkAdminExport.vue'
-import t from '../utils/i18n'
-import { logger, call } from '../utils'
-import iconClose from '@fortawesome/fontawesome-free/svgs/solid/times.svg?raw'
-import { tcbStore } from '../store'
-
-export default {
-    components: {
-        ElButton, ElInput,
-        TkAdminComment,
-        TkAdminConfig,
-        TkAdminImport,
-        TkAdminExport
-    },
-    directives: {
-        "Loading": ElLoading.directive,
-    },
-    props: {
-        show: Boolean
-    },
-    data () {
-        return {
-            iconClose,
-            loading: true,
-            version: '',
-            needUpdate: false,
-            isLogin: false,
-            isSetPassword: true,
-            isSetCredentials: false,
-            credentials: '',
-            password: '',
-            passwordConfirm: '',
-            loginErrorMessage: '',
-            activeTabName: 'comment'
-        }
-    },
-    computed: {
-        canRegist () {
-            return !this.isSetPassword &&
-                !!this.password &&
-                this.password === this.passwordConfirm &&
-                (this.isSetCredentials || this.credentials)
-        }
-    },
-    methods: {
-        t,
-        async onLogin () {
-            if (!this.password) {
-                this.loginErrorMessage = t('ADMIN_PASSWORD_REQUIRED')
-                return
-            }
-            this.loading = true
-            this.loginErrorMessage = ''
-            const passwordMd5 = md5(this.password)
-            const res = await call(tcbStore.get(), 'LOGIN', {
-                password: passwordMd5
-            })
-            if (res.result.message) {
-                this.loginErrorMessage = res.result.message
-            } else if (res.result.ticket) {
-                try {
-                    await tcbStore.get().auth
-                        .customAuthProvider()
-                        .signIn(res.result.ticket)
-                    logger.log('登录成功')
-                    this.password = ''
-                    this.checkAuth()
-                } catch (err) {
-                    logger.error('登录失败', err)
-                }
-            } else if (res.result.code === 0) {
-                logger.log('登录成功')
-                localStorage.setItem('twikoo-access-token', passwordMd5)
-                this.password = ''
-                this.checkAuth()
-            }
-            this.loading = false
-        },
-        async onLogout () {
-            this.loading = true
-            if (tcbStore.get()) {
-                await tcbStore.get().auth.signOut()
-                await tcbStore.get().auth
-                    .anonymousAuthProvider()
-                    .signIn()
-            } else {
-                localStorage.removeItem('twikoo-access-token')
-            }
-            this.isLogin = false
-            this.loading = false
-        },
-        async onRegist () {
-            this.loading = true
-            const passwordMd5 = md5(this.password)
-            const res = await call(tcbStore.get(), 'SET_PASSWORD', {
-                password: passwordMd5,
-                credentials: this.credentials
-            })
-            if (!res.result.code) {
-                this.passwordMd5 = ''
-                this.isSetPassword = true
-                this.onLogin()
-            } else {
-                this.loginErrorMessage = t('ADMIN_REGIST_FAILED')
-                if (res.result.message) {
-                    this.loginErrorMessage += '，' + res.result.message
-                }
-                logger.warn('Twikoo 注册失败', res)
-            }
-            this.loading = false
-        },
-        async onShow () {
-            this.loading = true
-            await this.checkAuth()
-            if (!this.isLogin) {
-                await this.checkIfPasswordSet()
-                this.focusPassword()
-            }
-            this.loading = false
-        },
-        focusPassword () {
-            // 聚焦密码输入框
-            setTimeout(() => {
-                this.$refs.focusme && this.$refs.focusme.focus()
-            }, 500)
-        },
-        async checkAuth () {
-            // 检查用户身份
-            
-            if (tcbStore.get()) {
-                const currentUser = await tcbStore.get().auth.getCurrenUser()
-                this.isLogin = currentUser.loginType === 'CUSTOM'
-            } else {
-                const result = await call(tcbStore.get(), 'GET_CONFIG')
-                if (result && result.result && result.result.config) {
-                    this.isLogin = result.result.config.IS_ADMIN
-                }
-            }
-        },
-        async checkIfPasswordSet () {
-            // 检查是否设置过密码
-            try {
-                const res = await call(tcbStore.get(), 'GET_PASSWORD_STATUS')
-                this.version = res.result.version
-                this.isSetPassword = res.result.status
-                this.isSetCredentials = !tcbStore.get()
-            } catch (e) {
-                this.needUpdate = true
-                this.loading = false
-                throw e
-            }
-        },
-        onClose () {
-            this.$emit('close')
-        }
-    },
-    watch: {
-        show (val) {
-            // 弹出管理面板
-            if (val) this.onShow()
-        }
-    }
-}
-</script> -->
   
 <style>
 .tk-admin-container {

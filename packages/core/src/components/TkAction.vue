@@ -18,6 +18,7 @@ import iconComment from '@fortawesome/fontawesome-free/svgs/regular/comment.svg?
 import iconCommentSolid from '@fortawesome/fontawesome-free/svgs/solid/comment.svg?raw'
 import iconLike from '@fortawesome/fontawesome-free/svgs/regular/thumbs-up.svg?raw'
 import iconLikeSolid from '@fortawesome/fontawesome-free/svgs/solid/thumbs-up.svg?raw'
+import {computed} from "vue"
 const props=defineProps({
   liked: Boolean,
   likeCount: Number,
@@ -34,45 +35,6 @@ function onReply() {
 }
 </script>
 
-  <!-- <script>
-  import iconComment from '@fortawesome/fontawesome-free/svgs/regular/comment.svg?raw'
-  import iconCommentSolid from '@fortawesome/fontawesome-free/svgs/solid/comment.svg?raw'
-  import iconLike from '@fortawesome/fontawesome-free/svgs/regular/thumbs-up.svg?raw'
-  import iconLikeSolid from '@fortawesome/fontawesome-free/svgs/solid/thumbs-up.svg?raw'
-  
-  export default {
-    data () {
-      return {
-        iconComment,
-        iconCommentSolid,
-        iconLike,
-        iconLikeSolid
-      }
-    },
-    props: {
-      liked: Boolean,
-      likeCount: Number,
-      repliesCount: Number
-    },
-    computed: {
-      likeCountStr () {
-        return this.likeCount > 0 ? `${this.likeCount}` : ''
-      },
-      repliesCountStr () {
-        return this.repliesCount > 0 ? `${this.repliesCount}` : ''
-      }
-    },
-    methods: {
-      onLike () {
-        this.$emit('like')
-      },
-      onReply () {
-        this.$emit('reply')
-      }
-    }
-  }
-  </script> -->
-  
 <style>
 .tk-action {
   display: flex;

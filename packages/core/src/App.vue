@@ -14,6 +14,7 @@ import TkAdmin from "./components/TkAdmin.vue";
 import { setLanguage, logger, isUrl } from './utils'
 import { onMounted, provide, ref } from "vue";
 import { tcbStore, twikooStore } from "./store"
+import mitt from "mitt"
 
 const showAdmin = ref(false);
 
@@ -62,7 +63,7 @@ async function initTcb() {
 
 const showAdminEntry=ref(false)
 function onShowAdminEntry(v) {
-    showAdminEntry = v;
+    showAdminEntry.value = v;
 }
 provide('onShowAdminEntry',onShowAdminEntry)
 provide('$mitt',new mitt())

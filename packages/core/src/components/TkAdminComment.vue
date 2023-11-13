@@ -41,7 +41,7 @@
         </div>
       </div>
     </div>
-    <TkPagination :page-size="pageSize" :total="count" @page-size-change="onPageSizeChange"
+    <TkPagination :page-size="pageSize" :total="pageTotal" @page-size-change="onPageSizeChange"
       @current-change="switchPage" />
   </div>
 </template>
@@ -54,8 +54,9 @@ import { version } from '../version'
 import TkAvatar from './TkAvatar.vue'
 import TkPagination from './TkPagination.vue'
 import { tcbStore } from '../store'
-import { inject, ref,nextTick } from 'vue'
+import { onMounted,inject, ref,nextTick } from 'vue'
 
+const vLoading=ElLoading.directive
 const defaultPageSize = 5
 
 const loading = ref(true)
@@ -63,7 +64,8 @@ const comments = ref([])
 const serverConfig = ref({})
 const serverVersion = ref(twikooStore.get().serverConfig.VERSION)
 const clientVersion = ref(version)
-const count = ref(0)
+
+const pageTotal=ref(0)
 const pageSize = ref(defaultPageSize)
 const currentPage = ref(1)
 const filter = ref({ keyword: '', type: '' })
@@ -88,7 +90,7 @@ async function getComments() {
     type: filter.value.type
   })
   if (res.result && !res.result.code) {
-    count.value = res.result.count
+    pageTotal.value = res.result.count
     comments.value = res.result.data
   }
   nextTick(() => {
@@ -132,7 +134,7 @@ function checkConfig() {
   localStorage.setItem('twikoo', JSON.stringify(metaData))
   // TODO
   //app.$emit('initMeta')
-  emit('initMeta')
+  $mitt.emit('initMeta')
 }
 function onPageSizeChange(newPageSize) {
   pageSize.value = newPageSize
@@ -171,7 +173,7 @@ async function setComment(comment, set) {
 }
 function highlightCode() {
   if (serverConfig.value.HIGHLIGHT === 'true') {
-    renderCode(commentListRef, serverConfig.value.HIGHLIGHT_THEME)
+    renderCode(commentListRef.value, serverConfig.value.HIGHLIGHT_THEME)
   }
 }
 
@@ -183,156 +185,6 @@ onMounted(async () => {
   highlightCode()
 })
 </script>
-
-<!-- <script>
-import { ElButton, ElInput, ElLoading } from 'element-plus'
-import { twikooStore } from '../store'
-import { timeago, call, convertLink, renderLinks, renderMath, renderCode, t } from '../utils'
-import { version } from '../version'
-import TkAvatar from './TkAvatar.vue'
-import TkPagination from './TkPagination.vue'
-import { tcbStore } from '../store'
-
-
-const defaultPageSize = 5
-
-export default {
-  components: {
-    ElButton,
-    ElInput,
-    TkAvatar,
-    TkPagination
-  },
-  directives: {
-    "Loading": ElLoading.directive
-  },
-  data() {
-    return {
-      loading: true,
-      comments: [],
-      serverConfig: {},
-      serverVersion: twikooStore.get().serverConfig.VERSION,
-      clientVersion: version,
-      count: 0,
-      pageSize: defaultPageSize,
-      currentPage: 1,
-      filter: { keyword: '', type: '' }
-    }
-  },
-  inject: ["$mitt"],
-  methods: {
-    t,
-    displayCreated(comment) {
-      return timeago(comment.created)
-    },
-    convertLink(link) {
-      return convertLink(link)
-    },
-    async getComments() {
-      this.loading = true
-      const res = await call(tcbStore.get(), 'COMMENT_GET_FOR_ADMIN', {
-        per: this.pageSize,
-        page: this.currentPage,
-        keyword: this.filter.keyword,
-        type: this.filter.type
-      })
-      if (res.result && !res.result.code) {
-        this.count = res.result.count
-        this.comments = res.result.data
-      }
-      this.$nextTick(() => {
-        renderLinks(this.$refs.comments)
-        renderMath(this.$refs['comment-list'], twikooStore.get().katex)
-        this.highlightCode()
-      })
-      this.loading = false
-    },
-    async getConfig() {
-      const res = await call(tcbStore.get(), 'GET_CONFIG_FOR_ADMIN')
-      if (res.result && !res.result.code) {
-        this.serverConfig = res.result.config
-        this.checkConfig()
-      }
-    },
-    checkConfig() {
-      if (!this.serverConfig.HIGHLIGHT) this.serverConfig.HIGHLIGHT = 'true'
-      // 在已登錄的情況下，不用再輸入昵稱和郵箱等信息
-      let metaData = {}
-      const mStr = localStorage.getItem('twikoo')
-      if (mStr) {
-        metaData = JSON.parse(mStr)
-      }
-      ['nick', 'mail', 'avatar'].forEach(key => {
-        if (!metaData[key]) {
-          this.serverConfig[key] = ''
-        } else {
-          this.serverConfig[key] = metaData[key]
-        }
-      })
-      if (!metaData.nick && this.serverConfig.BLOGGER_NICK) {
-        metaData.nick = this.serverConfig.BLOGGER_NICK
-      }
-      if (!metaData.mail && this.serverConfig.BLOGGER_EMAIL) {
-        metaData.mail = this.serverConfig.BLOGGER_EMAIL
-      }
-      if (!metaData.link && this.serverConfig.SITE_URL) {
-        metaData.link = this.serverConfig.SITE_URL
-      }
-      localStorage.setItem('twikoo', JSON.stringify(metaData))
-      // TODO
-      //app.$emit('initMeta')
-      this.$mitt.emit('initMeta')
-    },
-    onPageSizeChange(newPageSize) {
-      this.pageSize = newPageSize
-      this.getComments()
-    },
-    switchPage(e) {
-      this.currentPage = e
-      this.getComments()
-    },
-    handleView(comment) {
-      window.open(`${comment.url}#${comment._id}`)
-    },
-    async handleDelete(comment) {
-      if (!confirm(t('ADMIN_COMMENT_DELETE_CONFIRM'))) return
-      this.loading = true
-      await call(tcbStore.get(), 'COMMENT_DELETE_FOR_ADMIN', {
-        id: comment._id
-      })
-      await this.getComments()
-      this.loading = false
-    },
-    handleSpam(comment, isSpam) {
-      this.setComment(comment, { isSpam })
-    },
-    handleTop(comment, top) {
-      this.setComment(comment, { top })
-    },
-    async setComment(comment, set) {
-      this.loading = true
-      await call(tcbStore.get(), 'COMMENT_SET_FOR_ADMIN', {
-        id: comment._id,
-        set
-      })
-      await this.getComments()
-      this.loading = false
-    },
-    highlightCode() {
-      if (this.serverConfig.HIGHLIGHT === 'true') {
-        renderCode(this.$refs['comment-list'], this.serverConfig.HIGHLIGHT_THEME)
-      }
-    }
-  },
-  async mounted() {
-    await Promise.all([
-      this.getConfig(),
-      this.getComments()
-    ])
-    this.highlightCode()
-  }
-}
-</script> -->
   
 <style>
 .tk-admin-comment {

@@ -16,11 +16,11 @@ export default defineConfig({
             brotliSize: true,
             emitFile: false,
             filename: "test.html",
-            open: true
+            open: false
         })
     ],
     build: {
-        minify: true,
+        minify: false,
         rollupOptions: {
             external: [
                 'vue',

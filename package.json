@@ -8,6 +8,7 @@
     "dev": "pnpm run --filter demo dev",
     "buil": "pnpm run --filter core build",
     "build": "pnpm run -C internal/build start",
+    "build:locale":"pnpm run --filter locale build",
     "clean": "pnpm run clean:dist",
     "clean:dist": "rimraf dist",
     "stub": "pnpm run -r --parallel stub"
@@ -30,6 +31,7 @@
     "owo": "^1.0.2",
     "prismjs": "^1.29.0",
     "rollup-plugin-visualizer": "^5.9.2",
+    "tsup":"^7.2.0",
     "typescript": "^5.2.2",
     "unplugin-auto-import": "^0.16.7",
     "unplugin-vue-components": "^0.25.2",
