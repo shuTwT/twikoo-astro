@@ -1,6 +1,6 @@
 ---
-import "../styles/demo.css";
-import "@astro-twikoo/core/dist/style.css"
+ import "../styles/demo.css";
+// import "@astro-twikoo/core/dist/style.css"
 import {Twikoo} from  "@astro-twikoo/core/src/main.js"
 ---
 <!DOCTYPE html>
@@ -22,92 +22,23 @@ import {Twikoo} from  "@astro-twikoo/core/src/main.js"
 </head>
 
 <body>
+    
+   <div id="app">
+    <button id="switch">切换</button>
+    <Twikoo envId="http://localhost:8080" client:load></Twikoo>
+   </div>
+    <script is:inline>
+        document.getElementById('switch').onclick=function(){
+            const theme=document.documentElement.getAttribute('data-theme')
+            if(theme=='dark'){
+                document.documentElement.setAttribute('data-theme','light')
+            }else{
+                document.documentElement.setAttribute('data-theme','dark')
+            }
+            
+        }
+    </script>                 
    
-    <navbar>
-        <div class="container">
-            <nav class="navbar">
-                <div class="navbar-brand">
-                    <a class="navbar-item" href="#"><strong>Twikoo</strong></a>
-                </div>
-                <div class="navbar-menu">
-                    <div class="navbar-start">
-                        <a class="navbar-item" href="#">Demo</a>
-                    </div>
-                    <div class="navbar-end">
-                        <div class="navbar-item">
-                            <a class="button is-light" href="https://github.com/twikoojs/twikoo">View on Github</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-    </navbar>
-    <section class="section">
-        <div class="container">
-            <div class="columns">
-                <div class="configs column">
-                    <div class="field">
-                        <label class="label">环境 ID | Environment ID: <code>envId</code></label>
-                        <div class="control">
-                            <input class="input" id="envId" type="text" placeholder="e.g imaegoo-16fe3d"
-                                value="http://localhost:8080">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">环境地域 | Region: <code>region</code></label>
-                        <div class="control">
-                            <input class="input" id="region" type="text" placeholder="e.g ap-guangzhou"
-                                value="ap-shanghai">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">文章路径 | Path: <code>path</code></label>
-                        <div class="control">
-                            <input class="input" id="path" type="text" placeholder="e.g window.location.pathname"
-                                value="window.location.pathname">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">语言 | Language: <code>lang</code></label>
-                        <div class="control">
-                            <input class="input" id="lang" type="text" placeholder="e.g en-US" value="zh-CN">
-                        </div>
-                    </div>
-                    <div class="field">
-                        <label class="label">访问量:</label>
-                        <div class="control">
-                            <span id="twikoo_visitors">N/A</span>
-                        </div>
-                    </div>
-                    <div class="control">
-                        <button class="button is-info" onclick="init()">加载 | Init</button>
-                    </div>
-                    <div class="field">
-                        <a href="https://twikoo.js.org/frontend.html" target="_blank">如何集成到博客中？</a>
-                    </div>
-                </div>
-                <div class="column">
-                    <div class="card">
-                        <div class="card-content">
-                                <Twikoo envId="http://localhost:8080" client:load></Twikoo>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <footer class="footer">
-        <div class="container">
-            <div class="content has-text-centered">
-                <p>
-                    <strong>Twikoo</strong> by <a href="https://www.imaegoo.com">imaegoo</a>. The source code is
-                    licensed
-                    <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
-                    is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
-                </p>
-            </div>
-        </div>
-    </footer>
 </body>
 
 </html>

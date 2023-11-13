@@ -1,0 +1,52 @@
+:root{
+    --twikoo-primary-color:#409eff;
+    --twikoo-font-color:#363636;
+    --twikoo-button-font-color-white:#fff;
+    --twikoo-button-font-color-black:#000;
+    --twikoo-shadow-border:0 8px 16px -4px #00000050;
+    --twikoo-border:1px solid #e3e8f7;
+    --twikoo-input-bg:#f7f7f7;
+    --twikoo-border-radius:12px;
+    --twikoo-border-color:rgba(144, 147, 153, 0.31);
+    --twikoo-mask-bg:rgba(255,255,255,0.6)
+}
+:root[data-theme="dark"]{
+    --twikoo-input-bg:#21232a;
+    --twikoo-font-color:#fafafa;
+    --twikoo-button-font-color-white:#000;
+    --twikoo-button-font-color-black:#fff;
+    --twikoo-border:1px solid #3d3d3d;
+    --twikoo-shadow-border:0 8px 16px -4px #00000050;
+    --twikoo-mask-bg:rgba(0,0,0,0.6)
+}
+:root{
+    --twikoo-action-color:var(--twikoo-font-color)
+}
+
+
+@keyframes donate_effect{
+    0%{
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100%{
+        opacity: 1;
+        filter: none;
+        transform: translateY(0);
+    }
+}
+.OwO.OwO-open .OwO-body{
+    animation: 0.3s ease 0.1s 1 normal both running donate_effect;
+}
+.OwO .OwO-body{
+    border: var(--twikoo-border);
+    background-color: var(--twikoo-mask-bg,rgba(255,255,255,0.6));
+    backdrop-filter: saturate(180%) blur(10px);
+    transform: translateZ(0);
+}
+.OwO .OwO-body .OwO-bar{
+    border-top: none;
+}
+.OwO-packages{
+    background-color: var(--twikoo-input-bg);
+}

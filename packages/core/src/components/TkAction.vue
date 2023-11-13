@@ -43,7 +43,7 @@ function onReply() {
 
 .tk-action-link {
   margin-left: 0.5rem;
-  color: #409eff;
+  color: var(--twikoo-action-color,#409eff);
   text-decoration: none;
   display: flex;
   align-items: center;
@@ -75,5 +75,5 @@ function onReply() {
   height: 1em;
   width: 1em;
   line-height: 0;
-  color: #409eff;
+  color: var(--twikoo-action-color,#409eff);
 }</style>

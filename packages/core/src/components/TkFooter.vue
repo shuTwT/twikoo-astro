@@ -42,4 +42,10 @@ onMounted(()=>{
   color: #999999;
   margin-top: 1em;
 }
+.tk-footer a{
+    background-color: transparent;
+    color: var(--twikoo-font-color,#3273dc);
+    cursor: pointer;
+    text-decoration: none;
+}
 </style>

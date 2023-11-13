@@ -1,5 +1,9 @@
 {
+    "i18n-ally.enabledParsers": ["js","ts"],
     "i18n-ally.localesPaths": [
-        "packages/core/src/utils/i18n"
-    ]
+        "packages/locale/lang"
+    ],
+    "i18n-ally.keystyle": "auto",
+    "i18n-ally.sourceLanguage": "en",
+    "i18n-ally.displayLanguage": "en"
 }

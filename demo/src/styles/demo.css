@@ -1,19 +1,6 @@
-.section {
-    background-color: hsl(0, 0%, 96%);
-  }
-  .footer {
-    background: none;
-  }
-  
-  /* 以下 CSS 用于夜间测试 */
-  /* .card {
-    color: #eeeeee;
-    background-color: #222222;
-  }
-  .card strong{
-    color: currentColor;
-  }
-  .card pre {
-    color: currentColor;
-    background-color: transparent;
-  } */
+#app {
+    background: #fff;
+}
+[data-theme=dark] #app{
+    background: #18171d;
+}

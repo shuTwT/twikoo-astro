@@ -397,4 +397,16 @@ watch(
 .tk-expand {
   font-size: 0.75em;
 }
+.tk-meta{
+    margin-left: 0.75rem;
+}
+.tk-time{
+    margin-left: 0.75rem;
+}
+.tk-actions a{
+    color: var(--twikoo-action-color,#3273dc);
+}
+.tk-actions a:hover{
+    color: var(--twikoo-primary-color,#3273dc);
+}
 </style>

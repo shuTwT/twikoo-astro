@@ -1,8 +1,8 @@
 <template>
   <div class="tk-submit">
     <div class="tk-row">
-      <TkAvatar :config="config" :mail="mail" />
       <div class="tk-col">
+        <TkAvatar :config="config" :mail="mail" style="width: 100%;margin: 1.25rem 0;" />
         <TkMetaInput :nick="nick" :mail="mail" :link="link" @update="onMetaUpdate" :config="config" />
         <ElInput class="tk-input" type="textarea" ref="textareaRef" v-model="comment" show-word-limit
           :placeholder="commentPlaceholder" :autosize="{ minRows: 3 }" :maxlength="maxLength" @input="onCommentInput"
@@ -42,7 +42,7 @@ import t from '../utils/i18n'
 import { marked, call, logger, renderLinks, renderMath, renderCode, initOwoEmotions, initMarkedOwo, getUrl, getHref, blobToDataURL } from '../utils'
 import OwO from '../lib/owo'
 import { twikooStore, tcbStore } from '../store'
-import { computed, inject, ref, nextTick, watch,onMounted } from 'vue'
+import { computed,  ref, nextTick, watch,onMounted } from 'vue'
 
 const imageTypes = [
   'apng',
@@ -115,7 +115,7 @@ async function initOwo() {
     owo.value = new OwO({
       logo: iconEmotion, // OwO button text, default: `OωO表情`
       container: owoRef.value, // OwO container, default: `document.getElementsByClassName('OwO')[0]`
-      target: textareaRef.value, // OwO target input or textarea, default: `document.getElementsByTagName('textarea')[0]`
+      target: textarea.value, // OwO target input or textarea, default: `document.getElementsByTagName('textarea')[0]`
       odata,
       position: 'down', // OwO body position, default: `down`
       maxHeight: '250px' // OwO body max-height, default: `250px`
@@ -144,8 +144,8 @@ function updatePreview() {
   if (isPreviewing.value) {
     commentHtml.value = marked(comment.value)
     nextTick(() => {
-      renderLinks(commentPreviewRef)
-      renderMath(commentPreviewRef, twikooStore.get().katex)
+      renderLinks(commentPreviewRef.value)
+      renderMath(commentPreviewRef.value, twikooStore.get().katex)
       if (props.config.HIGHLIGHT === 'true') {
         renderCode(commentPreviewRef.value, props.config.HIGHLIGHT_THEME)
       }
@@ -404,7 +404,10 @@ watch(
 .tk-input {
   flex: 1;
 }
-
+.tk-input.el-textarea{
+    border-radius: var(--twikoo-border-radius,12px);
+    overflow: hidden;
+}
 .tk-input .el-textarea__inner {
   background-position: right bottom;
   background-repeat: no-repeat;
@@ -417,5 +420,8 @@ watch(
   border: 1px solid rgba(128, 128, 128, 0.31);
   border-radius: 4px;
   word-break: break-word;
+}
+.tk-preview span{
+    color: var(--twikoo-button-font-color-black);
 }
 </style>

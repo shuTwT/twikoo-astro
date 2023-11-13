@@ -19,7 +19,7 @@ import mitt from "mitt"
 const showAdmin = ref(false);
 
 defineOptions({
-    options:'twikooApp'
+    options:'twikooApp',
 })
 
 const props = defineProps({
@@ -73,12 +73,14 @@ onMounted(() => {
 </script>
 
 <style>
+@import url("./lib/owo.css");
+@import url("./var.css");
 @import url("element-plus/theme-chalk/el-var.css");
-@import url("element-plus/theme-chalk/el-icon.css");
+/* @import url("element-plus/theme-chalk/el-icon.css"); */
 @import url("element-plus/theme-chalk/el-button.css");
 @import url("element-plus/theme-chalk/el-input.css");
 @import url("element-plus/theme-chalk/el-loading.css");
-@import url("./lib/owo.css");
+
 
 .twikoo {
     position: relative;
@@ -122,9 +124,9 @@ onMounted(() => {
 /* element-ui overwrite */
 .twikoo .el-input__inner,
 .twikoo .el-textarea__inner {
-    /* color: currentColor; */
-    /* background-color: transparent; */
-    border-color: rgba(144, 147, 153, 0.31);
+    color: var(--twikoo-font-color,#606266);
+    background-color: var(--twikoo-input-bg,transparent);
+    box-shadow: none;
 }
 
 .twikoo .el-input__inner:hover,
@@ -147,8 +149,8 @@ onMounted(() => {
 
 .twikoo .el-button:not(.el-button--primary):not(.el-button--text) {
     color: currentColor;
-    background-color: rgba(144, 147, 153, 0.063);
-    border-color: rgba(144, 147, 153, 0.31);
+    background-color: var(--twikoo-input-bg,rgba(144, 147, 153, 0.063));
+    border-color: var(--twikoo-border-color,rgba(144, 147, 153, 0.31));
 }
 
 .twikoo .el-button:not(.el-button--primary):not(.el-button--text):active,
@@ -163,7 +165,7 @@ onMounted(() => {
 .twikoo .el-button--primary.is-disabled:active,
 .twikoo .el-button--primary.is-disabled:focus,
 .twikoo .el-button--primary.is-disabled:hover {
-    color: rgba(255, 255, 255, 0.63);
+    color: var(--twikoo-font-color,rgba(255, 255, 255, 0.63));
     background-color: rgba(64, 158, 255, 0.5);
     border-color: transparent;
 }
@@ -184,5 +186,15 @@ onMounted(() => {
     border-left: 0.5rem solid #e7c000;
     color: #6b5900;
     align-self: stretch;
+}
+.twikoo .el-button{
+    color: var(--twikoo-button-font-color-white,#fff);
+    background-color: var(--twikoo-font-color);
+}
+.twikoo .el-button:active,
+.twikoo .el-button:focus,
+.twikoo .el-button:hover{
+    color: var(--twikoo-button-font-color-white,#fff);
+    background-color: var(--twikoo-primary-color);
 }
 </style>

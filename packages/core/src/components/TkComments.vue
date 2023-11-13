@@ -172,6 +172,9 @@ onMounted(() => {
   width: 0.75em;
   line-height: 0;
   cursor: pointer;
-  color: #409eff;
+  color: var(--twikoo-font-color,#409eff);
+}
+.tk-icon.__comments:hover{
+    color: var(--twikoo-primary-color,);
 }
 </style>

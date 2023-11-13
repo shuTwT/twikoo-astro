@@ -176,17 +176,30 @@ watch(() => props.config['VERSION'],
   flex: 1;
 }
 
+.el-input .el-input__wrapper{
+    background-color: transparent;
+    box-shadow: none;
+}
+
 .tk-meta-input .el-input+.el-input {
   margin-left: 0.5rem;
 }
 
 .tk-meta-input .el-input .el-input-group__prepend {
   padding: 0 1rem;
+  color: var(--twikoo-font-color,#333333);
+  box-shadow: none;
 }
 
 .tk-meta-input .el-input input:invalid {
   border: 1px solid #f56c6c;
   box-shadow: none;
+}
+
+.el-input.el-input--small.el-input-group.el-input-group--prepend{
+    border-radius: var(--twikoo-border-radius);
+    background: var(--twikoo-input-bg);
+    border: var(--twikoo-border);
 }
 
 @media screen and (max-width: 767px) {
