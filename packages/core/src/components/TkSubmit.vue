@@ -206,11 +206,11 @@ function onEnterKeyUp(event) {
 }
 function closeOwo() {
   if (owo.value && owo.value.container.classList.contains('OwO-open')) {
-    owo.toggle()
+    owo.value.toggle()
   }
 }
 function openSelectImage() {
-  inputFileRef.click()
+  inputFileRef.value.click()
 }
 function onSelectImage() {
   const photo = inputFileRef.value.files[0]
