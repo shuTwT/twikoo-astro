@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { ElLoading } from 'element-plus'
+import { vLoading } from 'element-plus'
 import t from '../utils/i18n'
 import { call, getUrl } from '../utils'
 import TkSubmit from './TkSubmit.vue'
@@ -35,8 +35,6 @@ import iconSetting from '@fortawesome/fontawesome-free/svgs/solid/cog.svg?raw'
 import iconRefresh from '@fortawesome/fontawesome-free/svgs/solid/sync.svg?raw'
 import { tcbStore, twikooStore } from '../store'
 import { ref, nextTick, onMounted } from 'vue'
-
-const vLoading=ElLoading.directive
 
 defineOptions({
   name: 'TkComments'

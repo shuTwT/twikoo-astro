@@ -47,7 +47,7 @@
 </template>
   
 <script setup>
-import { ElButton, ElInput, ElLoading } from 'element-plus'
+import { ElButton, ElInput, vLoading } from 'element-plus'
 import { twikooStore } from '../store'
 import { timeago, call, convertLink, renderLinks, renderMath, renderCode, t } from '../utils'
 import { version } from '../version'
@@ -56,7 +56,6 @@ import TkPagination from './TkPagination.vue'
 import { tcbStore } from '../store'
 import { onMounted,inject, ref,nextTick } from 'vue'
 
-const vLoading=ElLoading.directive
 const defaultPageSize = 5
 
 const loading = ref(true)

@@ -26,26 +26,20 @@ export default defineConfig({
                 'vue',
                 'jsdom',
                 'prismjs',
-                'prismjs/plugins/autoloader/prism-autoloader'
+                'prismjs/plugins/autoloader/prism-autoloader',
             ],
             output: [
                 {
                     format: "es",
                     entryFileNames: "twikoo.mjs",
                     exports: "named",
-                    dir: "es",
-                    globals:{
-                        vue:'Vue',
-                    }
+                    dir: "es"
                 },
                 {
                     format: "cjs",
                     entryFileNames: "twikoo.cjs",
                     exports: "named",
-                    dir: "lib",
-                    globals:{
-                        vue:'Vue'
-                    }
+                    dir: "lib"
                 },
                 {
                     format: "umd",

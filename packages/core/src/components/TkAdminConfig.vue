@@ -43,14 +43,13 @@
 </template>
   
 <script setup>
-import { ElButton, ElInput, ElLoading } from 'element-plus'
+import { ElButton, ElInput, vLoading } from 'element-plus'
 import { call, logger, t } from '../utils'
 import { version } from '../version'
 import { twikooStore } from '../store'
 import { tcbStore } from '../store'
 import { onMounted, ref } from 'vue'
 
-const vLoading=ElLoading.directive
 const loading = ref(true)
 const settings = ref([
   {

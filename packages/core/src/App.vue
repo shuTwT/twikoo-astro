@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { en } from "@astro-twikoo/locale";
+import {  zhCn } from "@astro-twikoo/locale";
 import TkComments from "./components/TkComments.vue";
 import TkFooter from "./components/TkFooter.vue";
 import TkAdmin from "./components/TkAdmin.vue";
@@ -41,7 +41,7 @@ const props = defineProps({
     },
     locale: {
         type: Object,
-        default: en
+        default: zhCn
     }
 
 })

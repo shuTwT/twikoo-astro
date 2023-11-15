@@ -72,7 +72,7 @@
 </template>
   
 <script setup>
-import { ElButton, ElInput, ElLoading } from 'element-plus'
+import { ElButton, ElInput, vLoading } from 'element-plus'
 import md5 from 'blueimp-md5'
 import TkAdminComment from './TkAdminComment.vue'
 import TkAdminConfig from './TkAdminConfig.vue'
@@ -84,7 +84,7 @@ import iconClose from '@fortawesome/fontawesome-free/svgs/solid/times.svg?raw'
 import { tcbStore } from '../store'
 import { computed, ref,watch } from 'vue'
 
-const vLoading=ElLoading.directive
+
 const props = defineProps({
     show: Boolean
 })
