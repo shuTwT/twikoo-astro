@@ -4,7 +4,7 @@ import packageJson from './package.json' assert { type : 'json' }
 export default defineConfig({
     entry:['./lang/en.ts','./lang/zh-cn.ts'],
     format:['esm'],
-    dts:true,
+    dts:false,
     splitting:false,
     sourcemap:false,
     clean:true,
@@ -13,5 +13,6 @@ export default defineConfig({
         js:`/*!
 * locale v${packageJson.version}
 */`
-    }
+    },
+    outDir:"../core/locale"
 })

@@ -42,9 +42,11 @@
     "@nanostores/vue": "^0.10.0",
     "lodash-es": "^4.17.21",
     "lodash-unified": "^1.0.2",
+    "marked":"^9.1.6",
     "nanostores": "^0.9.4",
     "owo":"^1.0.2",
     "prismjs":"^1.29.0",
+    "remark":"^15.0.1",
     "vue":">=3.3.1"
   },
   "devDependencies": {
@@ -52,10 +54,16 @@
     "vite": "^4.5.0"
   },
   "peerDependenciesMeta": {
-    "prismjs":{
+    "marked":{
         "optional": true
     },
     "owo":{
+        "optional": true
+    },
+    "prismjs":{
+        "optional": true
+    },
+    "remark":{
         "optional": true
     }
   }

@@ -40,16 +40,6 @@ export default defineConfig({
                     entryFileNames: "twikoo.cjs",
                     exports: "named",
                     dir: "lib"
-                },
-                {
-                    format: "umd",
-                    name: "twikoo",
-                    entryFileNames: "twikoo.umd.js",
-                    exports: "named",
-                    dir: "dist",
-                    globals:{
-                        vue:'Vue'
-                    }
                 }
             ]
         },
