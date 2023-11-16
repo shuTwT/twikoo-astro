@@ -9,6 +9,7 @@
     "buil": "pnpm run --filter core build",
     "build": "pnpm run -C internal/build start",
     "build:locale":"pnpm run --filter locale build",
+    "build:marked":"pnpm run --filter marked build",
     "clean": "pnpm run clean:dist",
     "clean:dist": "rimraf dist",
     "stub": "pnpm run -r --parallel stub"

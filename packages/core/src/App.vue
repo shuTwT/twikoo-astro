@@ -42,6 +42,8 @@ const props = defineProps({
     locale: {
         type: Object,
         default: zhCn
+    },
+    renderer:{
     }
 
 })

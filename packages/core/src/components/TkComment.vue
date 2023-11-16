@@ -220,12 +220,12 @@ function handleTop(top) {
   setComment({ top })
 }
 async function setComment(set) {
-  loading.value = true
+  //this.loading = true
   await call(tcbStore.get(), 'COMMENT_SET_FOR_ADMIN', {
     id: props.comment.id,
     set
   })
-  loading.value = false
+  //this.loading = false
   emit('load')
 }
 

@@ -39,7 +39,8 @@ import iconImage from '@fortawesome/fontawesome-free/svgs/regular/image.svg?raw'
 import TkAvatar from './TkAvatar.vue'
 import TkMetaInput from './TkMetaInput.vue'
 import t from '../utils/i18n'
-import { marked, call, logger, renderLinks, renderMath, renderCode, initOwoEmotions, initMarkedOwo, getUrl, getHref, blobToDataURL } from '../utils'
+import { marked } from '../utils/renderer'
+import {  call, logger, renderLinks, renderMath, renderCode, initOwoEmotions, initMarkedOwo, getUrl, getHref, blobToDataURL } from '../utils'
 import OwO from '../lib/owo'
 import { twikooStore, tcbStore } from '../store'
 import { computed,  ref, nextTick, watch,onMounted } from 'vue'
@@ -142,7 +143,7 @@ function preview() {
 }
 function updatePreview() {
   if (isPreviewing.value) {
-    commentHtml.value = marked(comment.value)
+    commentHtml.value = marked.parse(comment.value)
     nextTick(() => {
       renderLinks(commentPreviewRef.value)
       renderMath(commentPreviewRef.value, twikooStore.get().katex)
@@ -167,7 +168,7 @@ async function send() {
       ua: navigator.userAgent,
       url,
       href,
-      comment: marked(comment.value),
+      comment: marked.parse(comment.value),
       pid: props.pid ? props.pid : props.replyId,
       rid: props.replyId
     }
