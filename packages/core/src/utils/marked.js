@@ -1,4 +1,5 @@
-import { marked } from '../lib/marked/marked'
+//import { marked } from '../lib/marked/marked'
+import {marked}from "@astro-twikoo/marked/src/marked.ts"
 
 /**
  * https://marked.js.org/#/USING_ADVANCED.md

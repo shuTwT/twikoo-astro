@@ -14,7 +14,8 @@ export function _getDefaults(): MarkedOptions {
     renderer: null,
     silent: false,
     tokenizer: null,
-    walkTokens: null
+    walkTokens: null,
+    odata:{}
   };
 }
 

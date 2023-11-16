@@ -4,7 +4,7 @@ import packageJson from './package.json' assert { type : 'json' }
 export default defineConfig({
     entry:['src/marked.ts'],
     format:['esm'],
-    dts:false,
+    dts:true,
     splitting:false,
     sourcemap:false,
     clean:true,

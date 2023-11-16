@@ -212,6 +212,11 @@ export class _Parser {
       }
 
       switch (token.type) {
+        case 'owo':{
+            const owoToken=token as Tokens.Owo
+            out+=(renderer as _Renderer).owo(owoToken.text);
+            break;
+        }
         case 'escape': {
           const escapeToken = token as Tokens.Escape;
           out += renderer.text(escapeToken.text);

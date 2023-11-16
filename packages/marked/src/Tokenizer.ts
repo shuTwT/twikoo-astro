@@ -721,6 +721,20 @@ export class _Tokenizer {
     }
   }
 
+  owo(src:string){
+    const cap=this.rules.inline.owo.exec(src)
+    if(cap){
+        console.warn(cap)
+        if(cap[0].length>1){
+            return {
+                type:'owo',
+                raw:cap[0],
+                text:cap[1]
+            }
+        }
+    }
+  }
+
   autolink(src: string): Tokens.Link | undefined {
     const cap = this.rules.inline.autolink.exec(src);
     if (cap) {

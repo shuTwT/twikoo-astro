@@ -336,6 +336,15 @@ export class _Lexer {
       }
       keepPrevChar = false;
 
+      // owo
+      if (token=this.tokenizer.owo(src)){
+        src=src.substring(token.raw.length);
+        if(token.type){
+            tokens.push(token);
+        }
+        continue;
+      }
+
       // extensions
       if (this.options.extensions
         && this.options.extensions.inline

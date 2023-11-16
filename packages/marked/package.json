@@ -2,6 +2,8 @@
     "name": "@astro-twikoo/marked",
     "type": "module",
     "version": "1.0.0",
+    "main": "lib/marked.js",
+    "types": "lib/marked.d.ts",
     "scripts": {
         "build":"tsup"
     },

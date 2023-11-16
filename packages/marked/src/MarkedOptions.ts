@@ -139,6 +139,11 @@ export interface MarkedOptions extends Omit<MarkedExtension, 'renderer' | 'token
   };
 
   /**
+   * owoOption
+   */
+  odata?:any
+
+  /**
    * walkTokens function returns array of values for Promise.all
    */
   walkTokens?: null | ((token: Token) => void | Promise<void> | (void | Promise<void>)[]);

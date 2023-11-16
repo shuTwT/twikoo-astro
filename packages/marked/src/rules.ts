@@ -221,6 +221,7 @@ import {
   // Not all rules are defined in the object literal
   // @ts-expect-error
   export const inline: Record<InlineRuleNames, Rule> & Record<InlineSubRuleNames, Rules> & Rules = {
+    owo: /^:(\S*):/,
     escape: /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/,
     autolink: /^<(scheme:[^\s\x00-\x1f<>]*|email)>/,
     url: noopTest,

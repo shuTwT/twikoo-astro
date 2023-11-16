@@ -14,6 +14,19 @@ export class _Renderer {
     this.options = options || _defaults;
   }
 
+  owo(text:string) {
+    const odata = this.options.odata;
+    if (odata && odata[text]) {
+      return '<img class="tk-owo-emotion" src="'
+        + odata[text]
+        + '" alt=":'
+        + text
+        + ':">';
+    } else {
+      return ':' + text + ':';
+    }
+  }
+
   code(code: string, infostring: string | undefined, escaped: boolean): string {
     const lang = (infostring || '').match(/^\S*/)?.[0];
 

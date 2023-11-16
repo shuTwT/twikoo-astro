@@ -192,6 +192,12 @@ export namespace Tokens {
         raw: string;
         tokens?: Token[] | undefined;
     }
+
+    export interface Owo {
+        type: 'owo';
+        raw: string;
+        text: string;
+    }
 }
 
 export type Links = Record<string, Pick<Tokens.Link | Tokens.Image, 'href' | 'title'>>;
