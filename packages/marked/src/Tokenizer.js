@@ -227,6 +227,9 @@ export class Tokenizer {
         if (!endEarly) {
           const nextBulletRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:[*+-]|\\d{1,9}[.)])((?: [^\\n]*)?(?:\\n|$))`);
           const hrRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}((?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$)`);
+          const fencesBeginRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:\`\`\`|~~~)`);
+          const headingBeginRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}#`);
+
           // Check if following lines should be included in List Item
           while (src) {
             rawLine = src.split('\n', 1)[0];
@@ -236,6 +239,17 @@ export class Tokenizer {
             if (this.options.pedantic) {
               line = line.replace(/^ {1,4}(?=( {4})*[^ ])/g, '  ');
             }
+
+            // End list item if found code fences
+            if (fencesBeginRegex.test(line)) {
+              break;
+            }
+  
+            // End list item if found start of new heading
+            if (headingBeginRegex.test(line)) {
+              break;
+            }
+  
 
             // End list item if found start of new bullet
             if (nextBulletRegex.test(line)) {
@@ -405,7 +419,7 @@ export class Tokenizer {
         l = item.header.length;
         for (j = 0; j < l; j++) {
           item.header[j].tokens = [];
-          this.lexer.inlineTokens(item.header[j].text, item.header[j].tokens);
+          this.lexer.inline(item.header[j].text, item.header[j].tokens);
         }
 
         // cell child tokens
@@ -414,7 +428,7 @@ export class Tokenizer {
           row = item.rows[j];
           for (k = 0; k < row.length; k++) {
             row[k].tokens = [];
-            this.lexer.inlineTokens(row[k].text, row[k].tokens);
+            this.lexer.inline(row[k].text, row[k].tokens);
           }
         }
 
