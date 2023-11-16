@@ -10,15 +10,15 @@ export const twikooStore=deepMap({
         "DISPLAYD_FIELDS":{}
     }
 })
-export const owoStore=deepMap({
+export const $owoStore=deepMap({
     odata:{},
 })
 export function setOwodata({odata}){
-    owoStore.setKey('odata',odata)
+    $owoStore.setKey('odata',odata)
 }
 export async function initOwoData(cdn){
     const odata = await initOwoEmotions(cdn || 'https://owo.imaegoo.com/owo.json')
-    owoStore.setKey('odata',odata)
+    $owoStore.setKey('odata',odata)
 }
 export async function initTwikooConfig(){
     try {

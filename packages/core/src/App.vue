@@ -13,7 +13,7 @@ import TkFooter from "./components/TkFooter.vue";
 import TkAdmin from "./components/TkAdmin.vue";
 import { setLanguage, logger, isUrl } from './utils'
 import { onMounted, provide, ref } from "vue";
-import { tcbStore, twikooStore } from "./store"
+import { initOwoData, tcbStore, twikooStore } from "./store"
 import mitt from "mitt"
 
 const showAdmin = ref(false);
@@ -69,8 +69,8 @@ function onShowAdminEntry(v) {
 }
 provide('onShowAdminEntry',onShowAdminEntry)
 provide('$mitt',new mitt())
-onMounted(() => {
-    console.log(tcbStore)
+onMounted(async () => {
+    await initOwoData()
 });
 </script>
 

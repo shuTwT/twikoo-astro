@@ -32,6 +32,7 @@
 </template>
   
 <script setup>
+import {useStore} from "@nanostores/vue"
 import { ElButton, ElInput, ClickOutside as vClickOutside } from 'element-plus'
 import iconMarkdown from '@fortawesome/fontawesome-free/svgs/brands/markdown.svg?raw'
 import iconEmotion from '@fortawesome/fontawesome-free/svgs/regular/laugh.svg?raw'
@@ -41,7 +42,7 @@ import TkMetaInput from './TkMetaInput.vue'
 import t from '../utils/i18n'
 import {marked,  call, logger, renderLinks, renderMath, renderCode, initOwoEmotions, initMarkedOwo, getUrl, getHref, blobToDataURL } from '../utils'
 import OwO from '../lib/owo'
-import { twikooStore, tcbStore } from '../store'
+import { twikooStore, tcbStore,$owoStore,initOwoData } from '../store'
 import { computed,  ref, nextTick, watch,onMounted } from 'vue'
 
 const imageTypes = [
@@ -64,6 +65,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['cancel', 'load'])
+
+const owoStore=useStore($owoStore)
 
 const isSending = ref(false)
 const isPreviewing = ref(false)
@@ -111,7 +114,12 @@ function saveDraft() {
 }
 async function initOwo() {
   if (props.config.SHOW_EMOTION === 'true') {
-    const odata = await initOwoEmotions(props.config.EMOTION_CDN || 'https://owo.imaegoo.com/owo.json')
+    let odata
+    odata=owoStore.value.odata
+    if (!odata||JSON.stringify(odata)=='{}'){
+        odata = await initOwoEmotions(props.config.EMOTION_CDN || 'https://owo.imaegoo.com/owo.json')
+    }
+    
     owo.value = new OwO({
       logo: iconEmotion, // OwO button text, default: `OωO表情`
       container: owoRef.value, // OwO container, default: `document.getElementsByClassName('OwO')[0]`
@@ -314,9 +322,9 @@ function paste(text) {
 function getImagePlaceholder(fileIndex, fileType) {
   return `![${t('IMAGE_UPLOAD_PLACEHOLDER')} ${fileIndex}.${fileType}]()`
 }
-onMounted(() => {
+onMounted(async () => {
   initDraft()
-  initOwo()
+  await initOwo()
   addEventListener()
   onBgImgChange()
 })
