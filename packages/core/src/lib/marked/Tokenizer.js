@@ -770,7 +770,7 @@ export class Tokenizer {
         text = this.options.sanitize ? (this.options.sanitizer ? this.options.sanitizer(cap[0]) : escape(cap[0])) : cap[0];
       } else {
         text = escape(this.options.smartypants ? smartypants(cap[0]) : cap[0]);
-      }
+    }
       return {
         type: 'text',
         raw: cap[0],

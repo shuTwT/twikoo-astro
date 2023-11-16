@@ -1,32 +1,58 @@
-import { _Tokenizer } from './Tokenizer.ts';
-import { _defaults } from './defaults.ts';
-import { block, inline } from './rules.ts';
-import type { Token, TokensList, Tokens } from './Tokens.ts';
-import type { MarkedOptions, TokenizerExtension } from './MarkedOptions.ts';
-import type { Rules } from './rules.ts';
+import { Tokenizer } from './Tokenizer.js';
+import { defaults } from './defaults.js';
+import { block, inline } from './rules.js';
+import { repeatString } from './helpers.js';
+
+/**
+ * smartypants text replacement
+ */
+function smartypants(text) {
+  return text
+    // em-dashes
+    .replace(/---/g, '\u2014')
+    // en-dashes
+    .replace(/--/g, '\u2013')
+    // opening singles
+    .replace(/(^|[-\u2014/(\[{"\s])'/g, '$1\u2018')
+    // closing singles & apostrophes
+    .replace(/'/g, '\u2019')
+    // opening doubles
+    .replace(/(^|[-\u2014/(\[{\u2018\s])"/g, '$1\u201c')
+    // closing doubles
+    .replace(/"/g, '\u201d')
+    // ellipses
+    .replace(/\.{3}/g, '\u2026');
+}
+
+/**
+ * mangle email addresses
+ */
+function mangle(text) {
+  let out = '',
+    i,
+    ch;
+
+  const l = text.length;
+  for (i = 0; i < l; i++) {
+    ch = text.charCodeAt(i);
+    if (Math.random() > 0.5) {
+      ch = 'x' + ch.toString(16);
+    }
+    out += '&#' + ch + ';';
+  }
+
+  return out;
+}
 
 /**
  * Block Lexer
  */
-export class _Lexer {
-  tokens: TokensList;
-  options: MarkedOptions;
-  state: {
-    inLink: boolean;
-    inRawBlock: boolean;
-    top: boolean;
-  };
-
-  private tokenizer: _Tokenizer;
-  private inlineQueue: {src: string, tokens: Token[]}[];
-
-  constructor(options?: MarkedOptions) {
-    // TokenList cannot be created in one go
-    // @ts-expect-error
+export class Lexer {
+  constructor(options) {
     this.tokens = [];
     this.tokens.links = Object.create(null);
-    this.options = options || _defaults;
-    this.options.tokenizer = this.options.tokenizer || new _Tokenizer();
+    this.options = options || defaults;
+    this.options.tokenizer = this.options.tokenizer || new Tokenizer();
     this.tokenizer = this.options.tokenizer;
     this.tokenizer.options = this.options;
     this.tokenizer.lexer = this;
@@ -59,7 +85,7 @@ export class _Lexer {
   /**
    * Expose Rules
    */
-  static get rules(): Rules {
+  static get rules() {
     return {
       block,
       inline
@@ -69,25 +95,26 @@ export class _Lexer {
   /**
    * Static Lex Method
    */
-  static lex(src: string, options?: MarkedOptions) {
-    const lexer = new _Lexer(options);
+  static lex(src, options) {
+    const lexer = new Lexer(options);
     return lexer.lex(src);
   }
 
   /**
    * Static Lex Inline Method
    */
-  static lexInline(src: string, options?: MarkedOptions) {
-    const lexer = new _Lexer(options);
+  static lexInline(src, options) {
+    const lexer = new Lexer(options);
     return lexer.inlineTokens(src);
   }
 
   /**
    * Preprocessing
    */
-  lex(src: string) {
+  lex(src) {
     src = src
-      .replace(/\r\n|\r/g, '\n');
+      .replace(/\r\n|\r/g, '\n')
+      .replace(/\t/g, '    ');
 
     this.blockTokens(src, this.tokens);
 
@@ -102,26 +129,16 @@ export class _Lexer {
   /**
    * Lexing
    */
-  blockTokens(src: string, tokens?: Token[]): Token[];
-  blockTokens(src: string, tokens?: TokensList): TokensList;
-  blockTokens(src: string, tokens: Token[] = []) {
+  blockTokens(src, tokens = []) {
     if (this.options.pedantic) {
-      src = src.replace(/\t/g, '    ').replace(/^ +$/gm, '');
-    } else {
-      src = src.replace(/^( *)(\t+)/gm, (_, leading, tabs) => {
-        return leading + '    '.repeat(tabs.length);
-      });
+      src = src.replace(/^ +$/gm, '');
     }
-
-    let token: Tokens.Generic | undefined;
-    let lastToken;
-    let cutSrc;
-    let lastParagraphClipped;
+    let token, lastToken, cutSrc, lastParagraphClipped;
 
     while (src) {
       if (this.options.extensions
         && this.options.extensions.block
-        && this.options.extensions.block.some((extTokenizer: TokenizerExtension['tokenizer']) => {
+        && this.options.extensions.block.some((extTokenizer) => {
           if (token = extTokenizer.call({ lexer: this }, src, tokens)) {
             src = src.substring(token.raw.length);
             tokens.push(token);
@@ -137,7 +154,7 @@ export class _Lexer {
         src = src.substring(token.raw.length);
         if (token.raw.length === 1 && tokens.length > 0) {
           // if there's a single \n as a spacer, it's terminating the last line,
-          // so move it there so that we don't get unnecessary paragraph tags
+          // so move it there so that we don't get unecessary paragraph tags
           tokens[tokens.length - 1].raw += '\n';
         } else {
           tokens.push(token);
@@ -240,7 +257,7 @@ export class _Lexer {
         let startIndex = Infinity;
         const tempSrc = src.slice(1);
         let tempStart;
-        this.options.extensions.startBlock.forEach((getStartIndex) => {
+        this.options.extensions.startBlock.forEach(function(getStartIndex) {
           tempStart = getStartIndex.call({ lexer: this }, tempSrc);
           if (typeof tempStart === 'number' && tempStart >= 0) { startIndex = Math.min(startIndex, tempStart); }
         });
@@ -293,15 +310,14 @@ export class _Lexer {
     return tokens;
   }
 
-  inline(src: string, tokens: Token[] = []) {
+  inline(src, tokens) {
     this.inlineQueue.push({ src, tokens });
-    return tokens;
   }
 
   /**
    * Lexing/Compiling
    */
-  inlineTokens(src: string, tokens: Token[] = []): Token[] {
+  inlineTokens(src, tokens = []) {
     let token, lastToken, cutSrc;
 
     // String with links masked to avoid interference with em and strong
@@ -315,19 +331,19 @@ export class _Lexer {
       if (links.length > 0) {
         while ((match = this.tokenizer.rules.inline.reflinkSearch.exec(maskedSrc)) != null) {
           if (links.includes(match[0].slice(match[0].lastIndexOf('[') + 1, -1))) {
-            maskedSrc = maskedSrc.slice(0, match.index) + '[' + 'a'.repeat(match[0].length - 2) + ']' + maskedSrc.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex);
+            maskedSrc = maskedSrc.slice(0, match.index) + '[' + repeatString('a', match[0].length - 2) + ']' + maskedSrc.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex);
           }
         }
       }
     }
     // Mask out other blocks
     while ((match = this.tokenizer.rules.inline.blockSkip.exec(maskedSrc)) != null) {
-      maskedSrc = maskedSrc.slice(0, match.index) + '[' + 'a'.repeat(match[0].length - 2) + ']' + maskedSrc.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);
+      maskedSrc = maskedSrc.slice(0, match.index) + '[' + repeatString('a', match[0].length - 2) + ']' + maskedSrc.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);
     }
 
-    // Mask out escaped characters
-    while ((match = this.tokenizer.rules.inline.anyPunctuation.exec(maskedSrc)) != null) {
-      maskedSrc = maskedSrc.slice(0, match.index) + '++' + maskedSrc.slice(this.tokenizer.rules.inline.anyPunctuation.lastIndex);
+    // Mask out escaped em & strong delimiters
+    while ((match = this.tokenizer.rules.inline.escapedEmSt.exec(maskedSrc)) != null) {
+      maskedSrc = maskedSrc.slice(0, match.index) + '++' + maskedSrc.slice(this.tokenizer.rules.inline.escapedEmSt.lastIndex);
     }
 
     while (src) {
@@ -337,10 +353,10 @@ export class _Lexer {
       keepPrevChar = false;
 
       // owo
-      if (token=this.tokenizer.owo(src)){
-        src=src.substring(token.raw.length);
-        if(token.type){
-            tokens.push(token);
+      if (token = this.tokenizer.owo(src)) {
+        src = src.substring(token.raw.length);
+        if (token.type) {
+          tokens.push(token);
         }
         continue;
       }
@@ -428,14 +444,14 @@ export class _Lexer {
       }
 
       // autolink
-      if (token = this.tokenizer.autolink(src)) {
+      if (token = this.tokenizer.autolink(src, mangle)) {
         src = src.substring(token.raw.length);
         tokens.push(token);
         continue;
       }
 
       // url (gfm)
-      if (!this.state.inLink && (token = this.tokenizer.url(src))) {
+      if (!this.state.inLink && (token = this.tokenizer.url(src, mangle))) {
         src = src.substring(token.raw.length);
         tokens.push(token);
         continue;
@@ -448,7 +464,7 @@ export class _Lexer {
         let startIndex = Infinity;
         const tempSrc = src.slice(1);
         let tempStart;
-        this.options.extensions.startInline.forEach((getStartIndex) => {
+        this.options.extensions.startInline.forEach(function(getStartIndex) {
           tempStart = getStartIndex.call({ lexer: this }, tempSrc);
           if (typeof tempStart === 'number' && tempStart >= 0) { startIndex = Math.min(startIndex, tempStart); }
         });
@@ -456,7 +472,7 @@ export class _Lexer {
           cutSrc = src.substring(0, startIndex + 1);
         }
       }
-      if (token = this.tokenizer.inlineText(cutSrc)) {
+      if (token = this.tokenizer.inlineText(cutSrc, smartypants)) {
         src = src.substring(token.raw.length);
         if (token.raw.slice(-1) !== '_') { // Track prevChar before string of ____ started
           prevChar = token.raw.slice(-1);

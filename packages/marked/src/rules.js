@@ -1,80 +1,20 @@
 import {
     noopTest,
-    edit
-  } from './helpers.ts';
-  
-  export type Rule = RegExp | string;
-  
-  export interface Rules {
-    [ruleName: string]: Pick<RegExp, 'exec'> | Rule | Rules;
-  }
-  
-  type BlockRuleNames =
-      | 'newline'
-      | 'code'
-      | 'fences'
-      | 'hr'
-      | 'heading'
-      | 'blockquote'
-      | 'list'
-      | 'html'
-      | 'def'
-      | 'lheading'
-      | '_paragraph'
-      | 'text'
-      | '_label'
-      | '_title'
-      | 'bullet'
-      | 'listItemStart'
-      | '_tag'
-      | '_comment'
-      | 'paragraph'
-      | 'uote' ;
-  
-  type BlockSubRuleNames = 'normal' | 'gfm' | 'pedantic';
-  
-  type InlineRuleNames =
-      | 'escape'
-      | 'autolink'
-      | 'tag'
-      | 'link'
-      | 'reflink'
-      | 'nolink'
-      | 'reflinkSearch'
-      | 'code'
-      | 'br'
-      | 'text'
-      | '_punctuation'
-      | 'punctuation'
-      | 'blockSkip'
-      | 'escapedEmSt'
-      | '_comment'
-      | '_escapes'
-      | '_scheme'
-      | '_email'
-      | '_attribute'
-      | '_label'
-      | '_href'
-      | '_title'
-      | 'strong'
-      | '_extended_email'
-      | '_backpedal';
-  
-  type InlineSubRuleNames = 'gfm' | 'emStrong' | 'normal' | 'pedantic'| 'breaks';
+    edit,
+    merge
+  } from './helpers.js';
   
   /**
    * Block-Level Grammar
    */
-  // Not all rules are defined in the object literal
-  // @ts-expect-error
-  export const block: Record<BlockRuleNames, Rule> & Record<BlockSubRuleNames, Rules> & Rules = {
+  export const block = {
     newline: /^(?: *(?:\n|$))+/,
     code: /^( {4}[^\n]+(?:\n(?: *(?:\n|$))*)?)+/,
-    fences: /^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/,
-    hr: /^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/,
+    fences: /^ {0,3}(`{3,}(?=[^`\n]*\n)|~{3,})([^\n]*)\n(?:|([\s\S]*?)\n)(?: {0,3}\1[~`]* *(?=\n|$)|$)/,
+    hr: /^ {0,3}((?:- *){3,}|(?:_ *){3,}|(?:\* *){3,})(?:\n+|$)/,
     heading: /^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/,
     blockquote: /^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/,
-    list: /^( {0,3}bull)([ \t][^\n]+?)?(?:\n|$)/,
+    list: /^( {0,3}bull)( [^\n]+?)?(?:\n|$)/,
     html: '^ {0,3}(?:' // optional indentation
       + '<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)' // (1)
       + '|comment[^\\n]*(\\n+|$)' // (2)
@@ -85,9 +25,9 @@ import {
       + '|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)' // (7) open tag
       + '|</(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)' // (7) closing tag
       + ')',
-    def: /^ {0,3}\[(label)\]: *(?:\n *)?([^<\s][^\s]*|<.*?>)(?:(?: +(?:\n *)?| *\n *)(title))? *(?:\n+|$)/,
+    def: /^ {0,3}\[(label)\]: *(?:\n *)?<?([^\s>]+)>?(?:(?: +(?:\n *)?| *\n *)(title))? *(?:\n+|$)/,
     table: noopTest,
-    lheading: /^(?!bull )((?:.|\n(?!\s*?\n|bull ))+?)\n {0,3}(=+|-+) *(?:\n+|$)/,
+    lheading: /^([^\n]+)\n {0,3}(=+|-+) *(?:\n+|$)/,
     // regex template, placeholders will be replaced according to different paragraph
     // interruption rules of commonmark and the original markdown spec:
     _paragraph: /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table| +\n)[^\n]+)*)/,
@@ -125,13 +65,9 @@ import {
     .replace('attribute', / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/)
     .getRegex();
   
-  block.lheading = edit(block.lheading)
-    .replace(/bull/g, block.bullet) // lists can interrupt
-    .getRegex();
-  
   block.paragraph = edit(block._paragraph)
     .replace('hr', block.hr)
-    .replace('heading', ' {0,3}#{1,6}(?:\\s|$)')
+    .replace('heading', ' {0,3}#{1,6} ')
     .replace('|lheading', '') // setex headings don't interrupt commonmark paragraphs
     .replace('|table', '')
     .replace('blockquote', ' {0,3}>')
@@ -149,22 +85,21 @@ import {
    * Normal Block Grammar
    */
   
-  block.normal = { ...block };
+  block.normal = merge({}, block);
   
   /**
    * GFM Block Grammar
    */
   
-  block.gfm = {
-    ...block.normal,
-    table: '^ *([^\\n ].*)\\n' // Header
-      + ' {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)' // Align
+  block.gfm = merge({}, block.normal, {
+    table: '^ *([^\\n ].*\\|.*)\\n' // Header
+      + ' {0,3}(?:\\| *)?(:?-+:? *(?:\\| *:?-+:? *)*)(?:\\| *)?' // Align
       + '(?:\\n((?:(?! *\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)' // Cells
-  };
+  });
   
-  block.gfm.table = edit(block.gfm.table as Rule)
+  block.gfm.table = edit(block.gfm.table)
     .replace('hr', block.hr)
-    .replace('heading', ' {0,3}#{1,6}(?:\\s|$)')
+    .replace('heading', ' {0,3}#{1,6} ')
     .replace('blockquote', ' {0,3}>')
     .replace('code', ' {4}[^\\n]')
     .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
@@ -175,9 +110,9 @@ import {
   
   block.gfm.paragraph = edit(block._paragraph)
     .replace('hr', block.hr)
-    .replace('heading', ' {0,3}#{1,6}(?:\\s|$)')
+    .replace('heading', ' {0,3}#{1,6} ')
     .replace('|lheading', '') // setex headings don't interrupt commonmark paragraphs
-    .replace('table', block.gfm.table as RegExp) // interrupt paragraphs with table
+    .replace('table', block.gfm.table) // interrupt paragraphs with table
     .replace('blockquote', ' {0,3}>')
     .replace('fences', ' {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n')
     .replace('list', ' {0,3}(?:[*+-]|1[.)]) ') // only lists starting from 1 can interrupt
@@ -188,8 +123,7 @@ import {
    * Pedantic grammar (original John Gruber's loose markdown specification)
    */
   
-  block.pedantic = {
-    ...block.normal,
+  block.pedantic = merge({}, block.normal, {
     html: edit(
       '^ *(?:comment *(?:\\n|\\s*$)'
       + '|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)' // closed tag
@@ -203,8 +137,7 @@ import {
     def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +(["(][^\n]+[")]))? *(?:\n+|$)/,
     heading: /^(#{1,6})(.*)(?:\n+|$)/,
     fences: noopTest, // fences not supported
-    lheading: /^(.+?)\n {0,3}(=+|-+) *(?:\n+|$)/,
-    paragraph: edit(block.normal._paragraph as Rule)
+    paragraph: edit(block.normal._paragraph)
       .replace('hr', block.hr)
       .replace('heading', ' *#{1,6} *[^\n]')
       .replace('lheading', block.lheading)
@@ -213,14 +146,12 @@ import {
       .replace('|list', '')
       .replace('|html', '')
       .getRegex()
-  };
+  });
   
   /**
    * Inline-Level Grammar
    */
-  // Not all rules are defined in the object literal
-  // @ts-expect-error
-  export const inline: Record<InlineRuleNames, Rule> & Record<InlineSubRuleNames, Rules> & Rules = {
+  export const inline = {
     owo: /^:(\S*):/,
     escape: /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/,
     autolink: /^<(scheme:[^\s\x00-\x1f<>]*|email)>/,
@@ -236,49 +167,43 @@ import {
     nolink: /^!?\[(ref)\](?:\[\])?/,
     reflinkSearch: 'reflink|nolink(?!\\()',
     emStrong: {
-      lDelim: /^(?:\*+(?:((?!\*)[punct])|[^\s*]))|^_+(?:((?!_)[punct])|([^\s_]))/,
-      //         (1) and (2) can only be a Right Delimiter. (3) and (4) can only be Left.  (5) and (6) can be either Left or Right.
-      //         | Skip orphan inside strong      | Consume to delim | (1) #***              | (2) a***#, a***                    | (3) #***a, ***a                  | (4) ***#                 | (5) #***#                         | (6) a***a
-      rDelimAst: /^[^_*]*?__[^_*]*?\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\*)[punct](\*+)(?=[\s]|$)|[^punct\s](\*+)(?!\*)(?=[punct\s]|$)|(?!\*)[punct\s](\*+)(?=[^punct\s])|[\s](\*+)(?!\*)(?=[punct])|(?!\*)[punct](\*+)(?!\*)(?=[punct])|[^punct\s](\*+)(?=[^punct\s])/,
-      rDelimUnd: /^[^_*]*?\*\*[^_*]*?_[^_*]*?(?=\*\*)|[^_]+(?=[^_])|(?!_)[punct](_+)(?=[\s]|$)|[^punct\s](_+)(?!_)(?=[punct\s]|$)|(?!_)[punct\s](_+)(?=[^punct\s])|[\s](_+)(?!_)(?=[punct])|(?!_)[punct](_+)(?!_)(?=[punct])/ // ^- Not allowed for _
+      lDelim: /^(?:\*+(?:([punct_])|[^\s*]))|^_+(?:([punct*])|([^\s_]))/,
+      //        (1) and (2) can only be a Right Delimiter. (3) and (4) can only be Left.  (5) and (6) can be either Left or Right.
+      //        () Skip orphan delim inside strong    (1) #***                (2) a***#, a***                   (3) #***a, ***a                 (4) ***#              (5) #***#                 (6) a***a
+      rDelimAst: /^[^_*]*?\_\_[^_*]*?\*[^_*]*?(?=\_\_)|[punct_](\*+)(?=[\s]|$)|[^punct*_\s](\*+)(?=[punct_\s]|$)|[punct_\s](\*+)(?=[^punct*_\s])|[\s](\*+)(?=[punct_])|[punct_](\*+)(?=[punct_])|[^punct*_\s](\*+)(?=[^punct*_\s])/,
+      rDelimUnd: /^[^_*]*?\*\*[^_*]*?\_[^_*]*?(?=\*\*)|[punct*](\_+)(?=[\s]|$)|[^punct*_\s](\_+)(?=[punct*\s]|$)|[punct*\s](\_+)(?=[^punct*_\s])|[\s](\_+)(?=[punct*])|[punct*](\_+)(?=[punct*])/ // ^- Not allowed for _
     },
     code: /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/,
     br: /^( {2,}|\\)\n(?!\s*$)/,
     del: noopTest,
-    text: /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/,
-    punctuation: /^((?![*_])[\spunctuation])/
+    text: /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`:*_]|\b_|$)|[^ ](?= {2,}\n)))/,
+    punctuation: /^([\spunctuation])/
   };
   
-  // list of unicode punctuation marks, plus any missing characters from CommonMark spec
-  inline._punctuation = '\\p{P}$+<=>`^|~';
-  inline.punctuation = edit(inline.punctuation, 'u').replace(/punctuation/g, inline._punctuation).getRegex();
+  // list of punctuation marks from CommonMark spec
+  // without * and _ to handle the different emphasis markers * and _
+  inline._punctuation = '!"#$%&\'()+\\-.,/:;<=>?@\\[\\]`^{|}~';
+  inline.punctuation = edit(inline.punctuation).replace(/punctuation/g, inline._punctuation).getRegex();
   
   // sequences em should skip over [title](link), `code`, <html>
-  inline.blockSkip = /\[[^[\]]*?\]\([^\(\)]*?\)|`[^`]*?`|<[^<>]*?>/g;
-  inline.anyPunctuation = /\\[punct]/g;
-  inline._escapes = /\\([punct])/g;
+  inline.blockSkip = /\[[^\]]*?\]\([^\)]*?\)|`[^`]*?`|<[^>]*?>/g;
+  inline.escapedEmSt = /\\\*|\\_/g;
   
   inline._comment = edit(block._comment).replace('(?:-->|$)', '-->').getRegex();
   
-  inline.emStrong.lDelim = edit(inline.emStrong.lDelim as Rule, 'u')
+  inline.emStrong.lDelim = edit(inline.emStrong.lDelim)
     .replace(/punct/g, inline._punctuation)
     .getRegex();
   
-  inline.emStrong.rDelimAst = edit(inline.emStrong.rDelimAst as Rule, 'gu')
+  inline.emStrong.rDelimAst = edit(inline.emStrong.rDelimAst, 'g')
     .replace(/punct/g, inline._punctuation)
     .getRegex();
   
-  inline.emStrong.rDelimUnd = edit(inline.emStrong.rDelimUnd as Rule, 'gu')
+  inline.emStrong.rDelimUnd = edit(inline.emStrong.rDelimUnd, 'g')
     .replace(/punct/g, inline._punctuation)
     .getRegex();
   
-  inline.anyPunctuation = edit(inline.anyPunctuation as Rule, 'gu')
-    .replace(/punct/g, inline._punctuation)
-    .getRegex();
-  
-  inline._escapes = edit(inline._escapes, 'gu')
-    .replace(/punct/g, inline._punctuation)
-    .getRegex();
+  inline._escapes = /\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/g;
   
   inline._scheme = /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/;
   inline._email = /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/;
@@ -322,14 +247,13 @@ import {
    * Normal Inline Grammar
    */
   
-  inline.normal = { ...inline };
+  inline.normal = merge({}, inline);
   
   /**
    * Pedantic Inline Grammar
    */
   
-  inline.pedantic = {
-    ...inline.normal,
+  inline.pedantic = merge({}, inline.normal, {
     strong: {
       start: /^__|\*\*/,
       middle: /^__(?=\S)([\s\S]*?\S)__(?!_)|^\*\*(?=\S)([\s\S]*?\S)\*\*(?!\*)/,
@@ -348,34 +272,32 @@ import {
     reflink: edit(/^!?\[(label)\]\s*\[([^\]]*)\]/)
       .replace('label', inline._label)
       .getRegex()
-  };
+  });
   
   /**
    * GFM Inline Grammar
    */
   
-  inline.gfm = {
-    ...inline.normal,
+  inline.gfm = merge({}, inline.normal, {
     escape: edit(inline.escape).replace('])', '~|])').getRegex(),
     _extended_email: /[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])/,
     url: /^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/,
-    _backpedal: /(?:[^?!.,:;*_'"~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_'"~)]+(?!$))+/,
+    _backpedal: /(?:[^?!.,:;*_~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_~)]+(?!$))+/,
     del: /^(~~?)(?=[^\s~])([\s\S]*?[^\s~])\1(?=[^~]|$)/,
-    text: /^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/
-  };
+    text: /^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`:*~_]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/
+  });
   
-  inline.gfm.url = edit(inline.gfm.url as Rule, 'i')
-    .replace('email', inline.gfm._extended_email as RegExp)
+  inline.gfm.url = edit(inline.gfm.url, 'i')
+    .replace('email', inline.gfm._extended_email)
     .getRegex();
   /**
    * GFM + Line Breaks Inline Grammar
    */
   
-  inline.breaks = {
-    ...inline.gfm,
+  inline.breaks = merge({}, inline.gfm, {
     br: edit(inline.br).replace('{2,}', '*').getRegex(),
-    text: edit(inline.gfm.text as Rule)
+    text: edit(inline.gfm.text)
       .replace('\\b_', '\\b_| {2,}\\n')
       .replace(/\{2,\}/g, '*')
       .getRegex()
-  };
+  });

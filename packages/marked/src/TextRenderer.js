@@ -2,37 +2,37 @@
  * TextRenderer
  * returns only the textual part of the token
  */
-export class _TextRenderer {
+export class TextRenderer {
     // no need for block level renderers
-    strong(text: string) {
+    strong(text) {
       return text;
     }
   
-    em(text: string) {
+    em(text) {
       return text;
     }
   
-    codespan(text: string) {
+    codespan(text) {
       return text;
     }
   
-    del(text: string) {
+    del(text) {
       return text;
     }
   
-    html(text: string) {
+    html(text) {
       return text;
     }
   
-    text(text: string) {
+    text(text) {
       return text;
     }
   
-    link(href: string, title: string | null | undefined, text: string) {
+    link(href, title, text) {
       return '' + text;
     }
   
-    image(href: string, title: string | null, text: string) {
+    image(href, title, text) {
       return '' + text;
     }
   

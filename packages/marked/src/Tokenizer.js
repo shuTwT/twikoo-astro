@@ -1,42 +1,40 @@
-import { _defaults } from './defaults.ts';
+import { defaults } from './defaults.js';
 import {
   rtrim,
   splitCells,
   escape,
   findClosingBracket
-} from './helpers.ts';
-import type { _Lexer } from './Lexer.ts';
-import type { Links, Tokens } from './Tokens.ts';
-import type { MarkedOptions } from './MarkedOptions.ts';
+} from './helpers.js';
 
-function outputLink(cap: string[], link: Pick<Tokens.Link, 'href' | 'title'>, raw: string, lexer: _Lexer): Tokens.Link | Tokens.Image {
+function outputLink(cap, link, raw, lexer) {
   const href = link.href;
   const title = link.title ? escape(link.title) : null;
   const text = cap[1].replace(/\\([\[\]])/g, '$1');
 
   if (cap[0].charAt(0) !== '!') {
     lexer.state.inLink = true;
-    const token: Tokens.Link = {
+    const token = {
       type: 'link',
       raw,
       href,
       title,
       text,
-      tokens: lexer.inlineTokens(text)
+      tokens: lexer.inlineTokens(text, [])
     };
     lexer.state.inLink = false;
     return token;
+  } else {
+    return {
+      type: 'image',
+      raw,
+      href,
+      title,
+      text: escape(text)
+    };
   }
-  return {
-    type: 'image',
-    raw,
-    href,
-    title,
-    text: escape(text)
-  };
 }
 
-function indentCodeCompensation(raw: string, text: string) {
+function indentCodeCompensation(raw, text) {
   const matchIndentToCode = raw.match(/^(\s+)(?:```)/);
 
   if (matchIndentToCode === null) {
@@ -67,17 +65,12 @@ function indentCodeCompensation(raw: string, text: string) {
 /**
  * Tokenizer
  */
-export class _Tokenizer {
-  options: MarkedOptions;
-  // TODO: Fix this rules type
-  rules: any;
-  lexer!: _Lexer;
-
-  constructor(options?: MarkedOptions) {
-    this.options = options || _defaults;
+export class Tokenizer {
+  constructor(options) {
+    this.options = options || defaults;
   }
 
-  space(src: string): Tokens.Space | undefined {
+  space(src) {
     const cap = this.rules.block.newline.exec(src);
     if (cap && cap[0].length > 0) {
       return {
@@ -87,7 +80,7 @@ export class _Tokenizer {
     }
   }
 
-  code(src: string): Tokens.Code | undefined {
+  code(src) {
     const cap = this.rules.block.code.exec(src);
     if (cap) {
       const text = cap[0].replace(/^ {1,4}/gm, '');
@@ -102,7 +95,7 @@ export class _Tokenizer {
     }
   }
 
-  fences(src: string): Tokens.Code | undefined {
+  fences(src) {
     const cap = this.rules.block.fences.exec(src);
     if (cap) {
       const raw = cap[0];
@@ -111,13 +104,13 @@ export class _Tokenizer {
       return {
         type: 'code',
         raw,
-        lang: cap[2] ? cap[2].trim().replace(this.rules.inline._escapes, '$1') : cap[2],
+        lang: cap[2] ? cap[2].trim() : cap[2],
         text
       };
     }
   }
 
-  heading(src: string): Tokens.Heading | undefined {
+  heading(src) {
     const cap = this.rules.block.heading.exec(src);
     if (cap) {
       let text = cap[2].trim();
@@ -133,17 +126,19 @@ export class _Tokenizer {
         }
       }
 
-      return {
+      const token = {
         type: 'heading',
         raw: cap[0],
         depth: cap[1].length,
-        text,
-        tokens: this.lexer.inline(text)
+        text: text,
+        tokens: []
       };
+      this.lexer.inline(token.text, token.tokens);
+      return token;
     }
   }
 
-  hr(src: string): Tokens.Hr | undefined {
+  hr(src) {
     const cap = this.rules.block.hr.exec(src);
     if (cap) {
       return {
@@ -153,36 +148,36 @@ export class _Tokenizer {
     }
   }
 
-  blockquote(src: string): Tokens.Blockquote | undefined {
+  blockquote(src) {
     const cap = this.rules.block.blockquote.exec(src);
     if (cap) {
-      const text = rtrim(cap[0].replace(/^ *>[ \t]?/gm, ''), '\n');
-      const top = this.lexer.state.top;
-      this.lexer.state.top = true;
-      const tokens = this.lexer.blockTokens(text);
-      this.lexer.state.top = top;
+      const text = cap[0].replace(/^ *> ?/gm, '');
+
       return {
         type: 'blockquote',
         raw: cap[0],
-        tokens,
+        tokens: this.lexer.blockTokens(text, []),
         text
       };
     }
   }
 
-  list(src: string): Tokens.List | undefined {
+  list(src) {
     let cap = this.rules.block.list.exec(src);
     if (cap) {
+      let raw, istask, ischecked, indent, i, blankLine, endsWithBlankLine,
+        line, nextLine, rawLine, itemContents, endEarly;
+
       let bull = cap[1].trim();
       const isordered = bull.length > 1;
 
-      const list: Tokens.List = {
+      const list = {
         type: 'list',
         raw: '',
         ordered: isordered,
         start: isordered ? +bull.slice(0, -1) : '',
         loose: false,
-        items: [] as Tokens.ListItem[]
+        items: []
       };
 
       bull = isordered ? `\\d{1,9}\\${bull.slice(-1)}` : `\\${bull}`;
@@ -192,13 +187,11 @@ export class _Tokenizer {
       }
 
       // Get next list item
-      const itemRegex = new RegExp(`^( {0,3}${bull})((?:[\t ][^\\n]*)?(?:\\n|$))`);
-      let raw = '';
-      let itemContents = '';
-      let endsWithBlankLine = false;
+      const itemRegex = new RegExp(`^( {0,3}${bull})((?: [^\\n]*)?(?:\\n|$))`);
+
       // Check if current bullet point can start a new List Item
       while (src) {
-        let endEarly = false;
+        endEarly = false;
         if (!(cap = itemRegex.exec(src))) {
           break;
         }
@@ -207,16 +200,15 @@ export class _Tokenizer {
           break;
         }
 
-        raw = cap[0] as string;
+        raw = cap[0];
         src = src.substring(raw.length);
 
-        let line = cap[2].split('\n', 1)[0].replace(/^\t+/, (t: string) => ' '.repeat(3 * t.length)) as string;
-        let nextLine = src.split('\n', 1)[0];
+        line = cap[2].split('\n', 1)[0];
+        nextLine = src.split('\n', 1)[0];
 
-        let indent = 0;
         if (this.options.pedantic) {
           indent = 2;
-          itemContents = line.trimStart();
+          itemContents = line.trimLeft();
         } else {
           indent = cap[2].search(/[^ ]/); // Find first non-space char
           indent = indent > 4 ? 1 : indent; // Treat indented code blocks (> 4 spaces) as having only 1 indent
@@ -224,7 +216,7 @@ export class _Tokenizer {
           indent += cap[1].length;
         }
 
-        let blankLine = false;
+        blankLine = false;
 
         if (!line && /^ *$/.test(nextLine)) { // Items begin with at most one blank line
           raw += nextLine + '\n';
@@ -233,73 +225,37 @@ export class _Tokenizer {
         }
 
         if (!endEarly) {
-          const nextBulletRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:[*+-]|\\d{1,9}[.)])((?:[ \t][^\\n]*)?(?:\\n|$))`);
-          const hrRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}((?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$)`);
-          const fencesBeginRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:\`\`\`|~~~)`);
-          const headingBeginRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}#`);
+          const nextBulletRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:[*+-]|\\d{1,9}[.)])`);
 
           // Check if following lines should be included in List Item
           while (src) {
-            const rawLine = src.split('\n', 1)[0];
-            nextLine = rawLine;
+            rawLine = src.split('\n', 1)[0];
+            line = rawLine;
 
             // Re-align to follow commonmark nesting rules
             if (this.options.pedantic) {
-              nextLine = nextLine.replace(/^ {1,4}(?=( {4})*[^ ])/g, '  ');
-            }
-
-            // End list item if found code fences
-            if (fencesBeginRegex.test(nextLine)) {
-              break;
-            }
-
-            // End list item if found start of new heading
-            if (headingBeginRegex.test(nextLine)) {
-              break;
+              line = line.replace(/^ {1,4}(?=( {4})*[^ ])/g, '  ');
             }
 
             // End list item if found start of new bullet
-            if (nextBulletRegex.test(nextLine)) {
+            if (nextBulletRegex.test(line)) {
               break;
             }
 
-            // Horizontal rule found
-            if (hrRegex.test(src)) {
+            if (line.search(/[^ ]/) >= indent || !line.trim()) { // Dedent if possible
+              itemContents += '\n' + line.slice(indent);
+            } else if (!blankLine) { // Until blank line, item doesn't need indentation
+              itemContents += '\n' + line;
+            } else { // Otherwise, improper indentation ends this item
               break;
             }
 
-            if (nextLine.search(/[^ ]/) >= indent || !nextLine.trim()) { // Dedent if possible
-              itemContents += '\n' + nextLine.slice(indent);
-            } else {
-              // not enough indentation
-              if (blankLine) {
-                break;
-              }
-
-              // paragraph continuation unless last line was a different block level element
-              if (line.search(/[^ ]/) >= 4) { // indented code block
-                break;
-              }
-              if (fencesBeginRegex.test(line)) {
-                break;
-              }
-              if (headingBeginRegex.test(line)) {
-                break;
-              }
-              if (hrRegex.test(line)) {
-                break;
-              }
-
-              itemContents += '\n' + nextLine;
-            }
-
-            if (!blankLine && !nextLine.trim()) { // Check if current line is blank
+            if (!blankLine && !line.trim()) { // Check if current line is blank
               blankLine = true;
             }
 
             raw += rawLine + '\n';
             src = src.substring(rawLine.length + 1);
-            line = nextLine.slice(indent);
           }
         }
 
@@ -312,8 +268,6 @@ export class _Tokenizer {
           }
         }
 
-        let istask: RegExpExecArray | null = null;
-        let ischecked: boolean | undefined;
         // Check for task list items
         if (this.options.gfm) {
           istask = /^\[[ xX]\] /.exec(itemContents);
@@ -325,39 +279,46 @@ export class _Tokenizer {
 
         list.items.push({
           type: 'list_item',
-          raw,
+          raw: raw,
           task: !!istask,
           checked: ischecked,
           loose: false,
-          text: itemContents,
-          tokens: []
+          text: itemContents
         });
 
         list.raw += raw;
       }
 
       // Do not consume newlines at end of final item. Alternatively, make itemRegex *start* with any newlines to simplify/speed up endsWithBlankLine logic
-      list.items[list.items.length - 1].raw = raw.trimEnd();
-      (list.items[list.items.length - 1] as Tokens.ListItem).text = itemContents.trimEnd();
-      list.raw = list.raw.trimEnd();
+      list.items[list.items.length - 1].raw = raw.trimRight();
+      list.items[list.items.length - 1].text = itemContents.trimRight();
+      list.raw = list.raw.trimRight();
+
+      const l = list.items.length;
 
       // Item child tokens handled here at end because we needed to have the final item to trim it first
-      for (let i = 0; i < list.items.length; i++) {
+      for (i = 0; i < l; i++) {
         this.lexer.state.top = false;
         list.items[i].tokens = this.lexer.blockTokens(list.items[i].text, []);
+        const spacers = list.items[i].tokens.filter(t => t.type === 'space');
+        const hasMultipleLineBreaks = spacers.every(t => {
+          const chars = t.raw.split('');
+          let lineBreaks = 0;
+          for (const char of chars) {
+            if (char === '\n') {
+              lineBreaks += 1;
+            }
+            if (lineBreaks > 1) {
+              return true;
+            }
+          }
 
-        if (!list.loose) {
-          // Check if list should be loose
-          const spacers = list.items[i].tokens.filter(t => t.type === 'space');
-          const hasMultipleLineBreaks = spacers.length > 0 && spacers.some(t => /\n.*\n/.test(t.raw));
+          return false;
+        });
 
-          list.loose = hasMultipleLineBreaks;
-        }
-      }
-
-      // Set all items to loose if list is loose
-      if (list.loose) {
-        for (let i = 0; i < list.items.length; i++) {
+        if (!list.loose && spacers.length && hasMultipleLineBreaks) {
+          // Having a single line break doesn't mean a list is loose. A single line break is terminating the last list item
+          list.loose = true;
           list.items[i].loose = true;
         }
       }
@@ -366,77 +327,71 @@ export class _Tokenizer {
     }
   }
 
-  html(src: string): Tokens.HTML | undefined {
+  html(src) {
     const cap = this.rules.block.html.exec(src);
     if (cap) {
-      const token: Tokens.HTML = {
+      const token = {
         type: 'html',
-        block: true,
         raw: cap[0],
-        pre: cap[1] === 'pre' || cap[1] === 'script' || cap[1] === 'style',
+        pre: !this.options.sanitizer
+          && (cap[1] === 'pre' || cap[1] === 'script' || cap[1] === 'style'),
         text: cap[0]
       };
+      if (this.options.sanitize) {
+        token.type = 'paragraph';
+        token.text = this.options.sanitizer ? this.options.sanitizer(cap[0]) : escape(cap[0]);
+        token.tokens = [];
+        this.lexer.inline(token.text, token.tokens);
+      }
       return token;
     }
   }
 
-  def(src: string): Tokens.Def | undefined {
+  def(src) {
     const cap = this.rules.block.def.exec(src);
     if (cap) {
+      if (cap[3]) cap[3] = cap[3].substring(1, cap[3].length - 1);
       const tag = cap[1].toLowerCase().replace(/\s+/g, ' ');
-      const href = cap[2] ? cap[2].replace(/^<(.*)>$/, '$1').replace(this.rules.inline._escapes, '$1') : '';
-      const title = cap[3] ? cap[3].substring(1, cap[3].length - 1).replace(this.rules.inline._escapes, '$1') : cap[3];
       return {
         type: 'def',
         tag,
         raw: cap[0],
-        href,
-        title
+        href: cap[2],
+        title: cap[3]
       };
     }
   }
 
-  table(src: string): Tokens.Table | undefined {
+  table(src) {
     const cap = this.rules.block.table.exec(src);
     if (cap) {
-      if (!/[:|]/.test(cap[2])) {
-        // delimiter row must have a pipe (|) or colon (:) otherwise it is a setext heading
-        return;
-      }
-
-      const item: Tokens.Table = {
+      const item = {
         type: 'table',
-        raw: cap[0],
-        header: splitCells(cap[1]).map(c => {
-          return { text: c, tokens: [] };
-        }),
-        align: cap[2].replace(/^\||\| *$/g, '').split('|'),
+        header: splitCells(cap[1]).map(c => { return { text: c }; }),
+        align: cap[2].replace(/^ *|\| *$/g, '').split(/ *\| */),
         rows: cap[3] && cap[3].trim() ? cap[3].replace(/\n[ \t]*$/, '').split('\n') : []
       };
 
       if (item.header.length === item.align.length) {
+        item.raw = cap[0];
+
         let l = item.align.length;
         let i, j, k, row;
         for (i = 0; i < l; i++) {
-          const align = item.align[i];
-          if (align) {
-            if (/^ *-+: *$/.test(align)) {
-              item.align[i] = 'right';
-            } else if (/^ *:-+: *$/.test(align)) {
-              item.align[i] = 'center';
-            } else if (/^ *:-+ *$/.test(align)) {
-              item.align[i] = 'left';
-            } else {
-              item.align[i] = null;
-            }
+          if (/^ *-+: *$/.test(item.align[i])) {
+            item.align[i] = 'right';
+          } else if (/^ *:-+: *$/.test(item.align[i])) {
+            item.align[i] = 'center';
+          } else if (/^ *:-+ *$/.test(item.align[i])) {
+            item.align[i] = 'left';
+          } else {
+            item.align[i] = null;
           }
         }
 
         l = item.rows.length;
         for (i = 0; i < l; i++) {
-          item.rows[i] = splitCells(item.rows[i] as unknown as string, item.header.length).map(c => {
-            return { text: c, tokens: [] };
-          });
+          item.rows[i] = splitCells(item.rows[i], item.header.length).map(c => { return { text: c }; });
         }
 
         // parse child tokens inside headers and cells
@@ -444,7 +399,8 @@ export class _Tokenizer {
         // header child tokens
         l = item.header.length;
         for (j = 0; j < l; j++) {
-          item.header[j].tokens = this.lexer.inline(item.header[j].text);
+          item.header[j].tokens = [];
+          this.lexer.inlineTokens(item.header[j].text, item.header[j].tokens);
         }
 
         // cell child tokens
@@ -452,7 +408,8 @@ export class _Tokenizer {
         for (j = 0; j < l; j++) {
           row = item.rows[j];
           for (k = 0; k < row.length; k++) {
-            row[k].tokens = this.lexer.inline(row[k].text);
+            row[k].tokens = [];
+            this.lexer.inlineTokens(row[k].text, row[k].tokens);
           }
         }
 
@@ -461,47 +418,52 @@ export class _Tokenizer {
     }
   }
 
-  lheading(src: string): Tokens.Heading | undefined {
+  lheading(src) {
     const cap = this.rules.block.lheading.exec(src);
     if (cap) {
-      return {
+      const token = {
         type: 'heading',
         raw: cap[0],
         depth: cap[2].charAt(0) === '=' ? 1 : 2,
         text: cap[1],
-        tokens: this.lexer.inline(cap[1])
+        tokens: []
       };
+      this.lexer.inline(token.text, token.tokens);
+      return token;
     }
   }
 
-  paragraph(src: string): Tokens.Paragraph | undefined {
+  paragraph(src) {
     const cap = this.rules.block.paragraph.exec(src);
     if (cap) {
-      const text = cap[1].charAt(cap[1].length - 1) === '\n'
-        ? cap[1].slice(0, -1)
-        : cap[1];
-      return {
+      const token = {
         type: 'paragraph',
         raw: cap[0],
-        text,
-        tokens: this.lexer.inline(text)
+        text: cap[1].charAt(cap[1].length - 1) === '\n'
+          ? cap[1].slice(0, -1)
+          : cap[1],
+        tokens: []
       };
+      this.lexer.inline(token.text, token.tokens);
+      return token;
     }
   }
 
-  text(src: string): Tokens.Text | undefined {
+  text(src) {
     const cap = this.rules.block.text.exec(src);
     if (cap) {
-      return {
+      const token = {
         type: 'text',
         raw: cap[0],
         text: cap[0],
-        tokens: this.lexer.inline(cap[0])
+        tokens: []
       };
+      this.lexer.inline(token.text, token.tokens);
+      return token;
     }
   }
 
-  escape(src: string): Tokens.Escape | undefined {
+  escape(src) {
     const cap = this.rules.inline.escape.exec(src);
     if (cap) {
       return {
@@ -512,7 +474,7 @@ export class _Tokenizer {
     }
   }
 
-  tag(src: string): Tokens.Tag | undefined {
+  tag(src) {
     const cap = this.rules.inline.tag.exec(src);
     if (cap) {
       if (!this.lexer.state.inLink && /^<a /i.test(cap[0])) {
@@ -527,17 +489,22 @@ export class _Tokenizer {
       }
 
       return {
-        type: 'html',
+        type: this.options.sanitize
+          ? 'text'
+          : 'html',
         raw: cap[0],
         inLink: this.lexer.state.inLink,
         inRawBlock: this.lexer.state.inRawBlock,
-        block: false,
-        text: cap[0]
+        text: this.options.sanitize
+          ? (this.options.sanitizer
+            ? this.options.sanitizer(cap[0])
+            : escape(cap[0]))
+          : cap[0]
       };
     }
   }
 
-  link(src: string): Tokens.Link | Tokens.Image | undefined {
+  link(src) {
     const cap = this.rules.inline.link.exec(src);
     if (cap) {
       const trimmedUrl = cap[2].trim();
@@ -593,13 +560,13 @@ export class _Tokenizer {
     }
   }
 
-  reflink(src: string, links: Links): Tokens.Link | Tokens.Image | Tokens.Text | undefined {
+  reflink(src, links) {
     let cap;
     if ((cap = this.rules.inline.reflink.exec(src))
-      || (cap = this.rules.inline.nolink.exec(src))) {
+        || (cap = this.rules.inline.nolink.exec(src))) {
       let link = (cap[2] || cap[1]).replace(/\s+/g, ' ');
       link = links[link.toLowerCase()];
-      if (!link) {
+      if (!link || !link.href) {
         const text = cap[0].charAt(0);
         return {
           type: 'text',
@@ -611,7 +578,7 @@ export class _Tokenizer {
     }
   }
 
-  emStrong(src: string, maskedSrc: string, prevChar = ''): Tokens.Em | Tokens.Strong | undefined {
+  emStrong(src, maskedSrc, prevChar = '') {
     let match = this.rules.inline.emStrong.lDelim.exec(src);
     if (!match) return;
 
@@ -620,9 +587,8 @@ export class _Tokenizer {
 
     const nextChar = match[1] || match[2] || '';
 
-    if (!nextChar || !prevChar || this.rules.inline.punctuation.exec(prevChar)) {
-      // unicode Regex counts emoji as 1 char; spread into array for proper count (used multiple times below)
-      const lLength = [...match[0]].length - 1;
+    if (!nextChar || (nextChar && (prevChar === '' || this.rules.inline.punctuation.exec(prevChar)))) {
+      const lLength = match[0].length - 1;
       let rDelim, rLength, delimTotal = lLength, midDelimTotal = 0;
 
       const endReg = match[0][0] === '*' ? this.rules.inline.emStrong.rDelimAst : this.rules.inline.emStrong.rDelimUnd;
@@ -636,7 +602,7 @@ export class _Tokenizer {
 
         if (!rDelim) continue; // skip single * in __abc*abc__
 
-        rLength = [...rDelim].length;
+        rLength = rDelim.length;
 
         if (match[3] || match[4]) { // found another Left Delim
           delimTotal += rLength;
@@ -654,34 +620,31 @@ export class _Tokenizer {
 
         // Remove extra characters. *a*** -> *a*
         rLength = Math.min(rLength, rLength + delimTotal + midDelimTotal);
-        // char length can be >1 for unicode characters;
-        const lastCharLength = [...match[0]][0].length;
-        const raw = src.slice(0, lLength + match.index + lastCharLength + rLength);
 
         // Create `em` if smallest delimiter has odd char count. *a***
         if (Math.min(lLength, rLength) % 2) {
-          const text = raw.slice(1, -1);
+          const text = src.slice(1, lLength + match.index + rLength);
           return {
             type: 'em',
-            raw,
+            raw: src.slice(0, lLength + match.index + rLength + 1),
             text,
-            tokens: this.lexer.inlineTokens(text)
+            tokens: this.lexer.inlineTokens(text, [])
           };
         }
 
         // Create 'strong' if smallest delimiter has even char count. **a***
-        const text = raw.slice(2, -2);
+        const text = src.slice(2, lLength + match.index + rLength - 1);
         return {
           type: 'strong',
-          raw,
+          raw: src.slice(0, lLength + match.index + rLength + 1),
           text,
-          tokens: this.lexer.inlineTokens(text)
+          tokens: this.lexer.inlineTokens(text, [])
         };
       }
     }
   }
 
-  codespan(src: string): Tokens.Codespan | undefined {
+  codespan(src) {
     const cap = this.rules.inline.code.exec(src);
     if (cap) {
       let text = cap[2].replace(/\n/g, ' ');
@@ -699,7 +662,7 @@ export class _Tokenizer {
     }
   }
 
-  br(src: string): Tokens.Br | undefined {
+  br(src) {
     const cap = this.rules.inline.br.exec(src);
     if (cap) {
       return {
@@ -709,38 +672,37 @@ export class _Tokenizer {
     }
   }
 
-  del(src: string): Tokens.Del | undefined {
+  del(src) {
     const cap = this.rules.inline.del.exec(src);
     if (cap) {
       return {
         type: 'del',
         raw: cap[0],
         text: cap[2],
-        tokens: this.lexer.inlineTokens(cap[2])
+        tokens: this.lexer.inlineTokens(cap[2], [])
       };
     }
   }
 
-  owo(src:string){
-    const cap=this.rules.inline.owo.exec(src)
-    if(cap){
-        console.warn(cap)
-        if(cap[0].length>1){
-            return {
-                type:'owo',
-                raw:cap[0],
-                text:cap[1]
-            }
-        }
+  owo(src) {
+    const cap = this.rules.inline.owo.exec(src);
+    if (cap) {
+      if (cap[0].length > 1) {
+        return {
+          type: 'owo',
+          raw: cap[0],
+          text: cap[1]
+        };
+      }
     }
   }
 
-  autolink(src: string): Tokens.Link | undefined {
+  autolink(src, mangle) {
     const cap = this.rules.inline.autolink.exec(src);
     if (cap) {
       let text, href;
       if (cap[2] === '@') {
-        text = escape(cap[1]);
+        text = escape(this.options.mangle ? mangle(cap[1]) : cap[1]);
         href = 'mailto:' + text;
       } else {
         text = escape(cap[1]);
@@ -763,12 +725,12 @@ export class _Tokenizer {
     }
   }
 
-  url(src: string): Tokens.Link | undefined {
+  url(src, mangle) {
     let cap;
     if (cap = this.rules.inline.url.exec(src)) {
       let text, href;
       if (cap[2] === '@') {
-        text = escape(cap[0]);
+        text = escape(this.options.mangle ? mangle(cap[0]) : cap[0]);
         href = 'mailto:' + text;
       } else {
         // do extended autolink path validation
@@ -779,9 +741,9 @@ export class _Tokenizer {
         } while (prevCapZero !== cap[0]);
         text = escape(cap[0]);
         if (cap[1] === 'www.') {
-          href = 'http://' + cap[0];
+          href = 'http://' + text;
         } else {
-          href = cap[0];
+          href = text;
         }
       }
       return {
@@ -800,15 +762,15 @@ export class _Tokenizer {
     }
   }
 
-  inlineText(src: string): Tokens.Text | undefined {
+  inlineText(src, smartypants) {
     const cap = this.rules.inline.text.exec(src);
     if (cap) {
       let text;
       if (this.lexer.state.inRawBlock) {
-        text = cap[0];
+        text = this.options.sanitize ? (this.options.sanitizer ? this.options.sanitizer(cap[0]) : escape(cap[0])) : cap[0];
       } else {
-        text = escape(cap[0]);
-      }
+        text = escape(this.options.smartypants ? smartypants(cap[0]) : cap[0]);
+    }
       return {
         type: 'text',
         raw: cap[0],

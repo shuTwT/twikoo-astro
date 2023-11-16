@@ -2,7 +2,7 @@ import {defineConfig} from 'tsup'
 import packageJson from './package.json' assert { type : 'json' }
 
 export default defineConfig({
-    entry:['src/marked.ts'],
+    entry:['src/marked.js'],
     format:['esm'],
     dts:true,
     splitting:false,
