@@ -1,7 +1,6 @@
 ---
  import "../styles/demo.css";
-// import "@astro-twikoo/core/dist/style.css"
-import {Twikoo} from  "@astro-twikoo/core/src/main.js"
+import Twikoo from "astro-twikoo/twikoo.astro";
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -25,7 +24,7 @@ import {Twikoo} from  "@astro-twikoo/core/src/main.js"
     
    <div id="app">
     <button id="switch">切换</button>
-    <Twikoo envId="http://localhost:8080" client:load></Twikoo>
+    <Twikoo envId="http://localhost:8080"></Twikoo>
    </div>
     <script is:inline>
         document.getElementById('switch').onclick=function(){

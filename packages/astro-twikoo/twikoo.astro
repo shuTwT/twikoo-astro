@@ -1,0 +1,14 @@
+---
+// import "@astro-twikoo/core/dist/style.css"
+import {Twikoo} from  "@astro-twikoo/core/src/main.js"
+interface Props {
+    envId:string
+    legacy?:boolean
+    region?:string
+    path?:string
+    lang?:string
+    enableAvatar?:boolean
+}
+const {envId}=Astro.props
+---
+<Twikoo envId={envId} client:load></Twikoo>

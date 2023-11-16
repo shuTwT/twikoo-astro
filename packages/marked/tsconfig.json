@@ -10,7 +10,8 @@
       "allowSyntheticDefaultImports": true,
       "moduleResolution": "NodeNext",
       "allowImportingTsExtensions": true,
-      "sourceMap": false
+      "sourceMap": false,
+      "composite": true
     },
     "include": [
       "src/*.ts",
