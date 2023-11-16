@@ -2,6 +2,7 @@
     "compilerOptions": {
       "target": "es2022",
       "module": "NodeNext",
+      "allowJs": true,
       "isolatedModules": true,
       "strict": true,
       "verbatimModuleSyntax": true,
@@ -12,6 +13,7 @@
       "sourceMap": false
     },
     "include": [
-      "src/*.ts"
+      "src/*.ts",
+      "src/*.js"
     ]
   }

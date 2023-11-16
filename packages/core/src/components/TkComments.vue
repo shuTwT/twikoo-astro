@@ -116,7 +116,11 @@ async function getComments(event) {
   }
 }
 function onReply(id) {
-  replyId.value = id
+    if(replyId.value==id){
+        replyId.value=''
+        return
+    }
+    replyId.value = id
 }
 function openAdmin() {
   emit('admin')
