@@ -23,15 +23,15 @@ function outputLink(cap, link, raw, lexer) {
     };
     lexer.state.inLink = false;
     return token;
-  } else {
-    return {
-      type: 'image',
-      raw,
-      href,
-      title,
-      text: escape(text)
-    };
-  }
+  } 
+  return {
+    type: 'image',
+    raw,
+    href,
+    title,
+    text: escape(text)
+  };
+  
 }
 
 function indentCodeCompensation(raw, text) {
@@ -130,7 +130,7 @@ export class Tokenizer {
         type: 'heading',
         raw: cap[0],
         depth: cap[1].length,
-        text: text,
+        text,
         tokens: []
       };
       this.lexer.inline(token.text, token.tokens);
@@ -151,7 +151,7 @@ export class Tokenizer {
   blockquote(src) {
     const cap = this.rules.block.blockquote.exec(src);
     if (cap) {
-      const text = cap[0].replace(/^ *> ?/gm, '');
+      const text = cap[0].replace(/^ *>[ \t]?/gm, '');
 
       return {
         type: 'blockquote',
@@ -187,7 +187,7 @@ export class Tokenizer {
       }
 
       // Get next list item
-      const itemRegex = new RegExp(`^( {0,3}${bull})((?: [^\\n]*)?(?:\\n|$))`);
+      const itemRegex = new RegExp(`^( {0,3}${bull})((?:[\t ][^\\n]*)?(?:\\n|$))`);
 
       // Check if current bullet point can start a new List Item
       while (src) {
@@ -225,8 +225,8 @@ export class Tokenizer {
         }
 
         if (!endEarly) {
-          const nextBulletRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:[*+-]|\\d{1,9}[.)])`);
-
+          const nextBulletRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:[*+-]|\\d{1,9}[.)])((?: [^\\n]*)?(?:\\n|$))`);
+          const hrRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}((?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$)`);
           // Check if following lines should be included in List Item
           while (src) {
             rawLine = src.split('\n', 1)[0];
@@ -240,6 +240,11 @@ export class Tokenizer {
             // End list item if found start of new bullet
             if (nextBulletRegex.test(line)) {
               break;
+            }
+
+            // Horizontal rule found
+            if (hrRegex.test(src)) {
+                break;
             }
 
             if (line.search(/[^ ]/) >= indent || !line.trim()) { // Dedent if possible
@@ -279,7 +284,7 @@ export class Tokenizer {
 
         list.items.push({
           type: 'list_item',
-          raw: raw,
+          raw,
           task: !!istask,
           checked: ischecked,
           loose: false,

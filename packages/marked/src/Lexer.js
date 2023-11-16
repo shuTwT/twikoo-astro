@@ -113,8 +113,7 @@ export class Lexer {
    */
   lex(src) {
     src = src
-      .replace(/\r\n|\r/g, '\n')
-      .replace(/\t/g, '    ');
+      .replace(/\r\n|\r/g, '\n');
 
     this.blockTokens(src, this.tokens);
 
@@ -131,8 +130,13 @@ export class Lexer {
    */
   blockTokens(src, tokens = []) {
     if (this.options.pedantic) {
-      src = src.replace(/^ +$/gm, '');
+      src = src.replace(/\t/g, '    ').replace(/^ +$/gm, '');
+    } else {
+      src = src.replace(/^( *)(\t+)/gm, (_, leading, tabs) => {
+        return leading + '    '.repeat(tabs.length);
+      });
     }
+    
     let token, lastToken, cutSrc, lastParagraphClipped;
 
     while (src) {
