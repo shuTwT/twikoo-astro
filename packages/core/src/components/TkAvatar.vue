@@ -4,8 +4,10 @@
     :class="{ 'tk-clickable': !!link, 'tk-has-avatar': !!avatarInner }"
     @click="onClick"
   >
-    <div class="tk-avatar-img" v-if="!avatarInner" v-html="iconUser"></div>
-    <img class="tk-avatar-img" v-if="avatarInner" :src="avatarInner" alt="" />
+    <div class="tk-avatar__wrap">
+        <img class="tk-avatar-img" v-if="!!avatarInner" :src="avatarInner" alt="" />
+        <div class="tk-avatar-img" v-else v-html="iconUser"></div>
+    </div>
   </div>
 </template>
 
@@ -78,8 +80,12 @@ function onClick() {
   height: 1.6rem;
   width: 1.6rem;
 }
-
-.tk-avatar.tk-has-avatar {
+.tk-avatar.tk-has-avatar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.tk-avatar.tk-has-avatar .tk-avatar__wrap{
   background-color: rgba(144, 147, 153, 0.13);
 }
 
