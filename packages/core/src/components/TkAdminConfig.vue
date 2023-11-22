@@ -21,10 +21,10 @@
         <summary class="tk-admin-config-group-title">{{ t('ADMIN_CONFIG_EMAIL_TEST') }}</summary>
         <div class="tk-admin-config-email-test">
           <div class="tk-admin-config-email-test-desc">{{ t('ADMIN_CONFIG_EMAIL_TEST_HELP') }}</div>
-          <div class="tk-admin-config-input">
+          <div class="tk-admin-config-input email">
             <ElInput v-model="emailTestAddress" size="small">
               <template v-slot:append>
-                <ElButton class="tk-admin-button" type="info" @click="testEmail">{{ t('ADMIN_CONFIG_EMAIL_TEST_BTN') }}</ElButton>
+                <VanButton class="tk-admin-button" @click="testEmail">{{ t('ADMIN_CONFIG_EMAIL_TEST_BTN') }}</VanButton>
               </template>
 
             </ElInput>
@@ -35,15 +35,16 @@
       </details>
     </div>
     <div class="tk-admin-config-actions">
-      <ElButton class="tk-admin-button" size="small" type="primary" @click="saveConfig">{{ t('ADMIN_CONFIG_SAVE') }}</ElButton>
-      <ElButton class="tk-admin-button" size="small" type="info" @click="resetConfig">{{ t('ADMIN_CONFIG_RESET') }}</ElButton>
+      <VanButton class="tk-admin-button"  type="primary" @click="saveConfig">{{ t('ADMIN_CONFIG_SAVE') }}</VanButton>
+      <VanButton class="tk-admin-button"  type="default" @click="resetConfig" style="margin-left: 10px;">{{ t('ADMIN_CONFIG_RESET') }}</VanButton>
     </div>
     <div class="tk-admin-config-message">{{ message }}</div>
   </div>
 </template>
   
 <script setup>
-import { ElButton, ElInput, vLoading } from 'element-plus'
+import { Button as VanButton} from 'vant'
+import { ElInput, vLoading } from 'element-plus'
 import { call, logger, t } from '../utils'
 import { version } from '../version'
 import { twikooStore } from '../store'
@@ -239,5 +240,8 @@ onMounted(()=>{
 
 .tk-admin-config-email-test-desc {
   margin: 1em 0;
+}
+.tk-admin-config-input.email :deep(.el-input-group__append){
+    padding: 0;
 }
 </style>

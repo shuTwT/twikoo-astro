@@ -33,7 +33,7 @@
   
 <script setup>
 import {useStore} from "@nanostores/vue"
-import { ElButton, ElInput, ClickOutside as vClickOutside } from 'element-plus'
+import {ElInput, ClickOutside as vClickOutside } from 'element-plus'
 import iconMarkdown from '@fortawesome/fontawesome-free/svgs/brands/markdown.svg?raw'
 import iconEmotion from '@fortawesome/fontawesome-free/svgs/regular/laugh.svg?raw'
 import iconImage from '@fortawesome/fontawesome-free/svgs/regular/image.svg?raw'

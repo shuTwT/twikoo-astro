@@ -75,11 +75,13 @@ onMounted(async () => {
 </script>
 
 <style>
+@import url("vant/es/style/css-variables.css");
+@import url("vant/es/button/index.css");
 @import url("./lib/owo.css");
 @import url("./var.css");
 @import url("./style.css");
 @import url("element-plus/theme-chalk/el-var.css");
-/* @import url("element-plus/theme-chalk/el-icon.css"); */
+@import url("element-plus/theme-chalk/el-icon.css");
 @import url("element-plus/theme-chalk/el-button.css");
 @import url("element-plus/theme-chalk/el-input.css");
 @import url("element-plus/theme-chalk/el-loading.css");
@@ -140,15 +142,5 @@ onMounted(async () => {
     border-left: 0.5rem solid #e7c000;
     color: #6b5900;
     align-self: stretch;
-}
-.twikoo .el-button{
-    color: var(--twikoo-button-font-color-white,#fff);
-    background-color: var(--twikoo-font-color);
-}
-.twikoo .el-button:active,
-.twikoo .el-button:focus,
-.twikoo .el-button:hover{
-    color: var(--twikoo-button-font-color-white,#fff);
-    background-color: var(--twikoo-primary-color);
 }
 </style>

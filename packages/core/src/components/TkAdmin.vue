@@ -14,7 +14,7 @@
                         show-password @keyup.enter.native="onLogin" ref="focusmeRef">
                         <template v-slot:prepend>{{ t('ADMIN_PASSWORD') }}</template>
                         <template v-slot:append>
-                            <ElButton @click="onLogin">{{ t('ADMIN_LOGIN') }}</ElButton>
+                            <VanButton @click="onLogin">{{ t('ADMIN_LOGIN') }}</VanButton>
                         </template>
 
                     </ElInput>
@@ -38,8 +38,8 @@
                         v-model="passwordConfirm" show-password>
                         <template v-slot:prepend>{{ t('ADMIN_SET_PASSWORD_CONFIRM') }}</template>
                     </ElInput>
-                    <ElButton class="tk-admin-button tk-regist-button" :disabled="!canRegist" @click="onRegist">{{ t('ADMIN_REGIST') }}
-                    </ElButton>
+                    <VanButton class="tk-admin-button tk-regist-button" :disabled="!canRegist" @click="onRegist">{{ t('ADMIN_REGIST') }}
+                    </VanButton>
                     <div class="tk-login-msg" v-if="loginErrorMessage">{{ loginErrorMessage }}</div>
                     <div class="tk-login-msg" v-if="!isSetCredentials">
                         <a href="https://twikoo.js.org/faq.html" rel="noopener noreferrer" target="_blank">{{
@@ -72,7 +72,8 @@
 </template>
   
 <script setup>
-import { ElButton, ElInput, vLoading } from 'element-plus'
+import { Button as VanButton } from 'vant'
+import { ElInput, vLoading } from 'element-plus'
 import md5 from 'blueimp-md5'
 import TkAdminComment from './TkAdminComment.vue'
 import TkAdminConfig from './TkAdminConfig.vue'
@@ -313,6 +314,9 @@ watch(
 
 .tk-password .el-input__inner {
     min-width: 100px;
+}
+.tk-password :deep(.el-input-group__append){
+    padding: 0;
 }
 
 .tk-login-msg a {

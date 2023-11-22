@@ -3,14 +3,14 @@
     <div class="tk-admin-warn tk-admin-import-warn">
       <p>{{ t('ADMIN_EXPORT_WARN') }}</p>
     </div>
-    <ElButton class="tk-admin-button" size="small" @click="doExport('comment')" :disabled="loading">{{ t('ADMIN_EXPORT_COMMENT') }}</ElButton>
-    <ElButton class="tk-admin-button" size="small" @click="doExport('counter')" :disabled="loading">{{ t('ADMIN_EXPORT_COUNTER') }}</ElButton>
+    <VanButton class="tk-admin-button" size="small" @click="doExport('comment')" :disabled="loading">{{ t('ADMIN_EXPORT_COMMENT') }}</VanButton>
+    <VanButton class="tk-admin-button" size="small" @click="doExport('counter')" :disabled="loading" style="margin-left: 10px;">{{ t('ADMIN_EXPORT_COUNTER') }}</VanButton>
   </div>
 </template>
   
 
 <script setup>
-import { ElButton, ElInput, ElLoading } from 'element-plus'
+import { Button as VanButton} from 'vant'
 import { call, t } from '../utils'
 import { tcbStore } from '../store'
 import {ref} from "vue"

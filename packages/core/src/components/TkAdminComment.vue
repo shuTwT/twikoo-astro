@@ -13,7 +13,7 @@
         <option value="VISIBLE">{{ t('ADMIN_COMMENT_FILTER_VISIBLE') }}</option>
         <option value="HIDDEN">{{ t('ADMIN_COMMENT_FILTER_HIDDEN') }}</option>
       </select>
-      <ElButton class="tk-admin-button" size="small" type="primary" @click="getComments">{{ t('ADMIN_COMMENT_SEARCH') }}</ElButton>
+      <VanButton class="tk-admin-button" size="small" type="primary" @click="getComments">{{ t('ADMIN_COMMENT_SEARCH') }}</VanButton>
     </div>
     <div class="tk-admin-comment-list" ref="commentListRef">
       <div class="tk-admin-comment-item" v-for="comment in comments" :key="comment._id">
@@ -28,16 +28,16 @@
         </div>
         <div class="tk-content" v-html="comment.comment" ref="commentsRef"></div>
         <div class="tk-admin-actions">
-          <ElButton class="tk-admin-button" size="small" :text="true" @click="handleView(comment)">{{ t('ADMIN_COMMENT_VIEW') }}</ElButton>
-          <ElButton class="tk-admin-button" size="small" :text="true" v-if="comment.isSpam" @click="handleSpam(comment, false)">{{
-            t('ADMIN_COMMENT_SHOW') }}</ElButton>
-          <ElButton class="tk-admin-button" size="small" :text="true" v-if="!comment.isSpam" @click="handleSpam(comment, true)">{{
-            t('ADMIN_COMMENT_HIDE') }}</ElButton>
-          <ElButton class="tk-admin-button" size="small" :text="true" v-if="!comment.rid && comment.top" @click="handleTop(comment, false)">{{
-            t('ADMIN_COMMENT_UNTOP') }}</ElButton>
-          <ElButton class="tk-admin-button" size="small" :text="true" v-if="!comment.rid && !comment.top" @click="handleTop(comment, true)">{{
-            t('ADMIN_COMMENT_TOP') }}</ElButton>
-          <ElButton class="tk-admin-button" size="small" :text="true" @click="handleDelete(comment)">{{ t('ADMIN_COMMENT_DELETE') }}</ElButton>
+            <VanButton class="tk-admin-button" size="small" @click="handleView(comment)">{{ t('ADMIN_COMMENT_VIEW') }}</VanButton>
+          <VanButton class="tk-admin-button" size="small"  v-if="comment.isSpam" @click="handleSpam(comment, false)">{{
+            t('ADMIN_COMMENT_SHOW') }}</VanButton>
+          <VanButton class="tk-admin-button" size="small"  v-if="!comment.isSpam" @click="handleSpam(comment, true)">{{
+            t('ADMIN_COMMENT_HIDE') }}</VanButton>
+          <VanButton class="tk-admin-button" size="small"  v-if="!comment.rid && comment.top" @click="handleTop(comment, false)">{{
+            t('ADMIN_COMMENT_UNTOP') }}</VanButton>
+          <VanButton class="tk-admin-button" size="small"  v-if="!comment.rid && !comment.top" @click="handleTop(comment, true)">{{
+            t('ADMIN_COMMENT_TOP') }}</VanButton>
+          <VanButton class="tk-admin-button" size="small"  @click="handleDelete(comment)">{{ t('ADMIN_COMMENT_DELETE') }}</VanButton>
         </div>
       </div>
     </div>
@@ -47,7 +47,8 @@
 </template>
   
 <script setup>
-import { ElButton, ElInput, vLoading } from 'element-plus'
+import { Button as VanButton } from 'vant'
+import { ElInput, vLoading } from 'element-plus'
 import { twikooStore } from '../store'
 import { timeago, call, convertLink, renderLinks, renderMath, renderCode, t } from '../utils'
 import { version } from '../version'
@@ -224,6 +225,7 @@ onMounted(async () => {
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
+  outline: none;
 }
 
 .tk-admin-comment-filter-type:focus {
@@ -261,5 +263,8 @@ onMounted(async () => {
   display: flex;
   margin-bottom: 1em;
   border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+.tk-admin-actions .tk-admin-button{
+    margin-right: 10px;
 }
 </style>

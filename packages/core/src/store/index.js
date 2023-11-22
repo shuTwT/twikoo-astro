@@ -1,4 +1,4 @@
-import {deepMap, map} from 'nanostores'
+import {deepMap} from 'nanostores'
 import { call } from '../utils'
 import { initOwoEmotions } from '../utils'
 

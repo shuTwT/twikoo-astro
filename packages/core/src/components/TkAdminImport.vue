@@ -15,14 +15,15 @@
     </select>
     <div class="tk-admin-import-label">{{ t('ADMIN_IMPORT_SELECT_FILE') }}</div>
     <input type="file" value="" ref="inputFileRef" />
-    <ElButton class="tk-admin-button" size="small" @click="uploadFile" :disabled="loading">{{ t('ADMIN_IMPORT_START') }}</ElButton>
+    <VanButton class="tk-admin-button" size="small" @click="uploadFile" :disabled="loading">{{ t('ADMIN_IMPORT_START') }}</VanButton>
     <ElInput type="textarea" :rows="10" :placeholder="t('ADMIN_IMPORT_LOG')" readonly v-model="logText"
       ref="logTextAreaRef" />
   </div>
 </template>
 
 <script setup>
-import { ElButton, ElInput, ElLoading } from 'element-plus'
+import {Button as VanButton} from 'vant'
+import { ElInput } from 'element-plus'
 import { call, readAsText, t } from '../utils'
 import { tcbStore } from '../store'
 import { reactive, ref } from 'vue';

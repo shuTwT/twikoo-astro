@@ -10,9 +10,10 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.4",
+        "@vant/touch-emulator":"^1.4.0",
         "blueimp-md5": "^2.19.0",
-        "jsdom":"^22.1.0",
-        "@fortawesome/fontawesome-free": "^5.15.4"
+        "jsdom":"^22.1.0"
       },
       "peerDependencies": {
         "@nanostores/vue": "^0.10.0",

@@ -27,6 +27,12 @@ export default defineConfig({
                 'jsdom',
                 'prismjs',
                 'prismjs/plugins/autoloader/prism-autoloader',
+                'lodash-es',
+                'lodash-unified',
+                'nanostores',
+                '@nanostores/vue',
+                'blueimp-md5',
+                '@vueuse/core'
             ],
             output: [
                 {

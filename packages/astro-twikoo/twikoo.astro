@@ -11,4 +11,7 @@ interface Props {
 }
 const {envId}=Astro.props
 ---
+<script>
+    import "@vant/touch-emulator";
+</script>
 <Twikoo envId={envId} client:load></Twikoo>
