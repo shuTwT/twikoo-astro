@@ -77,6 +77,7 @@ onMounted(async () => {
 <style>
 @import url("./lib/owo.css");
 @import url("./var.css");
+@import url("./style.css");
 @import url("element-plus/theme-chalk/el-var.css");
 /* @import url("element-plus/theme-chalk/el-icon.css"); */
 @import url("element-plus/theme-chalk/el-button.css");

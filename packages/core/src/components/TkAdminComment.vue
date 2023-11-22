@@ -13,7 +13,7 @@
         <option value="VISIBLE">{{ t('ADMIN_COMMENT_FILTER_VISIBLE') }}</option>
         <option value="HIDDEN">{{ t('ADMIN_COMMENT_FILTER_HIDDEN') }}</option>
       </select>
-      <ElButton size="small" type="primary" @click="getComments">{{ t('ADMIN_COMMENT_SEARCH') }}</ElButton>
+      <ElButton class="tk-admin-button" size="small" type="primary" @click="getComments">{{ t('ADMIN_COMMENT_SEARCH') }}</ElButton>
     </div>
     <div class="tk-admin-comment-list" ref="commentListRef">
       <div class="tk-admin-comment-item" v-for="comment in comments" :key="comment._id">
@@ -28,16 +28,16 @@
         </div>
         <div class="tk-content" v-html="comment.comment" ref="commentsRef"></div>
         <div class="tk-admin-actions">
-          <ElButton size="small" :text="true" @click="handleView(comment)">{{ t('ADMIN_COMMENT_VIEW') }}</ElButton>
-          <ElButton size="small" :text="true" v-if="comment.isSpam" @click="handleSpam(comment, false)">{{
+          <ElButton class="tk-admin-button" size="small" :text="true" @click="handleView(comment)">{{ t('ADMIN_COMMENT_VIEW') }}</ElButton>
+          <ElButton class="tk-admin-button" size="small" :text="true" v-if="comment.isSpam" @click="handleSpam(comment, false)">{{
             t('ADMIN_COMMENT_SHOW') }}</ElButton>
-          <ElButton size="small" :text="true" v-if="!comment.isSpam" @click="handleSpam(comment, true)">{{
+          <ElButton class="tk-admin-button" size="small" :text="true" v-if="!comment.isSpam" @click="handleSpam(comment, true)">{{
             t('ADMIN_COMMENT_HIDE') }}</ElButton>
-          <ElButton size="small" :text="true" v-if="!comment.rid && comment.top" @click="handleTop(comment, false)">{{
+          <ElButton class="tk-admin-button" size="small" :text="true" v-if="!comment.rid && comment.top" @click="handleTop(comment, false)">{{
             t('ADMIN_COMMENT_UNTOP') }}</ElButton>
-          <ElButton size="small" :text="true" v-if="!comment.rid && !comment.top" @click="handleTop(comment, true)">{{
+          <ElButton class="tk-admin-button" size="small" :text="true" v-if="!comment.rid && !comment.top" @click="handleTop(comment, true)">{{
             t('ADMIN_COMMENT_TOP') }}</ElButton>
-          <ElButton size="small" :text="true" @click="handleDelete(comment)">{{ t('ADMIN_COMMENT_DELETE') }}</ElButton>
+          <ElButton class="tk-admin-button" size="small" :text="true" @click="handleDelete(comment)">{{ t('ADMIN_COMMENT_DELETE') }}</ElButton>
         </div>
       </div>
     </div>

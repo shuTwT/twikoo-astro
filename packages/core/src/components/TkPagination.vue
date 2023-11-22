@@ -119,7 +119,7 @@ watch(
 </script>
 
 
-<style>
+<style scoped>
 .tk-pagination,
 .tk-pagination-pagers {
   display: flex;

@@ -22,9 +22,9 @@
       <a class="tk-submit-action-icon __markdown" alt="Markdown is supported"
         href="https://guides.github.com/features/mastering-markdown/" target="_blank" rel="noopener noreferrer"
         v-html="iconMarkdown"></a>
-      <ElButton class="tk-cancel" v-if="!!replyId" size="small" @click="cancel">{{ t('SUBMIT_CANCEL') }}</ElButton>
-      <ElButton class="tk-preview" size="small" @click="preview">{{ t('SUBMIT_PREVIEW') }}</ElButton>
-      <ElButton class="tk-send" type="primary" size="small" :disabled="!canSend" @click="send">{{ isSending ?
+      <ElButton class="tk-button tk-cancel" v-if="!!replyId" size="small" @click="cancel">{{ t('SUBMIT_CANCEL') }}</ElButton>
+      <ElButton class="tk-button tk-preview" size="small" @click="preview">{{ t('SUBMIT_PREVIEW') }}</ElButton>
+      <ElButton class="tk-button tk-send" type="primary" size="small" :disabled="!canSend" @click="send">{{ isSending ?
         t('SUBMIT_SENDING') : t('SUBMIT_SEND') }}</ElButton>
     </div>
     <div class="tk-preview-container" v-if="isPreviewing" v-html="commentHtml" ref="commentPreviewRef"></div>
@@ -344,19 +344,8 @@ watch(
 
 </script>
   
-<style>
+<style scoped>
 .tk-submit {
-  display: flex;
-  flex-direction: column;
-}
-
-.tk-row {
-  display: flex;
-  flex-direction: row;
-}
-
-.tk-col {
-  flex: 1;
   display: flex;
   flex-direction: column;
 }
@@ -365,14 +354,6 @@ watch(
   margin-bottom: 0.5rem;
 }
 
-.tk-row.actions {
-  position: relative;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  margin-left: 3.5rem;
-  align-items: center;
-  justify-content: flex-end;
-}
 
 .tk-row-actions-start {
   flex: 1;

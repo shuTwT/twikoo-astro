@@ -35,7 +35,7 @@ function onReply() {
 }
 </script>
 
-<style>
+<style scoped>
 .tk-action {
   display: flex;
   align-items: center;

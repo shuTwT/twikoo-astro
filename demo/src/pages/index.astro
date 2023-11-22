@@ -24,7 +24,8 @@ import Twikoo from "astro-twikoo/twikoo.astro";
     
    <div id="app">
     <button id="switch">切换</button>
-    <Twikoo envId="http://localhost:8080"></Twikoo>
+    <div id="comment"><Twikoo envId="http://localhost:8080"></Twikoo></div>
+    
    </div>
     <script is:inline>
         document.getElementById('switch').onclick=function(){

@@ -264,18 +264,12 @@ watch(
 </script>
 
   
-<style>
+<style scoped>
 .tk-main {
   flex: 1;
   width: 0;
 }
 
-.tk-row {
-  flex: 1;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
 
 .tk-nick-link {
   color: inherit;

@@ -15,7 +15,7 @@
     </select>
     <div class="tk-admin-import-label">{{ t('ADMIN_IMPORT_SELECT_FILE') }}</div>
     <input type="file" value="" ref="inputFileRef" />
-    <ElButton size="small" @click="uploadFile" :disabled="loading">{{ t('ADMIN_IMPORT_START') }}</ElButton>
+    <ElButton class="tk-admin-button" size="small" @click="uploadFile" :disabled="loading">{{ t('ADMIN_IMPORT_START') }}</ElButton>
     <ElInput type="textarea" :rows="10" :placeholder="t('ADMIN_IMPORT_LOG')" readonly v-model="logText"
       ref="logTextAreaRef" />
   </div>
@@ -105,7 +105,7 @@ function scrollLogToBottom() {
 
 </script>
   
-<style>
+<style scoped>
 .tk-admin-import {
   display: flex;
   flex-direction: column;

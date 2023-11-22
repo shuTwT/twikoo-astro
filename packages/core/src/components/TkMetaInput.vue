@@ -164,7 +164,7 @@ watch(() => props.config['VERSION'],
 </script>
 
   
-<style>
+<style scoped>
 .tk-meta-input {
   display: flex;
 }

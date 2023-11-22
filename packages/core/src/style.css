@@ -1,0 +1,21 @@
+.tk-row {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.tk-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.tk-row.actions {
+    position: relative;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    margin-left: 3.5rem;
+    align-items: center;
+    justify-content: flex-end;
+}

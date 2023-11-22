@@ -3,8 +3,8 @@
     <div class="tk-admin-warn tk-admin-import-warn">
       <p>{{ t('ADMIN_EXPORT_WARN') }}</p>
     </div>
-    <ElButton size="small" @click="doExport('comment')" :disabled="loading">{{ t('ADMIN_EXPORT_COMMENT') }}</ElButton>
-    <ElButton size="small" @click="doExport('counter')" :disabled="loading">{{ t('ADMIN_EXPORT_COUNTER') }}</ElButton>
+    <ElButton class="tk-admin-button" size="small" @click="doExport('comment')" :disabled="loading">{{ t('ADMIN_EXPORT_COMMENT') }}</ElButton>
+    <ElButton class="tk-admin-button" size="small" @click="doExport('counter')" :disabled="loading">{{ t('ADMIN_EXPORT_COUNTER') }}</ElButton>
   </div>
 </template>
   

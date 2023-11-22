@@ -24,7 +24,7 @@
           <div class="tk-admin-config-input">
             <ElInput v-model="emailTestAddress" size="small">
               <template v-slot:append>
-                <ElButton type="info" @click="testEmail">{{ t('ADMIN_CONFIG_EMAIL_TEST_BTN') }}</ElButton>
+                <ElButton class="tk-admin-button" type="info" @click="testEmail">{{ t('ADMIN_CONFIG_EMAIL_TEST_BTN') }}</ElButton>
               </template>
 
             </ElInput>
@@ -35,8 +35,8 @@
       </details>
     </div>
     <div class="tk-admin-config-actions">
-      <ElButton size="small" type="primary" @click="saveConfig">{{ t('ADMIN_CONFIG_SAVE') }}</ElButton>
-      <ElButton size="small" type="info" @click="resetConfig">{{ t('ADMIN_CONFIG_RESET') }}</ElButton>
+      <ElButton class="tk-admin-button" size="small" type="primary" @click="saveConfig">{{ t('ADMIN_CONFIG_SAVE') }}</ElButton>
+      <ElButton class="tk-admin-button" size="small" type="info" @click="resetConfig">{{ t('ADMIN_CONFIG_RESET') }}</ElButton>
     </div>
     <div class="tk-admin-config-message">{{ message }}</div>
   </div>
@@ -187,7 +187,7 @@ onMounted(()=>{
 
 </script>
   
-<style>
+<style scoped>
 .tk-admin-config-groups {
   overflow-y: auto;
   padding-right: 0.5em;

@@ -65,7 +65,7 @@ function onClick() {
 }
 </script>
 
-<style>
+<style scoped>
 .tk-avatar {
     flex-shrink: 0;
   height: 2.5rem;

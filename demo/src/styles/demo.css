@@ -4,3 +4,7 @@
 [data-theme=dark] #app{
     background: #18171d;
 }
+#comment{
+    position: relative;
+    width: 768px;
+}

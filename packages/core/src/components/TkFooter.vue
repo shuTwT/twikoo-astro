@@ -34,7 +34,7 @@ onMounted(()=>{
 })
 </script>
   
-<style>
+<style scoped>
 .tk-footer {
   width: 100%;
   text-align: end;

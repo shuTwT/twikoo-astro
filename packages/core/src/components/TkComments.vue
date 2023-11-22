@@ -131,7 +131,7 @@ onMounted(() => {
 })
 </script>
   
-<style>
+<style scoped>
 .tk-comments-title {
   font-size: 1.25rem;
   font-weight: bold;
@@ -177,6 +177,6 @@ onMounted(() => {
   color: var(--twikoo-font-color,#409eff);
 }
 .tk-icon.__comments:hover{
-    color: var(--twikoo-primary-color,);
+    color: var(--twikoo-primary-color);
 }
 </style>

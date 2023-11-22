@@ -38,7 +38,7 @@
                         v-model="passwordConfirm" show-password>
                         <template v-slot:prepend>{{ t('ADMIN_SET_PASSWORD_CONFIRM') }}</template>
                     </ElInput>
-                    <ElButton class="tk-regist-button" :disabled="!canRegist" @click="onRegist">{{ t('ADMIN_REGIST') }}
+                    <ElButton class="tk-admin-button tk-regist-button" :disabled="!canRegist" @click="onRegist">{{ t('ADMIN_REGIST') }}
                     </ElButton>
                     <div class="tk-login-msg" v-if="loginErrorMessage">{{ loginErrorMessage }}</div>
                     <div class="tk-login-msg" v-if="!isSetCredentials">
@@ -230,7 +230,7 @@ watch(
 
 </script>
   
-<style>
+<style scoped>
 .tk-admin-container {
     position: absolute;
     top: 0;
