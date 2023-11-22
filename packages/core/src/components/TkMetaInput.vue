@@ -1,15 +1,15 @@
 <template>
   <div class="tk-meta-input">
-    <ElInput v-for="metaInput in displayedInputs" :key="metaInput.key" :name="metaInput.name" :type="metaInput.type"
-      :placeholder="requiredFields[metaInput.key] ? t('META_INPUT_REQUIRED') : t('META_INPUT_NOT_REQUIRED')"
-      v-model="metaData[metaInput.key]" size="small" @change="onMetaChange">
-      <template v-slot:prepend>{{ metaInput.locale }}</template>
-    </ElInput>
+    <div class="tk-input tk-input-group tk-input-group--prepend" v-for="metaInput in displayedInputs" :key="metaInput.key">
+        <div class="tk-input-group__prepend">{{ metaInput.locale }}</div>
+        <div class="tk-input__wrapper" tabindex="-1">
+            <input class="tk-input__inner"  v-model="metaData[metaInput.key]" @change="onMetaChange"  :name="metaInput.name" :type="metaInput.type" autocomplete="off" tabindex="0" :placeholder="requiredFields[metaInput.key] ? t('META_INPUT_REQUIRED') : t('META_INPUT_NOT_REQUIRED')">
+        </div>
+    </div>
   </div>
 </template>
   
 <script setup>
-import { ElButton, ElInput } from 'element-plus'
 import t from '../utils/i18n'
 import { isQQ } from '../utils'
 import { computed, inject, onMounted, ref, watch } from 'vue';
@@ -125,6 +125,7 @@ function onMetaChange() {
   updateMeta()
   checkAdminCrypt()
 }
+
 watch(
   () => props.nick,
   (newVal) => {
@@ -169,51 +170,22 @@ watch(() => props.config['VERSION'],
   display: flex;
 }
 
-.tk-meta-input .el-input {
+.tk-meta-input .tk-input-group {
   width: auto;
   width: calc((100% - 1rem) / 3);
   /* Fix Safari */
   flex: 1;
-}
-
-.el-input .el-input__wrapper{
-    background-color: transparent;
-    box-shadow: none;
-}
-
-.tk-meta-input .el-input+.el-input {
   margin-left: 0.5rem;
 }
-
-.tk-meta-input .el-input .el-input-group__prepend {
-  padding: 0 1rem;
-  color: var(--twikoo-font-color,#333333);
-  box-shadow: none;
-}
-
-.tk-meta-input .el-input input:invalid {
-  border: 1px solid #f56c6c;
-  box-shadow: none;
-}
-
-.el-input.el-input--small.el-input-group.el-input-group--prepend{
-    border-radius: var(--twikoo-border-radius);
-    background: var(--twikoo-input-bg);
-    border: var(--twikoo-border);
-}
-
 @media screen and (max-width: 767px) {
   .tk-meta-input {
     flex-direction: column;
   }
 
-  .tk-meta-input .el-input {
+  .tk-meta-input .tk-input-group {
     width: auto;
-  }
-
-  .tk-meta-input .el-input+.el-input {
     margin-left: 0;
-    margin-top: 0.5rem;
+    margin-top: 10px;
   }
 }
 </style>

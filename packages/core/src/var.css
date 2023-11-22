@@ -1,6 +1,8 @@
 :root{
     --twikoo-primary-color:#409eff;
     --twikoo-font-color:#363636;
+    --twikoo-background:#fff;
+    --twikoo-second-bg:#f7f8f9;
     --twikoo-button-font-color-white:#fff;
     --twikoo-button-font-color-black:#000;
     --twikoo-shadow-border:0 8px 16px -4px #00000050;
@@ -9,15 +11,19 @@
     --twikoo-border-radius:12px;
     --twikoo-border-color:rgba(144, 147, 153, 0.31);
     --twikoo-mask-bg:rgba(255,255,255,0.6)
+    --twikoo-scrollbar:rgba(60, 60, 67, 0.4);
 }
 :root[data-theme="dark"]{
     --twikoo-input-bg:#21232a;
     --twikoo-font-color:#fafafa;
+    --twikoo-background:#181716;
+    --twikoo-second-bg:#21232a;
     --twikoo-button-font-color-white:#000;
     --twikoo-button-font-color-black:#fff;
     --twikoo-border:1px solid #3d3d3d;
     --twikoo-shadow-border:0 8px 16px -4px #00000050;
     --twikoo-mask-bg:rgba(0,0,0,0.6)
+    --twikoo-scrollbar:rgba(200, 200, 223, 0.4);
 }
 :root{
     --twikoo-action-color:var(--twikoo-font-color)
@@ -34,19 +40,4 @@
         filter: none;
         transform: translateY(0);
     }
-}
-.OwO.OwO-open .OwO-body{
-    animation: 0.3s ease 0.1s 1 normal both running donate_effect;
-}
-.OwO .OwO-body{
-    border: var(--twikoo-border);
-    background-color: var(--twikoo-mask-bg,rgba(255,255,255,0.6));
-    backdrop-filter: saturate(180%) blur(10px);
-    transform: translateZ(0);
-}
-.OwO .OwO-body .OwO-bar{
-    border-top: none;
-}
-.OwO-packages{
-    background-color: var(--twikoo-input-bg);
 }

@@ -22,10 +22,10 @@
       <a class="tk-submit-action-icon __markdown" alt="Markdown is supported"
         href="https://guides.github.com/features/mastering-markdown/" target="_blank" rel="noopener noreferrer"
         v-html="iconMarkdown"></a>
-      <ElButton class="tk-button tk-cancel" v-if="!!replyId" size="small" @click="cancel">{{ t('SUBMIT_CANCEL') }}</ElButton>
-      <ElButton class="tk-button tk-preview" size="small" @click="preview">{{ t('SUBMIT_PREVIEW') }}</ElButton>
-      <ElButton class="tk-button tk-send" type="primary" size="small" :disabled="!canSend" @click="send">{{ isSending ?
-        t('SUBMIT_SENDING') : t('SUBMIT_SEND') }}</ElButton>
+      <button class="tk-button tk-cancel" v-if="!!replyId"  @click="cancel">{{ t('SUBMIT_CANCEL') }}</button>
+      <button class="tk-button tk-preview"  @click="preview">{{ t('SUBMIT_PREVIEW') }}</button>
+      <button class="tk-button tk-send" type="primary"  :disabled="!canSend" @click="send">{{ isSending ?
+        t('SUBMIT_SENDING') : t('SUBMIT_SEND') }}</button>
     </div>
     <div class="tk-preview-container" v-if="isPreviewing" v-html="commentHtml" ref="commentPreviewRef"></div>
   </div>

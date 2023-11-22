@@ -19,3 +19,78 @@
     align-items: center;
     justify-content: flex-end;
 }
+
+.tk-button{
+    border: none;
+    border-radius: var(--twikoo-border-radius);
+    outline: none;
+    transition: 0.1s;
+    background-color: var(--twikoo-font-color);
+    color: var(--twikoo-background);
+    cursor: pointer;
+    width: 5rem;
+    height: 2rem;
+    margin-left: 10px;
+}
+.tk-button:disabled{
+    cursor: not-allowed;
+    opacity: 0.2;
+}
+.tk-button:not(:disabled):active{
+    transform: translateY(1px);
+}
+.tk-input-group--prepend{
+    border-radius: var(--twikoo-border-radius);
+    background-color: var(--twikoo-second-bg);
+    display: flex;
+    border: 1px solid var(--twikoo-border-color);
+    overflow: hidden;
+}
+.tk-input-group--prepend .tk-input-group__prepend{
+    padding: 0 1rem;
+    user-select: none;
+    color: var(--twikoo-font-color);
+    background-color: var(--twikoo-background);
+    height: 2rem;
+    line-height: 2rem;
+}
+.tk-input-group--prepend .tk-input__inner{
+    outline: none;
+    background-color: var(--twikoo-second-bg);
+    border: none;
+    color: var(--twikoo-font-color);
+    font-weight: 400;
+    height: 2rem;
+    line-height: 2rem;
+}
+
+.OwO.OwO-open .OwO-body{
+    animation: 0.3s ease 0.1s 1 normal both running donate_effect;
+}
+.OwO .OwO-body{
+    border: var(--twikoo-border);
+    background-color: var(--twikoo-mask-bg,rgba(255,255,255,0.6));
+    backdrop-filter: saturate(180%) blur(10px);
+    transform: translateZ(0);
+}
+.OwO .OwO-body .OwO-bar{
+    border-top: none;
+}
+.OwO-packages{
+    background-color: var(--twikoo-input-bg);
+}
+.OwO ::-webkit-scrollbar{
+    width: 6px;
+}
+.OwO ::-webkit-scrollbar-thumb{
+    background: var(--twikoo-scrollbar);
+    border-radius: 8px;
+    cursor: pointer;
+}
+.OwO ::-webkit-scrollbar-track{
+    background: none;
+}
+.OwO .OwO-body .OwO-items-show{
+    margin: 12px 8px;
+    min-height: 200px;
+}

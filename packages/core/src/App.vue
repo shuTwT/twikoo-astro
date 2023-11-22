@@ -1,5 +1,5 @@
 <template>
-    <div id="twikoo" class="twikoo" ref="twikoo">
+    <div  class="twikoo" ref="twikoo">
         <TkComments v-if="$props.envId" @admin="showAdmin = true" :show-admin-entry="showAdminEntry" />
         <TkFooter />
         <TkAdmin v-if="$props.envId" :show="showAdmin" @close="showAdmin = false" />
