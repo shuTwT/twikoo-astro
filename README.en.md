@@ -6,7 +6,7 @@ A **simple**, **safe**, **free** comment system.
 
 ## Introduction
 
-This is a modified version of [twikoo](https://github.com/twikoojs/twikoo), with the goal of adapting to Astro. Theoretically, Vue projects can also be used
+This is a modified version of [twikoo](https://github.com/twikoojs/twikoo), with the goal of adapting to Astro.
 
 ~~Ultimate goal: packaging volume<100kb~~
 

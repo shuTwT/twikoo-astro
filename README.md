@@ -8,7 +8,7 @@ A **simple**, **safe**, **free** comment system.
 
 ## 简介
 
-这是一个[twikoo](https://github.com/twikoojs/twikoo)的魔改版，目标适配astro，理论上vue项目也能使用
+这是一个[twikoo](https://github.com/twikoojs/twikoo)的魔改版，目标适配astro
 
 ~~终极目标：打包体积<200kb~~
 

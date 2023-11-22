@@ -34,9 +34,11 @@
     "url": "https://github.com/shuTwT/astro-twikoo"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "blueimp-md5": "^2.19.0",
+    "element-plus":"^2.4.2",
     "jsdom":"^22.1.0",
-    "@fortawesome/fontawesome-free": "^5.15.4"
+    "primevue":"^3.41.0"
   },
   "peerDependencies": {
     "@nanostores/vue": "^0.10.0",
