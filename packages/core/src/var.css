@@ -1,41 +1,50 @@
-:root{
-    --twikoo-primary-color:#409eff;
-    --twikoo-font-color:#363636;
-    --twikoo-background:#fff;
-    --twikoo-second-bg:#f7f8f9;
-    --twikoo-button-font-color-white:#fff;
-    --twikoo-button-font-color-black:#000;
-    --twikoo-shadow-border:0 8px 16px -4px #00000050;
-    --twikoo-border:1px solid #e3e8f7;
-    --twikoo-input-bg:#f7f7f7;
-    --twikoo-border-radius:12px;
-    --twikoo-border-color:rgba(144, 147, 153, 0.31);
-    --twikoo-mask-bg:rgba(255,255,255,0.6)
-    --twikoo-scrollbar:rgba(60, 60, 67, 0.4);
+:root {
+    --twikoo-primary-color: #409eff;
+    --twikoo-border-radius: 12px;
 }
-:root[data-theme="dark"]{
-    --twikoo-input-bg:#21232a;
-    --twikoo-font-color:#fafafa;
-    --twikoo-background:#181716;
-    --twikoo-second-bg:#21232a;
-    --twikoo-button-font-color-white:#000;
-    --twikoo-button-font-color-black:#fff;
-    --twikoo-border:1px solid #3d3d3d;
-    --twikoo-shadow-border:0 8px 16px -4px #00000050;
-    --twikoo-mask-bg:rgba(0,0,0,0.6)
-    --twikoo-scrollbar:rgba(200, 200, 223, 0.4);
+
+:root:not([data-theme=dark]) {
+    --twikoo-input-bg: #f7f7f7;
+    --twikoo-font-color: #363636;
+    --twikoo-background: #fff;
+    --twikoo-second-bg: #f7f8f9;
+    --twikoo-button-font-color-white: #fff;
+    --twikoo-button-font-color-black: #000;
+    --twikoo-border-color: #e3e8f7;
+    --twikoo-border: 1px solid #e3e8f7;
+    --twikoo-shadow-border: 0 8px 16px -4px #00000050;
+    --twikoo-mask-bg: rgba(255, 255, 255, 0.6);
+    --twikoo-scrollbar: rgba(60, 60, 67, 0.4);
+    --twikoo-color-lighttext: skyblue;
 }
-:root{
-    --twikoo-action-color:var(--twikoo-font-color)
+
+:root[data-theme=dark] {
+    --twikoo-input-bg: #21232a;
+    --twikoo-font-color: #fafafa;
+    --twikoo-background: #181716;
+    --twikoo-second-bg: #21232a;
+    --twikoo-button-font-color-white: #000;
+    --twikoo-button-font-color-black: #fff;
+    --twikoo-border-color: #3d3d3d;
+    --twikoo-border: 1px solid #3d3d3d;
+    --twikoo-shadow-border: 0 8px 16px -4px #00000050;
+    --twikoo-mask-bg: rgba(0, 0, 0, 0.6);
+    --twikoo-scrollbar: rgba(200, 200, 223, 0.4);
+    --twikoo-color-lighttext:yellowgreen;
+}
+
+:root {
+    --twikoo-action-color: var(--twikoo-font-color)
 }
 
 
-@keyframes donate_effect{
-    0%{
+@keyframes donate_effect {
+    0% {
         opacity: 0;
         transform: translateY(-20px);
     }
-    100%{
+
+    100% {
         opacity: 1;
         filter: none;
         transform: translateY(0);

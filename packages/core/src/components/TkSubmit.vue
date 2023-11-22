@@ -403,7 +403,6 @@ watch(
 }
 
 .tk-preview-container {
-  margin-left: 3rem;
   margin-bottom: 1rem;
   padding: 5px 15px;
   border: 1px solid rgba(128, 128, 128, 0.31);

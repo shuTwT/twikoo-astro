@@ -111,8 +111,12 @@ export default class OwO {
     }
   
     toggle () {
-      if (this.container.classList.contains('OwO-open')) {
-        this.container.classList.remove('OwO-open')
+      if (this.container.classList.contains('OwO-open')&&!this.container.classList.contains('OwO-close')) {
+        this.container.classList.add('OwO-close')
+        setTimeout(() => {
+            this.container.classList.remove('OwO-open')
+            this.container.classList.remove('OwO-close')
+        }, 200);
       } else {
         this.container.classList.add('OwO-open')
       }

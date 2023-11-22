@@ -124,55 +124,6 @@ onMounted(async () => {
     height: auto;
 }
 
-/* element-ui overwrite */
-.twikoo .el-input__inner,
-.twikoo .el-textarea__inner {
-    color: var(--twikoo-font-color,#606266);
-    background-color: var(--twikoo-input-bg,transparent);
-    box-shadow: none;
-}
-
-.twikoo .el-input__inner:hover,
-.twikoo .el-textarea__inner:hover {
-    border-color: rgba(144, 147, 153, 0.5);
-}
-
-.twikoo .el-input__inner:focus,
-.twikoo .el-textarea__inner:focus {
-    border-color: #409eff;
-}
-
-.twikoo .el-input-group__append,
-.twikoo .el-input-group__prepend {
-    color: currentColor;
-    background-clip: padding-box;
-    background-color: rgba(144, 147, 153, 0.13);
-    border-color: rgba(144, 147, 153, 0.31);
-}
-
-.twikoo .el-button:not(.el-button--primary):not(.el-button--text) {
-    color: currentColor;
-    background-color: var(--twikoo-input-bg,rgba(144, 147, 153, 0.063));
-    border-color: var(--twikoo-border-color,rgba(144, 147, 153, 0.31));
-}
-
-.twikoo .el-button:not(.el-button--primary):not(.el-button--text):active,
-.twikoo .el-button:not(.el-button--primary):not(.el-button--text):focus,
-.twikoo .el-button:not(.el-button--primary):not(.el-button--text):hover {
-    color: #409eff;
-    background-color: rgba(64, 158, 255, 0.063);
-    border-color: rgba(64, 158, 255, 0.5);
-}
-
-.twikoo .el-button--primary.is-disabled,
-.twikoo .el-button--primary.is-disabled:active,
-.twikoo .el-button--primary.is-disabled:focus,
-.twikoo .el-button--primary.is-disabled:hover {
-    color: var(--twikoo-font-color,rgba(255, 255, 255, 0.63));
-    background-color: rgba(64, 158, 255, 0.5);
-    border-color: transparent;
-}
-
 .twikoo .el-loading-mask {
     background-color: transparent;
     backdrop-filter: opacity(20%);

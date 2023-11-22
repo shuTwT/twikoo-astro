@@ -270,9 +270,11 @@ watch(
   width: 0;
 }
 
-
+.tk-nick{
+    line-height: 2rem;
+    color: var(--twikoo-color-lighttext);
+}
 .tk-nick-link {
-  color: inherit;
   text-decoration: none;
 }
 
@@ -298,13 +300,20 @@ watch(
   font-size: 0.875em;
   display: flex;
   flex-wrap: wrap;
+  margin-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 
 .tk-extra {
-  margin-top: 0.5rem;
-  margin-right: 0.75rem;
+  margin-top: 0.375rem;
+  margin-right: 0.375rem;
   display: flex;
   align-items: center;
+  background: var(--twikoo-second-bg);
+  padding: 2px 5px 2px 4px;
+  border-radius: 8px;
+  border: var(--twikoo-border);
+  font-size: 1rem;
 }
 
 .tk-icon.__comment {
@@ -399,6 +408,7 @@ watch(
 }
 .tk-actions a{
     color: var(--twikoo-action-color,#3273dc);
+    margin-left: 10px;
 }
 .tk-actions a:hover{
     color: var(--twikoo-primary-color,#3273dc);

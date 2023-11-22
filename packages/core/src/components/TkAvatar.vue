@@ -68,11 +68,12 @@ function onClick() {
 <style scoped>
 .tk-avatar {
     flex-shrink: 0;
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 2rem;
+  width: 2rem;
   overflow: hidden;
   text-align: center;
   border-radius: 5px;
+  margin-right: 1rem;
 }
 
 .tk-comment .tk-submit .tk-avatar,
@@ -84,6 +85,7 @@ function onClick() {
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 2rem;
 }
 .tk-avatar.tk-has-avatar .tk-avatar__wrap{
   background-color: rgba(144, 147, 153, 0.13);
@@ -94,7 +96,7 @@ function onClick() {
 }
 
 .tk-avatar .tk-avatar-img {
-  height: 2.5rem;
+  height: 2rem;
   color: #c0c4cc;
 }
 

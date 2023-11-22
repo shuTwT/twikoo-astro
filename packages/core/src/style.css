@@ -31,6 +31,7 @@
     width: 5rem;
     height: 2rem;
     margin-left: 10px;
+    user-select: none;
 }
 .tk-button:disabled{
     cursor: not-allowed;
@@ -53,6 +54,11 @@
     background-color: var(--twikoo-background);
     height: 2rem;
     line-height: 2rem;
+    font-weight: 700;
+}
+.tk-input-group--prepend .tk-input__wrapper{
+    flex: 1;
+    padding: 0 16px;
 }
 .tk-input-group--prepend .tk-input__inner{
     outline: none;
@@ -62,8 +68,12 @@
     font-weight: 400;
     height: 2rem;
     line-height: 2rem;
+    width: 100%;
 }
-
+.el-textarea__inner{
+    background-color: var(--twikoo-input-bg) !important;
+    box-shadow: none !important;
+}
 .OwO.OwO-open .OwO-body{
     animation: 0.3s ease 0.1s 1 normal both running donate_effect;
 }
@@ -93,4 +103,18 @@
 .OwO .OwO-body .OwO-items-show{
     margin: 12px 8px;
     min-height: 200px;
+}
+.OwO.OwO-close .OwO-body{
+    animation: 0.3s ease 0.1s normal both running donate_effect_reverse;
+}
+@keyframes donate_effect_reverse {
+    0% {
+        opacity: 1;
+        filter: none;
+        transform: translateY(0);
+    }
+100% {
+    opacity: 0;
+    transform: translateY(-20px);
+}
 }

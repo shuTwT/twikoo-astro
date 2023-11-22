@@ -352,6 +352,7 @@ watch(
 .tk-panel .tk-tab {
     color: #c0c4cc;
     cursor: pointer;
+    white-space: nowrap;
     line-height: 2em;
     margin-right: 2em;
     margin-bottom: -2px;
