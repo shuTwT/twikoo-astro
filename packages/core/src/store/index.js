@@ -10,6 +10,7 @@ export const twikooStore=deepMap({
         "DISPLAYD_FIELDS":{}
     }
 })
+export {twikooStore as $twikooStore}
 export const $owoStore=deepMap({
     odata:{},
 })

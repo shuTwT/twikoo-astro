@@ -13,9 +13,7 @@
 
 .tk-row.actions {
     position: relative;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
-    margin-left: 3.5rem;
+    margin: 1rem;
     align-items: center;
     justify-content: flex-end;
 }

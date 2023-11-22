@@ -1,6 +1,6 @@
 ---
-// import "@astro-twikoo/core/dist/style.css"
-import {Twikoo} from  "@astro-twikoo/core/src/main.js"
+//import "@astro-twikoo/core/es/style.css"
+import {Twikoo as TwikooVue } from  "@astro-twikoo/core/src/main.js"
 interface Props {
     envId:string
     legacy?:boolean
@@ -8,10 +8,12 @@ interface Props {
     path?:string
     lang?:string
     enableAvatar?:boolean
+    needLogin?:boolean
+    loginOrigin?:()=>void
 }
-const {envId}=Astro.props
+const {envId,enableAvatar=false}=Astro.props
 ---
 <script>
     import "@vant/touch-emulator";
 </script>
-<Twikoo envId={envId} client:load></Twikoo>
+<TwikooVue envId={envId} client:load enableAvatar={enableAvatar}></TwikooVue>

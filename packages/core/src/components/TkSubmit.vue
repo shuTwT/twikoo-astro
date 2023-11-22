@@ -2,7 +2,7 @@
   <div class="tk-submit">
     <div class="tk-row">
       <div class="tk-col">
-        <TkAvatar :config="config" :mail="mail" style="width: 100%;margin: 1.25rem 0;" />
+        <TkAvatar v-if="!!twikooStore.enableAvatar" :config="config" :mail="mail" style="width: 100%;margin: 1.25rem 0;" />
         <TkMetaInput :nick="nick" :mail="mail" :link="link" @update="onMetaUpdate" :config="config" />
         <ElInput class="tk-input" type="textarea" ref="textareaRef" v-model="comment" show-word-limit
           :placeholder="commentPlaceholder" :autosize="{ minRows: 3 }" :maxlength="maxLength" @input="onCommentInput"
@@ -42,7 +42,7 @@ import TkMetaInput from './TkMetaInput.vue'
 import t from '../utils/i18n'
 import {marked,  call, logger, renderLinks, renderMath, renderCode, initOwoEmotions, initMarkedOwo, getUrl, getHref, blobToDataURL } from '../utils'
 import OwO from '../lib/owo'
-import { twikooStore, tcbStore,$owoStore,initOwoData } from '../store'
+import { tcbStore,$owoStore,$twikooStore } from '../store'
 import { computed,  ref, nextTick, watch,onMounted } from 'vue'
 
 const imageTypes = [
@@ -66,6 +66,7 @@ const props = defineProps({
 
 const emit = defineEmits(['cancel', 'load'])
 
+const twikooStore=useStore($twikooStore)
 const owoStore=useStore($owoStore)
 
 const isSending = ref(false)
@@ -93,7 +94,7 @@ const textarea = computed(() => {
   return textareaRef.value ? textareaRef.value.$refs.textarea : null
 })
 const commentPlaceholder = computed(() => {
-  let ph = twikooStore.get().placeholder || props.config.COMMENT_PLACEHOLDER || ''
+  let ph = twikooStore.value.placeholder || props.config.COMMENT_PLACEHOLDER || ''
   ph = ph.replace(/<br>/g, '\n')
   return ph
 })
@@ -153,7 +154,7 @@ function updatePreview() {
     commentHtml.value = marked.parse(comment.value)
     nextTick(() => {
       renderLinks(commentPreviewRef.value)
-      renderMath(commentPreviewRef.value, twikooStore.get().katex)
+      renderMath(commentPreviewRef.value, twikooStore.value.katex)
       if (props.config.HIGHLIGHT === 'true') {
         renderCode(commentPreviewRef.value, props.config.HIGHLIGHT_THEME)
       }
@@ -166,8 +167,8 @@ async function send() {
     if (comment.value.match(new RegExp(`!\\[${t('IMAGE_UPLOAD_PLACEHOLDER')}.+\\]\\(\\)`))) {
       throw new Error(t('IMAGE_UPLOAD_PLEASE_WAIT'))
     }
-    const url = getUrl(twikooStore.get().path)
-    const href = getHref(twikooStore.get().href)
+    const url = getUrl(twikooStore.value.path)
+    const href = getHref(twikooStore.value.href)
     const commentForm = {
       nick: nick.value,
       mail: mail.value,

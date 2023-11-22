@@ -6,8 +6,8 @@
       <span>请参考&nbsp;<a href="https://twikoo.js.org/update.html" target="_blank">版本更新</a>&nbsp;进行升级</span>
     </div>
     <div class="tk-admin-comment-filter">
-      <ElInput class="tk-admin-comment-filter-keyword" size="small" v-model="filter.keyword"
-        :placeholder="t('ADMIN_COMMENT_SEARCH_PLACEHOLDER')" @keyup.enter.native="getComments" />
+        <input class="tk-admin-comment-filter-keyword" v-model="filter.keyword"
+        :placeholder="t('ADMIN_COMMENT_SEARCH_PLACEHOLDER')" @keyup.enter.native="getComments"/>
       <select class="tk-admin-comment-filter-type" v-model="filter.type">
         <option value="">{{ t('ADMIN_COMMENT_FILTER_ALL') }}</option>
         <option value="VISIBLE">{{ t('ADMIN_COMMENT_FILTER_VISIBLE') }}</option>
@@ -48,7 +48,7 @@
   
 <script setup>
 import { Button as VanButton } from 'vant'
-import { ElInput, vLoading } from 'element-plus'
+import { vLoading } from 'element-plus'
 import { twikooStore } from '../store'
 import { timeago, call, convertLink, renderLinks, renderMath, renderCode, t } from '../utils'
 import { version } from '../version'
@@ -211,6 +211,7 @@ onMounted(async () => {
 
 .tk-admin-comment-filter-keyword {
   flex: 1;
+  outline: none;
 }
 
 .tk-admin-comment-filter-type {

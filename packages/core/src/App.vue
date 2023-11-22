@@ -44,11 +44,17 @@ const props = defineProps({
         default: zhCn
     },
     renderer:{
+    },
+    enableAvatar:{
+        type:Boolean
+    },
+    needLogin:{
+        type:Boolean
     }
 
 })
 
-const options = { envId: props.envId, region: props.region, path: props.path, lang: props.lang }
+const options = { envId: props.envId, region: props.region, path: props.path, lang: props.lang,enableAvatar:props.enableAvatar,needLogin:props.needLogin }
 const tcb = isUrl(props.envId) ? null : await initTcb({})
 tcbStore.set(tcb)
 setLanguage(options)
@@ -82,7 +88,7 @@ onMounted(async () => {
 @import url("./style.css");
 @import url("element-plus/theme-chalk/el-var.css");
 @import url("element-plus/theme-chalk/el-icon.css");
-@import url("element-plus/theme-chalk/el-button.css");
+/* @import url("element-plus/theme-chalk/el-button.css"); */
 @import url("element-plus/theme-chalk/el-input.css");
 @import url("element-plus/theme-chalk/el-loading.css");
 
