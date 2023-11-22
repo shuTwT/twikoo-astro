@@ -1,19 +1,29 @@
 ---
 //import "@astro-twikoo/core/es/style.css"
-import {Twikoo as TwikooVue } from  "@astro-twikoo/core/src/main.js"
+import { Twikoo as TwikooVue } from "@astro-twikoo/core/src/main.js";
 interface Props {
-    envId:string
-    legacy?:boolean
-    region?:string
-    path?:string
-    lang?:string
-    enableAvatar?:boolean
-    needLogin?:boolean
-    loginOrigin?:()=>void
+  envId: string;
+  legacy?: boolean;
+  region?: string;
+  path?: string;
+  lang?: string;
+  enableAvatar?: boolean;
+  needLogin?: boolean;
+  loginOrigin?: () => string;
 }
-const {envId,enableAvatar=false}=Astro.props
+const { envId, enableAvatar = false, needLogin = true } = Astro.props;
+function handleLogin(){
+    console.log(1)
+}
 ---
+
 <script>
-    import "@vant/touch-emulator";
+  import "@vant/touch-emulator";
 </script>
-<TwikooVue envId={envId} client:load enableAvatar={enableAvatar}></TwikooVue>
+<TwikooVue
+  envId={envId}
+  client:load
+  needLogin={needLogin}
+  enableAvatar={enableAvatar}
+  loginFun={handleLogin}
+/>

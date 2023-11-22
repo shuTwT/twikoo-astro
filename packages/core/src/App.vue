@@ -50,6 +50,9 @@ const props = defineProps({
     },
     needLogin:{
         type:Boolean
+    },
+    LoginFun:{
+        type:Function
     }
 
 })
@@ -59,7 +62,8 @@ const tcb = isUrl(props.envId) ? null : await initTcb({})
 tcbStore.set(tcb)
 setLanguage(options)
 twikooStore.set(options)
-
+const eventBus=new mitt()
+const showAdminEntry=ref(false)
 async function initTcb() {
     if (typeof window.cloudbase === 'undefined') {
         logger.error('Please import cloudbase firstly:\n<script src="https://imgcache.qq.com/qcloud/cloudbase-js-sdk/1.3.3/cloudbase.full.js"\></script\>')
@@ -68,13 +72,14 @@ async function initTcb() {
     /* eslint-disable-next-line no-undef */
     return await install(cloudbase, options)
 }
-
-const showAdminEntry=ref(false)
 function onShowAdminEntry(v) {
     showAdminEntry.value = v;
 }
 provide('onShowAdminEntry',onShowAdminEntry)
-provide('$mitt',new mitt())
+provide('$mitt',eventBus)
+eventBus.on("login",()=>{
+    props.LoginFun&&props.LoginFun()
+})
 onMounted(async () => {
     await initOwoData()
 });
