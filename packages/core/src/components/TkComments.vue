@@ -35,6 +35,7 @@ import iconSetting from '@fortawesome/fontawesome-free/svgs/solid/cog.svg?raw'
 import iconRefresh from '@fortawesome/fontawesome-free/svgs/solid/sync.svg?raw'
 import { tcbStore, twikooStore } from '../store'
 import { ref, nextTick, onMounted } from 'vue'
+import { inject } from 'vue'
 
 defineOptions({
   name: 'TkComments'
@@ -44,14 +45,15 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['admin'])
+const prerenderComments=inject('prerenderComments')
 
 const loading = ref(true)
 const loadingMore = ref(false)
 const errorMessage = ref('')
 const config = ref({})
-const comments = ref([])
-const showExpand = ref(true)
-const count = ref(0)
+const comments = ref(prerenderComments.data||[])
+const showExpand = ref(prerenderComments.more||true)
+const count = ref(prerenderComments.data?prerenderComments.data.length:0)
 const replyId = ref('')
 
 async function initConfig() {

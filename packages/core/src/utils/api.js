@@ -6,9 +6,10 @@ const isUrl = (s) => {
 }
 
 const call = async (tcb, event, data = {}) => {
-  const _tcb = tcb || (tcbStore.value ? tcbStore.get() : null)
+  const _tcb = tcb || (tcbStore.get() ? tcbStore.get() : null)
   const _envId = data.envId || twikooStore.get().envId
   const _funcName = data.funcName || twikooStore.get().funcName || 'twikoo'
+
   if (_tcb) {
     try {
       return await _tcb.app.callFunction({
@@ -44,7 +45,7 @@ const call = async (tcb, event, data = {}) => {
   } else if (isUrl(_envId)) {
     return await new Promise(async(resolve, reject) => {
       try {
-        const accessToken = localStorage.getItem('twikoo-access-token')
+        const accessToken = typeof window!=='undefined'? localStorage.getItem('twikoo-access-token'):''
         // const xhr = new XMLHttpRequest()
         // xhr.onreadystatechange = () => {
         //   if (xhr.readyState === 4) {

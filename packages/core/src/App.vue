@@ -7,7 +7,8 @@
 </template>
 
 <script setup>
-import {  zhCn } from "@astro-twikoo/locale";
+import { install } from "./utils/tcb";
+import { zhCn } from "@astro-twikoo/locale";
 import TkComments from "./components/TkComments.vue";
 import TkFooter from "./components/TkFooter.vue";
 import TkAdmin from "./components/TkAdmin.vue";
@@ -48,6 +49,8 @@ const props = defineProps({
     enableAvatar:{
         type:Boolean
     },
+    prerenderComments:{
+    }
 })
 
 const options = { envId: props.envId, region: props.region, path: props.path, lang: props.lang,enableAvatar:props.enableAvatar }
@@ -70,6 +73,8 @@ function onShowAdminEntry(v) {
 }
 provide('onShowAdminEntry',onShowAdminEntry)
 provide('$mitt',eventBus)
+provide('prerenderComments',props.prerenderComments)
+
 eventBus.on("oauth",async()=>{
     if(globalThis.$twikoo&&typeof globalThis.$twikoo.loginEvent=='function'){
         globalThis.$twikoo.loginEvent()

@@ -1,6 +1,6 @@
 ---
 //import "@astro-twikoo/core/es/style.css"
-import { Twikoo as TwikooVue } from "@astro-twikoo/core/src/main.js";
+import { Twikoo as TwikooVue,getComments } from "@astro-twikoo/core/src/main.js";
 interface Props {
   envId: string;
   legacy?: boolean;
@@ -10,7 +10,12 @@ interface Props {
   enableAvatar?: boolean;
 }
 const props = Astro.props;
+const pathname=new URL(Astro.request.url)
 
+const prerenderComments=await getComments({
+    envId:props.envId,
+    url:pathname.pathname
+})
 
 ---
 
@@ -20,4 +25,5 @@ const props = Astro.props;
 <TwikooVue
   envId={props.envId}
   client:load
+  prerenderComments={prerenderComments}
 />

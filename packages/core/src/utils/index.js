@@ -65,6 +65,18 @@ const getRecentCommentsApi = async (tcb, options) => {
   return result.result.data
 }
 
+const getCommentsApi=async(tcb,options)=> {
+    try {
+      const res = await call(tcb, 'COMMENT_GET', options)
+      if (res && res.result && res.result.data) {
+        return res.result
+      }
+    } catch (e) {
+      errorMessage.value = e.message
+      throw e
+    }
+  }
+
 /**
  * 由于 Twikoo 早期版本将 path 视为表达式处理，
  * 而其他同类评论系统都是把 path 视为字符串常量，
@@ -178,6 +190,7 @@ export {
   initMarkedOwo,
   getCommentsCountApi,
   getRecentCommentsApi,
+  getCommentsApi,
   getUrl,
   getHref,
   readAsText,

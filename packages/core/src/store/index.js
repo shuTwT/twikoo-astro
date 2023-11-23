@@ -2,8 +2,7 @@ import {deepMap,map} from 'nanostores'
 import { call } from '../utils'
 import { initOwoEmotions } from '../utils'
 
-export const tcbStore=deepMap({
-})
+export const tcbStore=deepMap(null)
 export const twikooStore=deepMap({
     envId:"",
     serverConfig:{
