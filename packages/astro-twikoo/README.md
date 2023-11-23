@@ -20,12 +20,6 @@ A **simple**, **safe**, **free** comment system.
 
 fork from **12f841f**
 
-## 已完成
-
-- [x] SSR适配
-- [x] 再次点击回复按钮可关闭面板
-- [x] 允许对接站点登录功能
-
 ## 快速开始
 
 安装
@@ -87,18 +81,6 @@ window.$twikoo={
     --twikoo-color-lighttext: skyblue;
 }
 ````
-
-
-
-## 待完成
-
-
-- [ ] 进一步缩小体积
-- [ ] 自定义语言覆盖
-- [ ] css变量
-- [ ] 自定义默认头像
-- [ ] 增加一个选项，允许将有无index.html的情况一视同仁
-
 
 
 ## 预览
