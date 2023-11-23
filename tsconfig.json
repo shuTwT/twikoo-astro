@@ -1,5 +1,6 @@
 {
     "compilerOptions": {
+        "allowJs": true,
         "types": ["element-plus/global"]
     },
     "references": [{"path": "./packages/marked/tsconfig.json"}]

@@ -2,6 +2,7 @@ import { defineConfig } from "vite"
 import path from "node:path"
 import VueMacros from "unplugin-vue-macros/vite"
 import Vue from "@vitejs/plugin-vue"
+import dts from 'vite-plugin-dts'
 import {visualizer} from "rollup-plugin-visualizer"
 
 export default defineConfig({
@@ -18,7 +19,7 @@ export default defineConfig({
             filename: "test.html",
             open: false
         }),
-
+        dts()
     ],
     build: {
         minify: true,

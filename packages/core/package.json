@@ -2,7 +2,7 @@
   "name": "@astro-twikoo/core",
   "version": "0.1.0",
   "description": "",
-  "main": "lib/twikoo.cjs",
+  "main": "twikoo.cjs",
   "module": "es/twikoo.mjs",
   "exports":{
     ".":{
@@ -24,7 +24,7 @@
     "lib/*.css"
   ],
   "scripts": {
-    "build": "tsc && vite build"
+    "build": "vite build"
   },
   "keywords": ["twikoo","comment","astro","vue"],
   "author": "",

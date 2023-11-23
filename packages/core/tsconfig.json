@@ -1,9 +1,12 @@
 {
     "compilerOptions": {
+        "baseUrl": ".",
         "noEmit": false,
         "emitDeclarationOnly": true,
         "declaration": true,
+        "allowJs": true,
         "declarationDir": "dist",
+        "outDir": "dist",
         "types": ["unplugin-vue-macros/macros-global"]
     },
     "vueCompilerOptions": {
