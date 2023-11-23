@@ -24,7 +24,7 @@
     "lib/*.css"
   ],
   "scripts": {
-    "build": "vite build"
+    "build": "tsc && vite build"
   },
   "keywords": ["twikoo","comment","astro","vue"],
   "author": "",

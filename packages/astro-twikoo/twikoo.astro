@@ -8,22 +8,16 @@ interface Props {
   path?: string;
   lang?: string;
   enableAvatar?: boolean;
-  needLogin?: boolean;
-  loginOrigin?: () => string;
 }
-const { envId, enableAvatar = false, needLogin = true } = Astro.props;
-function handleLogin(){
-    console.log(1)
-}
+const props = Astro.props;
+
+
 ---
 
 <script>
   import "@vant/touch-emulator";
 </script>
 <TwikooVue
-  envId={envId}
+  envId={props.envId}
   client:load
-  needLogin={needLogin}
-  enableAvatar={enableAvatar}
-  loginFun={handleLogin}
 />

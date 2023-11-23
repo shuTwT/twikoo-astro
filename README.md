@@ -24,12 +24,25 @@ fork from **12f841f**
 
 - [x] SSR适配
 - [x] 再次点击回复按钮可关闭面板
+- [x] 允许对接站点登录功能
+
+## 配置
+
+````astro
+<script>
+    globalThis.$twikoo:{
+    	needLogin:true,//需要登录
+    	loginOrigin:()=>{isLogin:boolean,token,expiresIn},//登录数据源
+    	loginEvent:()=>void//登录事件
+    }
+</script>
+````
 
 
 
 ## 待完成
 
-- [ ] 允许对接站点登录功能
+
 - [ ] 进一步缩小体积
 - [ ] 自定义语言覆盖
 - [ ] css变量

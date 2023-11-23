@@ -1,4 +1,4 @@
-import {deepMap} from 'nanostores'
+import {deepMap,map} from 'nanostores'
 import { call } from '../utils'
 import { initOwoEmotions } from '../utils'
 
@@ -8,11 +8,17 @@ export const twikooStore=deepMap({
     envId:"",
     serverConfig:{
         "DISPLAYD_FIELDS":{}
-    }
+    },
+    needLogin:false
 })
 export {twikooStore as $twikooStore}
 export const $owoStore=deepMap({
     odata:{},
+})
+export const $twikooOauthStore=map({
+    isLogin:false,
+    token:"",
+    expiresin:""
 })
 export function setOwodata({odata}){
     $owoStore.setKey('odata',odata)

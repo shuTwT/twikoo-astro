@@ -70,7 +70,7 @@ const pageSize = ref(defaultPageSize)
 const currentPage = ref(1)
 const filter = ref({ keyword: '', type: '' })
 
-const $mitt = inject('$mitt')
+const eventBus = inject('$mitt')
 
 const commentsRef=ref(null)
 const commentListRef=ref(null)
@@ -134,7 +134,7 @@ function checkConfig() {
   localStorage.setItem('twikoo', JSON.stringify(metaData))
   // TODO
   //app.$emit('initMeta')
-  $mitt.emit('initMeta')
+  eventBus.emit('initMeta')
 }
 function onPageSizeChange(newPageSize) {
   pageSize.value = newPageSize

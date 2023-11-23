@@ -62,7 +62,7 @@ const requiredFields = computed(() => {
 })
 
 const onShowAdminEntry = inject('onShowAdminEntry')
-const $mitt = inject('$mitt')
+const eventBus = inject('$mitt')
 
 function initMeta() {
   const mStr = localStorage.getItem('twikoo')
@@ -158,7 +158,7 @@ watch(() => props.config['VERSION'],
   onMounted(()=>{
     // TODO
     // app.$on('initMeta', this.initMeta)
-    $mitt.on('initMeta', initMeta)
+    eventBus.on('initMeta', initMeta)
     initMeta()
   })
 

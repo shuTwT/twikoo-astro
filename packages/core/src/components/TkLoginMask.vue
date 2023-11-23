@@ -11,7 +11,7 @@ import { inject } from 'vue';
 
 const eventBus=inject('$mitt')
 function handleLogin(){
-    eventBus.emit('login')
+    eventBus.emit('oauth')
 }
 </script>
 
@@ -21,7 +21,7 @@ function handleLogin(){
     top: 0;
     left: 0;
     right: 0;
-    min-height: 275px;
+    bottom: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;

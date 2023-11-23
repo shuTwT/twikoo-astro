@@ -17,7 +17,8 @@ export default defineConfig({
             emitFile: false,
             filename: "test.html",
             open: false
-        })
+        }),
+
     ],
     build: {
         minify: true,

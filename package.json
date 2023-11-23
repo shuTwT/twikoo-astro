@@ -23,6 +23,7 @@
     "@fortawesome/fontawesome-free": "^5.15.4",
     "@nanostores/vue": "^0.10.0",
     "@vitejs/plugin-vue": "^4.4.0",
+    "astro": "^3.4.3",
     "astro-twikoo": "workspace:*",
     "blueimp-md5": "^2.19.0",
     "element-plus": "^2.4.2",
@@ -38,6 +39,7 @@
     "unplugin-auto-import": "^0.16.7",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.5.0",
+    "vite-plugin-dts":"^3.6.3",
     "vue": "^3.3.1",
     "vue-i18n": "^9.6.5"
   }

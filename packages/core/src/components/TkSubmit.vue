@@ -1,6 +1,6 @@
 <template>
   <div class="tk-submit">
-    <TkLoginMask v-if="!!twikooStore.needLogin"></TkLoginMask>
+    <TkLoginMask v-if="!!twikooStore.needLogin&&!twikooOauthStore.isLogin"></TkLoginMask>
     <div  class="tk-submit__wrapper">
       <div class="tk-row">
         <div class="tk-col">
@@ -113,7 +113,7 @@ import {
   blobToDataURL,
 } from "../utils";
 import OwO from "../lib/owo";
-import { tcbStore, $owoStore, $twikooStore } from "../store";
+import { tcbStore, $owoStore, $twikooStore,$twikooOauthStore } from "../store";
 import { computed, ref, nextTick, watch, onMounted } from "vue";
 
 const imageTypes = [
@@ -139,6 +139,7 @@ const emit = defineEmits(["cancel", "load"]);
 
 const twikooStore = useStore($twikooStore);
 const owoStore = useStore($owoStore);
+const twikooOauthStore=useStore($twikooOauthStore)
 
 const isSending = ref(false);
 const isPreviewing = ref(false);

@@ -13,7 +13,7 @@ import TkFooter from "./components/TkFooter.vue";
 import TkAdmin from "./components/TkAdmin.vue";
 import { setLanguage, logger, isUrl } from './utils'
 import { onMounted, provide, ref } from "vue";
-import { initOwoData, tcbStore, twikooStore } from "./store"
+import { initOwoData, tcbStore, twikooStore,$twikooOauthStore } from "./store"
 import mitt from "mitt"
 
 const showAdmin = ref(false);
@@ -48,16 +48,9 @@ const props = defineProps({
     enableAvatar:{
         type:Boolean
     },
-    needLogin:{
-        type:Boolean
-    },
-    LoginFun:{
-        type:Function
-    }
-
 })
 
-const options = { envId: props.envId, region: props.region, path: props.path, lang: props.lang,enableAvatar:props.enableAvatar,needLogin:props.needLogin }
+const options = { envId: props.envId, region: props.region, path: props.path, lang: props.lang,enableAvatar:props.enableAvatar }
 const tcb = isUrl(props.envId) ? null : await initTcb({})
 tcbStore.set(tcb)
 setLanguage(options)
@@ -77,11 +70,23 @@ function onShowAdminEntry(v) {
 }
 provide('onShowAdminEntry',onShowAdminEntry)
 provide('$mitt',eventBus)
-eventBus.on("login",()=>{
-    props.LoginFun&&props.LoginFun()
+eventBus.on("oauth",async()=>{
+    if(globalThis.$twikoo&&typeof globalThis.$twikoo.loginEvent=='function'){
+        globalThis.$twikoo.loginEvent()
+    }
+    if(globalThis.$twikoo&&typeof globalThis.$twikoo.loginOrigin=='function'){
+        $twikooOauthStore.setKey('isLogin',(await globalThis.$twikoo.loginOrigin()).isLogin)
+    }
+    
 })
 onMounted(async () => {
     await initOwoData()
+    if(globalThis.$twikoo&&typeof globalThis.$twikoo.needLogin){
+        twikooStore.setKey('needLogin',globalThis.$twikoo.needLogin)
+    }
+    if(globalThis.$twikoo&&typeof globalThis.$twikoo.loginOrigin=='function'){
+        $twikooOauthStore.setKey('isLogin',(await globalThis.$twikoo.loginOrigin()).isLogin)
+    }
 });
 </script>
 
