@@ -194,6 +194,7 @@ declare class Tokenizer {
     } | undefined;
     html(src: any): {
         type: string;
+        block: boolean;
         raw: any;
         pre: boolean;
         text: any;
@@ -240,6 +241,7 @@ declare class Tokenizer {
         raw: any;
         inLink: any;
         inRawBlock: any;
+        block: boolean;
         text: any;
     } | undefined;
     link(src: any): {
@@ -324,7 +326,7 @@ declare class Renderer {
     owo(text: any): string;
     code(code: any, infostring: any, escaped: any): string;
     blockquote(quote: any): string;
-    html(html: any): any;
+    html(html: any, block: any): any;
     heading(text: any, level: any, raw: any, slugger: any): string;
     hr(): "<hr/>\n" | "<hr>\n";
     list(body: any, ordered: any, start: any): string;

@@ -5,5 +5,5 @@
        "baseUrl": ".",
        "allowJs": true
     },
-
+    "exclude": ["./locale","./marked"]
 }

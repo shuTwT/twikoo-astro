@@ -1,5 +1,5 @@
 /**
-* marked v4.3.0 - a markdown parser
+* marked v5.0.0 - a markdown parser
 * Copyright (c) 2011-2023, Christopher Jeffrey. (MIT Licensed)
 * https://github.com/markedjs/marked
 */
@@ -214,9 +214,33 @@ function findClosingBracket(str, b) {
   }
   return -1;
 }
-function checkSanitizeDeprecation(opt) {
-  if (opt && opt.sanitize && !opt.silent) {
+function checkDeprecations(opt, callback) {
+  if (!opt || opt.silent) {
+    return;
+  }
+  if (callback) {
+    console.warn("marked(): callback is deprecated since version 5.0.0, should not be used and will be removed in the future. Read more here: https://marked.js.org/using_pro#async");
+  }
+  if (opt.sanitize || opt.sanitizer) {
     console.warn("marked(): sanitize and sanitizer parameters are deprecated since version 0.7.0, should not be used and will be removed in the future. Read more here: https://marked.js.org/#/USING_ADVANCED.md#options");
+  }
+  if (opt.highlight || opt.langPrefix) {
+    console.warn("marked(): highlight and langPrefix parameters are deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-highlight.");
+  }
+  if (opt.mangle) {
+    console.warn("marked(): mangle parameter is deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-mangle.");
+  }
+  if (opt.baseUrl) {
+    console.warn("marked(): baseUrl parameter is deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-base-url.");
+  }
+  if (opt.smartypants) {
+    console.warn("marked(): smartypants parameter is deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-smartypants.");
+  }
+  if (opt.xhtml) {
+    console.warn("marked(): xhtml parameter is deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-xhtml.");
+  }
+  if (opt.headerIds || opt.headerPrefix) {
+    console.warn("marked(): headerIds and headerPrefix parameters are deprecated since version 5.0.0, should not be used and will be removed in the future. Instead use https://www.npmjs.com/package/marked-gfm-heading-id.");
   }
 }
 function repeatString(pattern, count) {
@@ -509,6 +533,7 @@ var Tokenizer = class {
     if (cap) {
       const token = {
         type: "html",
+        block: true,
         raw: cap[0],
         pre: !this.options.sanitizer && (cap[1] === "pre" || cap[1] === "script" || cap[1] === "style"),
         text: cap[0]
@@ -647,6 +672,7 @@ var Tokenizer = class {
         raw: cap[0],
         inLink: this.lexer.state.inLink,
         inRawBlock: this.lexer.state.inRawBlock,
+        block: false,
         text: this.options.sanitize ? this.options.sanitizer ? this.options.sanitizer(cap[0]) : escape(cap[0]) : cap[0]
       };
     }
@@ -1447,7 +1473,7 @@ var Renderer = class {
   blockquote(quote) {
     return "<blockquote>\n" + quote + "</blockquote>\n";
   }
-  html(html) {
+  html(html, block2) {
     return html;
   }
   heading(text, level, raw, slugger) {
@@ -1733,7 +1759,7 @@ var Parser = class _Parser {
           continue;
         }
         case "html": {
-          out += this.renderer.html(token.text);
+          out += this.renderer.html(token.text, token.blck);
           continue;
         }
         case "paragraph": {
@@ -1901,7 +1927,7 @@ function parseMarkdown(lexer2, parser2) {
     if (typeof src !== "string") {
       return throwError(new Error("marked(): input parameter is of type " + Object.prototype.toString.call(src) + ", string expected"));
     }
-    checkSanitizeDeprecation(opt);
+    checkDeprecations(opt, callback);
     if (opt.hooks) {
       opt.hooks.options = opt;
     }

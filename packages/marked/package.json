@@ -1,7 +1,7 @@
 {
     "name": "@astro-twikoo/marked",
     "type": "module",
-    "version": "4.3.0",
+    "version": "5.0.2",
     "main": "lib/marked.js",
     "types": "lib/marked.d.ts",
     "scripts": {

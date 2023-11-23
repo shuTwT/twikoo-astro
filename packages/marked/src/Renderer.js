@@ -55,7 +55,7 @@ export class Renderer {
     return '<blockquote>\n' + quote + '</blockquote>\n';
   }
 
-  html(html) {
+  html(html, block) {
     return html;
   }
 
