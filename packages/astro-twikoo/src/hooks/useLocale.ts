@@ -1,7 +1,8 @@
-import type { Language } from "@astro-twikoo/locale"
+import type { Language } from "../../locale/index.mjs"
 import {get} from "lodash-unified"
-import { InjectionKey, MaybeRef, Ref, computed, inject, isRef, ref, unref } from "vue"
-import English from "@astro-twikoo/locale/lang/en"
+import type {InjectionKey, MaybeRef, Ref,} from 'vue'
+import {  computed, inject, isRef, ref, unref } from "vue"
+import { en as English} from "../../locale/index.mjs"
 
 export type TranslatorOption=Record<string,string|number>
 export type Translator= (path:string,options?:TranslatorOption)=>string

@@ -1,5 +1,5 @@
 //import i18n from './i18n'
-import {zhCn} from '@astro-twikoo/locale/'
+import {zhCn} from '../../../locale/index.mjs'
 // ISO Language Code Table http://www.lingoes.net/en/translator/langcode.htm
 // RSS Language Code Table https://www.rssboard.org/rss-language-codes
 

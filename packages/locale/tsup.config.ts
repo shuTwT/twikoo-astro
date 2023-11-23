@@ -2,9 +2,9 @@ import {defineConfig} from 'tsup'
 import packageJson from './package.json' assert { type : 'json' }
 
 export default defineConfig({
-    entry:['./lang/en.ts','./lang/zh-cn.ts'],
+    entry:['./index.ts'],
     format:['esm'],
-    dts:false,
+    dts:true,
     splitting:false,
     sourcemap:false,
     clean:true,

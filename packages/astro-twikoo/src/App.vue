@@ -8,7 +8,7 @@
 
 <script setup>
 import { install } from "./utils/tcb";
-import { zhCn } from "@astro-twikoo/locale";
+import {zhCn} from "../locale/index.mjs";
 import TkComments from "./components/TkComments.vue";
 import TkFooter from "./components/TkFooter.vue";
 import TkAdmin from "./components/TkAdmin.vue";

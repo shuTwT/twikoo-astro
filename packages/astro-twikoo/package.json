@@ -10,7 +10,9 @@
             "import":"./src/twikoo.ts",
             "require":"./src/twikoo.ts"
         },
-        "./client":"./client.d.ts"
+        "./client":"./client.d.ts",
+        "./locale/*":"./locale/*",
+        "./marked/*":"./marked/*"
     },
     "scripts": {
       "build": "tsc --noEmit"
