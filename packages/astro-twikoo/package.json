@@ -12,7 +12,8 @@
         },
         "./client":"./client.d.ts",
         "./locale/*":"./locale/*",
-        "./marked/*":"./marked/*"
+        "./marked/*":"./marked/*",
+        "./style/*":"./src/styles/*"
     },
     "scripts": {
       "build": "tsc --noEmit"

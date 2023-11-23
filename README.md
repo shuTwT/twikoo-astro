@@ -26,6 +26,35 @@ fork from **12f841f**
 - [x] 再次点击回复按钮可关闭面板
 - [x] 允许对接站点登录功能
 
+## 快速开始
+
+安装
+
+````shell
+npm install astro-twikoo
+# yarn add astro-twikoo
+# pnpm add astro-twikoo
+````
+
+引入
+
+````astro
+---
+import 'astro-twikoo/style/var.css'
+import 'astro-twikoo/style/index.css'
+import Twikoo from "astro-twikoo/components/Twikoo";
+---
+<!-- 在合适的地方 -->
+<script>
+window.$twikoo={
+}
+</script>
+<Twikoo envId="http://localhost:8080">
+<!-- 在合适的地方  -->
+````
+
+
+
 ## 配置
 
 ````astro
@@ -36,6 +65,27 @@ fork from **12f841f**
     	loginEvent:()=>void//登录事件
     }
 </script>
+````
+
+## 自定义主题覆盖
+
+对var.css中的变量进行覆盖可以自定义主题
+
+````
+:root:not([data-theme=dark]) {
+    --twikoo-input-bg: #f7f7f7;
+    --twikoo-font-color: #363636;
+    --twikoo-background: #fff;
+    --twikoo-second-bg: #f7f8f9;
+    --twikoo-button-font-color-white: #fff;
+    --twikoo-button-font-color-black: #000;
+    --twikoo-border-color: #e3e8f7;
+    --twikoo-border: 1px solid #e3e8f7;
+    --twikoo-shadow-border: 0 8px 16px -4px #00000050;
+    --twikoo-mask-bg: rgba(255, 255, 255, 0.6);
+    --twikoo-scrollbar: rgba(60, 60, 67, 0.4);
+    --twikoo-color-lighttext: skyblue;
+}
 ````
 
 
