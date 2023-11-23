@@ -14,5 +14,5 @@ export default defineConfig({
 * locale v${packageJson.version}
 */`
     },
-    outDir:"dist"
+    outDir:"../astro-twikoo/locale"
 })
