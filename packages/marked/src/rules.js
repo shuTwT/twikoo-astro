@@ -188,7 +188,7 @@ import {
   inline.punctuation = edit(inline.punctuation).replace(/punctuation/g, inline._punctuation).getRegex();
   
   // sequences em should skip over [title](link), `code`, <html>
-  inline.blockSkip = /\[[^\]]*?\]\([^\)]*?\)|`[^`]*?`|<[^>]*?>/g;
+  inline.blockSkip = /\[[^[\]]*?\]\([^\(\)]*?\)|`[^`]*?`|<[^<>]*?>/g;
   // lookbehind is not available on Safari as of version 16
   // inline.escapedEmSt = /(?<=(?:^|[^\\)(?:\\[^])*)\\[*_]/g;
   inline.escapedEmSt = /(?:^|[^\\])(?:\\\\)*\\[*_]/g;
