@@ -42,27 +42,37 @@ const call = async (tcb, event, data = {}) => {
       }
     }
   } else if (isUrl(_envId)) {
-    return await new Promise((resolve, reject) => {
+    return await new Promise(async(resolve, reject) => {
       try {
         const accessToken = localStorage.getItem('twikoo-access-token')
-        const xhr = new XMLHttpRequest()
-        xhr.onreadystatechange = () => {
-          if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-              const result = JSON.parse(xhr.responseText)
-              if (result.accessToken) {
-                localStorage.setItem('twikoo-access-token', result.accessToken)
-              }
+        // const xhr = new XMLHttpRequest()
+        // xhr.onreadystatechange = () => {
+        //   if (xhr.readyState === 4) {
+        //     if (xhr.status === 200) {
+        //       const result = JSON.parse(xhr.responseText)
+        //       if (result.accessToken) {
+        //         localStorage.setItem('twikoo-access-token', result.accessToken)
+        //       }
+        //       resolve({ result })
+        //     } else {
+        //       reject(xhr.status)
+        //     }
+        //   }
+        // }
+        // xhr.open('POST', _envId)
+        // xhr.setRequestHeader('Content-Type', 'application/json')
+        // xhr.send(JSON.stringify({ event, accessToken, ...data }))
 
-              resolve({ result })
-            } else {
-              reject(xhr.status)
-            }
-          }
-        }
-        xhr.open('POST', _envId)
-        xhr.setRequestHeader('Content-Type', 'application/json')
-        xhr.send(JSON.stringify({ event, accessToken, ...data }))
+        const res=await fetch(_envId,
+            {
+            method:'POST',
+            headers:{
+            'Content-Type':'application/json'
+            },
+            body:JSON.stringify({ event, accessToken, ...data })
+        })
+        const result=await res.json()
+        resolve({result})
       } catch (e) {
         reject(e)
       }

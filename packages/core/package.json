@@ -2,12 +2,14 @@
   "name": "@astro-twikoo/core",
   "version": "0.1.0",
   "description": "",
-  "main": "twikoo.cjs",
+  "main": "lib/twikoo.cjs",
   "module": "es/twikoo.mjs",
+  "types": "dist/index.d.ts",
   "exports":{
     ".":{
         "require":"./lib/twikoo.cjs",
-        "import":"./es/twikoo.mjs"
+        "import":"./es/twikoo.mjs",
+        "types":"./dist/index.d.ts"
     },
     "./package.json":"./package.json",
     "./dist/*":"./dist/*",

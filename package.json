@@ -37,7 +37,7 @@
     "prismjs": "^1.29.0",
     "rollup-plugin-visualizer": "^5.9.2",
     "tsup":"^7.2.0",
-    "typescript": "^5.2.2",
+    "typescript": "^5.0.4",
     "unplugin-auto-import": "^0.16.7",
     "unplugin-vue-components": "^0.25.2",
     "vite": "^4.5.0",

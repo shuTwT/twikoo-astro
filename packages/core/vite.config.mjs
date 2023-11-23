@@ -12,14 +12,19 @@ export default defineConfig({
                 vue:Vue()
             }
         }),
+        dts({
+            outDir:"dist",
+            tsconfigPath:"./tsconfig.json",
+            rollupTypes:true
+        }),
         visualizer({
             gzipSize: true,
             brotliSize: true,
             emitFile: false,
             filename: "test.html",
             open: false
-        }),
-        dts()
+        })
+
     ],
     build: {
         minify: true,
@@ -41,13 +46,13 @@ export default defineConfig({
                     format: "es",
                     entryFileNames: "twikoo.mjs",
                     exports: "named",
-                    dir: "es"
+                    dir: "es",
                 },
                 {
                     format: "cjs",
                     entryFileNames: "twikoo.cjs",
                     exports: "named",
-                    dir: "lib"
+                    dir: "lib",
                 }
             ]
         },

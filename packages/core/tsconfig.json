@@ -1,14 +1,16 @@
 {
     "compilerOptions": {
         "baseUrl": ".",
+        "lib": ["DOM","ESNext"],
         "noEmit": false,
         "emitDeclarationOnly": true,
         "declaration": true,
         "allowJs": true,
+        "skipLibCheck": true,
         "declarationDir": "dist",
-        "outDir": "dist",
         "types": ["unplugin-vue-macros/macros-global"]
     },
+    "include": ["src"],
     "vueCompilerOptions": {
         "plugins": [
             "@vue-macros/volar/define-options",
