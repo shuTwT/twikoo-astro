@@ -2,9 +2,12 @@
     "name": "astro-twikoo",
     "version": "1.0.0",
     "description": "",
-    "main": "index.js",
+    "main": "./src/main.js",
+    "exports":{
+        ".":"./src/main.js"
+    },
     "scripts": {
-      "build": "astro build"
+      "build": "tsc --noEmit"
     },
     "keywords": [],
     "author": "",
