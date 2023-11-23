@@ -1,7 +1,6 @@
 import fs from "node:fs"
 import { defineConfig } from 'astro/config';
 import vue from "@astrojs/vue";
-import macros from "@vue-macros/astro"
 
 const ssrTransformCustomDir = ()=>{
     return {
@@ -27,7 +26,6 @@ export default defineConfig({
           },
           //appEntrypoint:'/src/pages/_app'
         }),
-        macros()
     ],
     output: 'static',
 });

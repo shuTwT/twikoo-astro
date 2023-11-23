@@ -10,9 +10,9 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "astro": "^3.4.3",
         "@astrojs/vue":"^3.0.4",
-        "@vue-macros/astro":"^0.1.14"
+        "astro": "^3.4.3",
+        "vue":"^3.3.8"
     }
   }
   

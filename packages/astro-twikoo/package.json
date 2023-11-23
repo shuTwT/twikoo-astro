@@ -40,19 +40,12 @@
       "peerDependencies": {
         "@nanostores/vue": "^0.10.0",
         "nanostores": "^0.9.4",
-        "owo":"^1.0.2",
         "prismjs":"^1.29.0",
-        "vue":"^3.2.47",
+        "vue":"^3.3.0",
         "astro":"^3.5.0"
       },
       "peerDependenciesMeta": {
         "prismjs":{
-            "optional": true
-        },
-        "owo":{
-            "optional": true
-        },
-        "astro":{
             "optional": true
         }
       }
