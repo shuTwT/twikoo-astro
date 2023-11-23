@@ -15,7 +15,7 @@ export default defineConfig({
         dts({
             outDir:"dist",
             tsconfigPath:"./tsconfig.json",
-            rollupTypes:true
+            rollupTypes:true,
         }),
         visualizer({
             gzipSize: true,

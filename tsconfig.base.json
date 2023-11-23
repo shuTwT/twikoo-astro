@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "outDir": "dist",
+        "module": "ESNext",
+        "baseUrl": ".",
+        "rootDir": ".",
+        "esModuleInterop": true,
+        "allowJs": true
+    }
+}

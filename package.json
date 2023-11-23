@@ -6,8 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm run --filter demo dev",
-    "buil": "pnpm run --filter core build",
-    "build": "pnpm run -C internal/build start",
+    "build": "pnpm run --filter core build",
     "build:locale":"pnpm run --filter locale build",
     "build:marked":"pnpm run --filter marked build",
     "clean": "pnpm run clean:dist",

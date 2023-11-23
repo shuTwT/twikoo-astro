@@ -3,5 +3,8 @@
         "allowJs": true,
         "types": ["element-plus/global"]
     },
-    "references": [{"path": "./packages/marked/tsconfig.json"}]
+    "references": [
+        {"path": "./packages/marked/tsconfig.json"},
+        {"path": "./demo/tsconfig.json"}
+    ]
 }
