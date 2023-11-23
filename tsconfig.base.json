@@ -4,7 +4,12 @@
         "module": "ESNext",
         "baseUrl": ".",
         "rootDir": ".",
+        "moduleResolution": "Node",
         "esModuleInterop": true,
-        "allowJs": true
+        "allowJs": true,
+        "strict": false,
+        "lib": ["esnext"],
+        "target": "ES6",
+        "skipLibCheck": true
     }
 }

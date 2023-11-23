@@ -1,6 +1,6 @@
 ---
  import "../styles/demo.css";
-import Twikoo from "astro-twikoo/twikoo.astro";
+import Twikoo from "astro-twikoo/components/Twikoo";
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -31,7 +31,7 @@ import Twikoo from "astro-twikoo/twikoo.astro";
                 token:'',
                 expiresIn:''
             }
-            globalThis.$twikoo={
+            window.$twikoo={
                 needLogin:true,
                 loginOrigin(){
                     return loginData

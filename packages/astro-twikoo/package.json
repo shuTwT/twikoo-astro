@@ -4,26 +4,42 @@
     "description": "",
     "main": "./src/main.js",
     "exports":{
-        ".":"./src/main.js"
+        ".":"./src/main.js",
+        "./components/Twikoo":{
+            "types":"./src/twikoo.d.ts",
+            "import":"./src/twikoo.ts",
+            "require":"./src/twikoo.ts"
+        },
+        "./client":"./client.d.ts"
     },
     "scripts": {
       "build": "tsc --noEmit"
     },
-    "keywords": [],
+    "keywords": ["twikoo","comment","astro","vue"],
+    "files": ["src","*.d.ts"],
     "author": "",
     "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/shuTwT/astro-twikoo"
+      },
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.4",
         "@vant/touch-emulator":"^1.4.0",
         "blueimp-md5": "^2.19.0",
-        "jsdom":"^22.1.0"
+        "element-plus": "^2.4.2",
+        "jsdom":"^22.1.0",
+        "lodash-es": "^4.17.21",
+        "lodash-unified": "^1.0.2",
+        "vant":"^4.8.0",
+        "@vueuse/core":"^9.13.0"
       },
       "peerDependencies": {
         "@nanostores/vue": "^0.10.0",
         "nanostores": "^0.9.4",
         "owo":"^1.0.2",
         "prismjs":"^1.29.0",
-        "vue":">=3.3.1",
+        "vue":"^3.2.47",
         "astro":"^3.5.0"
       },
       "peerDependenciesMeta": {
