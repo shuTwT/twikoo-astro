@@ -17,7 +17,7 @@
         "prismjs":"^1.29.0",
         "remark-gemoji":"^8.0.0",
         "remark-gfm":"^4.0.0",
-        "twikoo-astro":"npm:twikoo-astro@0.2.4",
+        "twikoo-astro":"npm:twikoo-astro@0.2.5",
         "vue":"^3.3.8"
     }
   }
