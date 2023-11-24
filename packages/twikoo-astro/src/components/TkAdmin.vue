@@ -74,7 +74,7 @@
 <script setup>
 import { Button as VanButton } from 'vant'
 import { ElInput, vLoading } from 'element-plus'
-import md5 from '../utils/md5'
+import md5 from 'blueimp-md5'
 import TkAdminComment from './TkAdminComment.vue'
 import TkAdminConfig from './TkAdminConfig.vue'
 import TkAdminImport from './TkAdminImport.vue'

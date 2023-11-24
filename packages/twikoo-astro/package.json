@@ -29,6 +29,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.4",
         "@vant/touch-emulator":"^1.4.0",
+        "blueimp-md5": "^2.19.0",
         "jsdom":"^22.1.0",
         "lodash-es": "^4.17.21",
         "lodash-unified": "^1.0.2",

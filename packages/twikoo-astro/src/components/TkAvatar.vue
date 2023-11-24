@@ -12,7 +12,7 @@
 </template>
 
 <script setup>
-import md5 from '../utils/md5'
+import md5 from 'blueimp-md5'
 import { convertLink, normalizeMail, isQQ, getQQAvatar } from "../utils";
 import iconUser from "@fortawesome/fontawesome-free/svgs/solid/user-circle.svg?raw";
 import { computed } from "vue";
