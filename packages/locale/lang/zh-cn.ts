@@ -231,7 +231,7 @@ export default {
     ADMIN_SET_PASSWORD_CONFIRM_PLACEHOLDER: "确认密码",
     ADMIN_SET_PASSWORD_PLACEHOLDER: "密码",
     ADMIN_TITLE: "Twikoo 管理面板",
-    COMMENTS_COUNT_SUFFIX: " 条评论",
+    COMMENTS_COUNT_SUFFIX: " 条留言",
     COMMENTS_EXPAND: "查看更多",
     COMMENTS_NO_COMMENTS: "没有评论",
     COMMENT_EXPAND: "展开",
