@@ -34,6 +34,7 @@
         "jsdom":"^22.1.0",
         "lodash-es": "^4.17.21",
         "lodash-unified": "^1.0.2",
+        "mitt":"^3.0.1",
         "vant":"^4.8.0",
         "@vueuse/core":"^9.13.0"
       },

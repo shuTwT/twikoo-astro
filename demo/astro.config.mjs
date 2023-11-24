@@ -1,13 +1,9 @@
 import fs from "node:fs"
 import { defineConfig } from 'astro/config';
 import vue from "@astrojs/vue";
-
-const ssrTransformCustomDir = ()=>{
-    return {
-        props:[],
-        needRuntime:true
-    }
-}
+import node from '@astrojs/node'
+import gemoji from 'remark-gemoji';
+import gfm from 'remark-gfm';
 
 // https://astro.build/config
 export default defineConfig({
@@ -16,16 +12,29 @@ export default defineConfig({
           template:{
             compilerOptions:{
                 directiveTransforms:{
-                    'click-outside':ssrTransformCustomDir,
-                    'clickoutside':ssrTransformCustomDir,
-                    'loading':ssrTransformCustomDir
                 },
               // 将所有带短横线的标签名都视为自定义元素
-              //isCustomElement:(tag)=>tag.includes('-')
+              isCustomElement:(tag)=>tag.includes('-')
             }
           },
           //appEntrypoint:'/src/pages/_app'
         }),
     ],
-    output: 'static',
+    output: 'server',
+    build:{
+        format:'directory'
+    },
+    markdown: {
+        remarkPlugins:[
+            gemoji,gfm
+        ]
+    },
+    vite: {
+        ssr: {
+          noExternal: ['path-to-regexp'],
+        },
+      },
+      adapter: node({
+        mode: 'standalone'
+    }),
 });
