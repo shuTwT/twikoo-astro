@@ -1,6 +1,6 @@
 {
     "name": "twikoo-astro",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "description": "",
     "main": "./src/main.js",
     "exports":{
@@ -19,7 +19,7 @@
       "build": "tsc --noEmit"
     },
     "keywords": ["twikoo","comment","astro","comment-system","vue"],
-    "files": ["src","*.d.ts"],
+    "files": ["src","locale","marked","*.d.ts"],
     "author": "",
     "license": "MIT",
     "repository": {
