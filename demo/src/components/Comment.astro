@@ -1,0 +1,22 @@
+---
+import Twikoo from "twikoo-astro/components/Twikoo";
+---
+<div id="comment">
+    <script>
+        const loginData={
+            isLogin:false,
+            token:'',
+            expiresIn:''
+        }
+        window.$twikoo={
+            needLogin:true,
+            loginOrigin(){
+                return loginData
+            },
+            loginEvent(){
+                loginData.isLogin=true
+            }
+        }
+    </script>
+    <Twikoo envId="http://localhost:8080" ></Twikoo>
+</div>

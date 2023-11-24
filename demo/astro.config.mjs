@@ -17,7 +17,7 @@ export default defineConfig({
               isCustomElement:(tag)=>tag.includes('-')
             }
           },
-          //appEntrypoint:'/src/pages/_app'
+          appEntrypoint:'/src/pages/_app'
         }),
     ],
     output: 'server',
@@ -30,6 +30,11 @@ export default defineConfig({
         ]
     },
     vite: {
+        build:{
+            commonjsOptions:{
+                transformMixedEsModules:true
+            }
+        },
         ssr: {
           noExternal: ['path-to-regexp'],
         },

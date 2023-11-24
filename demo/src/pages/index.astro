@@ -2,7 +2,7 @@
 import 'twikoo-astro/style/var.css'
 import 'twikoo-astro/style/index.css'
 import "../styles/demo.css";
-import Twikoo from "twikoo-astro/components/Twikoo";
+import Comment from "../components/Comment.astro"
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -26,25 +26,7 @@ import Twikoo from "twikoo-astro/components/Twikoo";
     
    <div id="app">
     <button id="switch">切换</button>
-    <div id="comment">
-        <script>
-            const loginData={
-                isLogin:false,
-                token:'',
-                expiresIn:''
-            }
-            window.$twikoo={
-                needLogin:true,
-                loginOrigin(){
-                    return loginData
-                },
-                loginEvent(){
-                    loginData.isLogin=true
-                }
-            }
-        </script>
-        <Twikoo envId="http://localhost:8080" ></Twikoo>
-    </div>
+    <Comment></Comment>
     
    </div>
     <script is:inline>

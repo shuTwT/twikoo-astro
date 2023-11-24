@@ -1,6 +1,6 @@
 {
     "name": "twikoo-astro",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "description": "",
     "main": "./src/main.js",
     "exports":{
@@ -30,20 +30,20 @@
         "@fortawesome/fontawesome-free": "^5.15.4",
         "@vant/touch-emulator":"^1.4.0",
         "blueimp-md5": "^2.19.0",
-        "element-plus": "^2.4.2",
         "jsdom":"^22.1.0",
         "lodash-es": "^4.17.21",
         "lodash-unified": "^1.0.2",
         "mitt":"^3.0.1",
-        "vant":"^4.8.0",
         "@vueuse/core":"^9.13.0"
       },
       "peerDependencies": {
         "@nanostores/vue": "^0.10.0",
+        "astro":"^3.5.0",
+        "element-plus": "^2.4.2",
         "nanostores": "^0.9.4",
         "prismjs":"^1.29.0",
-        "vue":"^3.3.0",
-        "astro":"^3.5.0"
+        "vant":"^4.8.0",
+        "vue":"^3.3.0"
       },
       "peerDependenciesMeta": {
         "prismjs":{

@@ -12,9 +12,12 @@
     "dependencies": {
         "@astrojs/node":"^6.0.0",
         "@astrojs/vue":"^3.0.4",
+        "astro": "^3.5.0",
+        "element-plus":"^2.4.2",
+        "prismjs":"^1.29.0",
         "remark-gemoji":"^8.0.0",
         "remark-gfm":"^4.0.0",
-        "astro": "^3.4.3",
+        "twikoo-astro":"npm:twikoo-astro@0.2.4",
         "vue":"^3.3.8"
     }
   }
