@@ -22,18 +22,18 @@ fork from **12f841f**
 安装
 
 ````shell
-npm install twikoo-twikoo
-# yarn add twikoo-twikoo
-# pnpm add twikoo-twikoo
+npm install twikoo-astro
+# yarn add twikoo-astro
+# pnpm add twikoo-astro
 ````
 
 引入
 
 ````astro
 ---
-import 'twikoo-twikoo/style/var.css'
-import 'twikoo-twikoo/style/index.css'
-import Twikoo from "twikoo-twikoo/components/Twikoo";
+import 'twikoo-astro/style/var.css'
+import 'twikoo-astro/style/index.css'
+import Twikoo from "twikoo-astro/components/Twikoo";
 ---
 <!-- 在合适的地方 -->
 <script>
