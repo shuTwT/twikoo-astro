@@ -53,7 +53,7 @@ const errorMessage = ref('')
 const config = ref({})
 const comments = ref(prerenderComments.data||[])
 const showExpand = ref(prerenderComments.more||true)
-const count = ref(prerenderComments.data?prerenderComments.data.length:0)
+const count = ref(prerenderComments.count||0)
 const replyId = ref('')
 
 async function initConfig() {
