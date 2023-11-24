@@ -9,7 +9,7 @@ const renderCode = async (el, theme) => {
   window.Prism = window.Prism || {}
   window.Prism.manual = true
   if (!Prism) {
-    Prism = await import('prismjs')
+    Prism =await import('prismjs')
     await import('prismjs/plugins/autoloader/prism-autoloader')
     Prism.plugins.autoloader.languages_path = `${prismCdn}/components/`
   }
