@@ -8,11 +8,8 @@ A **simple**, **safe**, **free** comment system.
 
 ## 简介
 
-这是一个[twikoo](https://github.com/twikoojs/twikoo)的魔改版，目标适配astro
+这是一个[twikoo](https://github.com/twikoojs/twikoo)的魔改版，适配astro
 
-~~终极目标：打包体积<200kb~~
-
-目前约为 280kb
 
 **注意**：该仓库仅包含魔改版的前端，后端依旧为原版
 

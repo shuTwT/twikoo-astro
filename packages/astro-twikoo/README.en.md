@@ -6,7 +6,7 @@ A **simple**, **safe**, **free** comment system.
 
 ## Introduction
 
-This is a modified version of [twikoo](https://github.com/twikoojs/twikoo), with the goal of adapting to Astro.
+This is a modified version of [twikoo](https://github.com/twikoojs/twikoo), adapting to Astro.
 
 **Note**：: This warehouse only includes the front-end of the  modified version, and the back-end remains the original version
 
