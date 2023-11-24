@@ -63,17 +63,19 @@ const call = async (tcb, event, data = {}) => {
         // xhr.open('POST', _envId)
         // xhr.setRequestHeader('Content-Type', 'application/json')
         // xhr.send(JSON.stringify({ event, accessToken, ...data }))
+        
+            const res=await fetch(_envId,
+                {
+                method:'POST',
+                headers:{
+                'Content-Type':'application/json'
+                },
+                body:JSON.stringify({ event, accessToken, ...data })
+            })
+        
+            const result=await res.json()
+            resolve({result})
 
-        const res=await fetch(_envId,
-            {
-            method:'POST',
-            headers:{
-            'Content-Type':'application/json'
-            },
-            body:JSON.stringify({ event, accessToken, ...data })
-        })
-        const result=await res.json()
-        resolve({result})
       } catch (e) {
         reject(e)
       }

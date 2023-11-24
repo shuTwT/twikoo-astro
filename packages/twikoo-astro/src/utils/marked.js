@@ -11,7 +11,9 @@ marked.setOptions({
   breaks: true,
   pedantic: false,
   smartLists: true,
-  smartypants: true
+  smartypants: false,
+  mangle:false,
+  headerIds:false
 })
 
 export default marked

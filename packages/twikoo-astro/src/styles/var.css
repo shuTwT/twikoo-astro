@@ -3,7 +3,7 @@
     --twikoo-border-radius: 12px;
 }
 
-:root:not([data-theme=dark]) {
+:root:not([data-theme=dark]),:root:not(.dark) {
     --twikoo-input-bg: #f7f7f7;
     --twikoo-font-color: #363636;
     --twikoo-background: #fff;
@@ -18,7 +18,7 @@
     --twikoo-color-lighttext: skyblue;
 }
 
-:root[data-theme=dark] {
+:root[data-theme=dark],:root.dark {
     --twikoo-input-bg: #21232a;
     --twikoo-font-color: #fafafa;
     --twikoo-background: #181716;

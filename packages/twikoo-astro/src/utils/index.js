@@ -72,8 +72,11 @@ const getCommentsApi=async(tcb,options)=> {
         return res.result
       }
     } catch (e) {
-      errorMessage.value = e.message
-      throw e
+      return {
+        count:0,
+        data:[],
+        more:false
+      }
     }
   }
 
